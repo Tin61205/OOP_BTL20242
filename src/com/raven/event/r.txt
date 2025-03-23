@@ -1,0 +1,2 @@
+ Chứa các lớp xử lý sự kiện
+ như khi người dùng gửi tin nhắn hoặc tương tác với giao diện người dùng.

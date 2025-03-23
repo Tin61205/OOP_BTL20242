@@ -1,0 +1,1 @@
+Các lớp mô hình như User, Message, hoặc các đối tượng dữ liệu khác trong ứng dụng chat.

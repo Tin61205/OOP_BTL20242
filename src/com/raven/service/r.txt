@@ -1,0 +1,2 @@
+Các lớp dịch vụ xử lý logic nghiệp vụ của ứng dụng chat như gửi/nhận tin nhắn,
+kết nối với server (WebSocket).
