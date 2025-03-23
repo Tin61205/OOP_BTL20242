@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cda51726-76fa-46a9-aee9-afd56a6b9ed7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="cda51726-76fa-46a9-aee9-afd56a6b9ed7" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -79,6 +77,9 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\win\IdeaProjects\OOP_BTL20242" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\JAVA\OOP_BTL20242\ChatApp" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -115,7 +116,7 @@
       <workItem from="1741011260886" duration="23000" />
       <workItem from="1741011784374" duration="19000" />
       <workItem from="1742714340644" duration="1352000" />
-      <workItem from="1742715783797" duration="642000" />
+      <workItem from="1742715783797" duration="1385000" />
     </task>
     <servers />
   </component>
