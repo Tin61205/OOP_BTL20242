@@ -1,1 +1,0 @@
-Các thành phần giao diện người dùng được xây dựng bằng Swing như cửa sổ, bảng điều khiển, các trường nhập liệu.

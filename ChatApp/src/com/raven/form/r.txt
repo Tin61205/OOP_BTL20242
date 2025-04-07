@@ -1,2 +1,0 @@
-Các lớp quản lý các biểu mẫu (form),
-ví dụ như form đăng nhập, đăng ký, hoặc các biểu mẫu gửi tin nhắn.

@@ -1,2 +1,0 @@
-: Các thành phần UI tùy chỉnh như
-nút bấm, cửa sổ chat, các hộp nhập liệu.

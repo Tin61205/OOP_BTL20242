@@ -1,2 +1,0 @@
-Emogi.java
-ModelEmoji.java

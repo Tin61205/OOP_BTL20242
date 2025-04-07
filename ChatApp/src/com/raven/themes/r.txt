@@ -1,1 +1,0 @@
-Các tài nguyên giao diện người dùng như màu sắc, kiểu dáng, hoặc các tệp cấu hình giao diện cho ứng dụng.
