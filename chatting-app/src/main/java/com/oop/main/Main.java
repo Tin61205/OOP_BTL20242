@@ -4,6 +4,10 @@
  */
 package com.oop.main;
 
+import com.oop.swing.ComponentResizer;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 /**
  *
  * @author Admin
@@ -15,8 +19,15 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        init();
     }
-
+    private void init(){
+         ComponentResizer com = new ComponentResizer();
+         com.registerComponent(this);
+         com.setMinimumSize(new Dimension (800,500));
+         com.setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
+         com.setSnapSize(new Dimension(10,10));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,11 +43,11 @@ public class Main extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1095, Short.MAX_VALUE)
+            .addGap(0, 1082, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 635, Short.MAX_VALUE)
+            .addGap(0, 646, Short.MAX_VALUE)
         );
 
         pack();
