@@ -23,7 +23,7 @@ public class Main extends javax.swing.JFrame {
         init();
     }
     private void init(){
-         setIconImage( new ImageIcon(getClass.().getResource("/com/oop/icon.png")).getImage());
+       setIconImage( new ImageIcon(getClass().getResource("/com/oop/icon/app_icon.png")).getImage());
          ComponentResizer com = new ComponentResizer();
          com.registerComponent(this);
          com.setMinimumSize(new Dimension (800,500));
