@@ -4,11 +4,14 @@
  */
 package com.oop.main;
 
+import com.oop.form.Home;
+
 import com.oop.swing.ComponentResizer;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
-
+import javax.swing.JFrame;
+import net.miginfocom.swing.MigLayout; 
 /**
  *
  * @author Admin
@@ -23,13 +26,17 @@ public class Main extends javax.swing.JFrame {
         init();
     }
     private void init(){
+
        setIconImage( new ImageIcon(getClass().getResource("/com/oop/icon/app_icon.png")).getImage());
          ComponentResizer com = new ComponentResizer();
          com.registerComponent(this);
          com.setMinimumSize(new Dimension (800,500));
          com.setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
          com.setSnapSize(new Dimension(10,10));
+         Home home= new Home();
+         body.add(home);
          
+         this.setLocationRelativeTo(null);     // Cho màn hình khởi tạo ở giữa
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -44,47 +51,71 @@ public class Main extends javax.swing.JFrame {
         background = new javax.swing.JPanel();
         title = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        cmdClose = new javax.swing.JButton();
+        body = new javax.swing.JLayeredPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         Border.setBackground(new java.awt.Color(211, 226, 226));
 
-        javax.swing.GroupLayout titleLayout = new javax.swing.GroupLayout(title);
-        title.setLayout(titleLayout);
-        titleLayout.setHorizontalGroup(
-            titleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        titleLayout.setVerticalGroup(
-            titleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 21, Short.MAX_VALUE)
-        );
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/oop/icon/button.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/oop/icon/icons8-minimize-48.png"))); // NOI18N
+        jButton1.setBorder(null);
+        jButton1.setContentAreaFilled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
+        cmdClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/oop/icon/close_icon.png"))); // NOI18N
+        cmdClose.setBorder(null);
+        cmdClose.setContentAreaFilled(false);
+        cmdClose.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cmdClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdCloseActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout titleLayout = new javax.swing.GroupLayout(title);
+        title.setLayout(titleLayout);
+        titleLayout.setHorizontalGroup(
+            titleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, titleLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cmdClose, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        titleLayout.setVerticalGroup(
+            titleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(titleLayout.createSequentialGroup()
+                .addGroup(titleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(cmdClose, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 15, Short.MAX_VALUE))
+        );
+
+        body.setLayout(new java.awt.BorderLayout());
+
         javax.swing.GroupLayout backgroundLayout = new javax.swing.GroupLayout(background);
         background.setLayout(backgroundLayout);
         backgroundLayout.setHorizontalGroup(
             backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, backgroundLayout.createSequentialGroup()
-                .addContainerGap(782, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(304, 304, 304))
+            .addGroup(backgroundLayout.createSequentialGroup()
+                .addGap(106, 106, 106)
+                .addComponent(body, javax.swing.GroupLayout.DEFAULT_SIZE, 985, Short.MAX_VALUE))
         );
         backgroundLayout.setVerticalGroup(
             backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(backgroundLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addGap(43, 43, 43)
+                .addGap(0, 0, 0)
                 .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(537, Short.MAX_VALUE))
+                .addGap(359, 359, 359)
+                .addComponent(body, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(272, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout BorderLayout = new javax.swing.GroupLayout(Border);
@@ -92,16 +123,14 @@ public class Main extends javax.swing.JFrame {
         BorderLayout.setHorizontalGroup(
             BorderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BorderLayout.createSequentialGroup()
-                .addGap(1, 1, 1)
                 .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         BorderLayout.setVerticalGroup(
             BorderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(BorderLayout.createSequentialGroup()
-                .addGap(1, 1, 1)
-                .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BorderLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -112,15 +141,21 @@ public class Main extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Border, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(Border, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        this.setState(JFrame.ICONIFIED);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void cmdCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCloseActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_cmdCloseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -160,6 +195,8 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Border;
     private javax.swing.JPanel background;
+    private javax.swing.JLayeredPane body;
+    private javax.swing.JButton cmdClose;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel title;
     // End of variables declaration//GEN-END:variables
