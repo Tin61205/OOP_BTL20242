@@ -1,0 +1,4 @@
+Bot: Hello! I'm your Gemini AI assistant. How can I help you today? [10\:53]
+User: xin chào [10\:53]
+Bot: Chào bạn! Bạn khỏe không? Tôi có thể giúp gì cho bạn?
+ [10\:53]
