@@ -15,4 +15,5 @@ module com.training.studyfx {
     exports com.training.studyfx.controller;
     exports com.training.studyfx.model;
     exports com.training.studyfx.service;
+    exports com.training.studyfx.server;
 }

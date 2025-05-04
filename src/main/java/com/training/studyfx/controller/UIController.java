@@ -94,26 +94,23 @@ public class UIController implements Initializable {
 
     @FXML
     private void handleChatClick() {
-        /*
-        try {
-            //  load ChatView in the main content area
-            loadView("ChatView");
 
-            //  load the ListView
+        try {
+
+            //  load ChatView in the main content area
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/ChatView.fxml"));
+            Parent chatView = loader.load();
+
+            bot_area.getChildren().clear();
+            mainContentArea.getChildren().clear();
             list.getChildren().clear();
-            Parent listViewPane = App.getView("ListView");
-            list.getChildren().add(listViewPane);
-            ListViewController listViewController = (ListViewController) listViewPane.getUserData();
-            ChatViewController chatViewController = (ChatViewController) mainContentArea.getChildren().get(0).getUserData();
-            // Set the chat view controller in the list view controller
-            if (chatViewController != null) {
-                listViewController.setChatViewController(chatViewController);
-            }
+            // mainContentArea.getChildren().add(chatbotView);
+            bot_area.getChildren().add(chatView);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-         */
+
     }
 
     @FXML

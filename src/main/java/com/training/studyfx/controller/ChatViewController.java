@@ -1,174 +1,108 @@
 package com.training.studyfx.controller;
-import com.training.studyfx.service.UserService;
-import com.training.studyfx.model.User;
-import com.training.studyfx.model.Message;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ResourceBundle;
-
-public class ChatViewController implements Initializable {
-
-        @FXML
-        private VBox messagesContainer;
-
-        @FXML
-        private TextField messageInput;
-
-        @FXML
-        private ScrollPane chatScrollPane;
-
-        private String currentChatPartner = "John Doe"; // demo
-
-        @Override
-        public void initialize(URL location, ResourceBundle resources) {
-            // Load demo mess
-            loadSampleMessages();
+import java.io.*;
+import java.net.Socket;
 
 
-            if (messagesContainer != null && chatScrollPane != null) {
-                messagesContainer.heightProperty().addListener((obs, oldVal, newVal) -> {
-                    if (chatScrollPane != null) {
-                        chatScrollPane.setVvalue(1.0);
-                    }
-                });
-            } else {
-                System.err.println("Warning: messagesContainer or chatScrollPane is null in ChatViewController");
+public class ChatViewController {
+    @FXML private ScrollPane scrollPane;
+    @FXML private TextArea chatArea;
+    @FXML private TextField messageField;
+    @FXML private TextField usernameField;
+
+    private Socket socket;
+    private BufferedReader bufferedReader;
+    private BufferedWriter bufferedWriter;
+    private String username;
+
+    public void initialize() {
+        // Initialize any necessary components
+    }
+
+    @FXML
+    private void connectToServer() {
+        try {
+            this.username = usernameField.getText().trim();
+            if (username.isEmpty()) {
+                appendToChat("Please enter a username");
+                return;
             }
-        }
 
-        private void sendMessage(String content) {
-            UserService userService = UserService.getInstance();
-            User currentUser = userService.getCurrentUser();
-            if (currentUser != null) {
-                String sender = currentUser.getUsername();
-                Message message = new Message(content, sender, false);
-                // Save message to database
-                userService.saveMessage(message);
-                // Display message in UI
-                displayMessage(message);
-            }
-        }
-        private void displayMessage(Message message) {
-            if (message.isFromBot()) {
-                addReceivedMessage(message.getContent());
-            } else {
-                addSentMessage(message.getContent());
-            }
-        }
-        @FXML
-        private void handleSendMessage() {
-            String messageText = messageInput.getText().trim();
-            if (!messageText.isEmpty()) {
-                sendMessage(messageText);
-                messageInput.clear();
-            }
-        }
+            this.socket = new Socket("localhost", 1234);
+            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        @FXML
-        private void handleSendMessage(MouseEvent event) {
-            handleSendMessage();
-        }
+            // Send username to server
+            bufferedWriter.write(username);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
 
-        public void setChatPartner(String name) {
-            this.currentChatPartner = name;
-            messagesContainer.getChildren().clear();
-            loadMessagesForPartner(name);
-        }
+            appendToChat("Connected to server as " + username);
 
+            // Start thread to listen for messages
+            new Thread(this::listenForMessages).start();
 
-       //**** CHƯA  UPDATE  MÀ MỚI CHỈ DEMO ******
-       // ************************
-        private void loadMessagesForPartner(String name) {
-
-            loadSampleMessages();
-        }
-
-        private void loadSampleMessages() {
-            addReceivedMessage("Chào m dạo này sao r");
-            addSentMessage("Tao ổn lòi lìa");
-            addReceivedMessage("OHHH");
-        }
-
-        private void addSentMessage(String messageText) {
-            HBox messageBox = new HBox();
-            messageBox.setAlignment(Pos.CENTER_RIGHT);
-            messageBox.setPadding(new Insets(5, 5, 5, 10));
-
-            Text text = new Text(messageText);
-            TextFlow textFlow = new TextFlow(text);
-            textFlow.setStyle("-fx-background-color: #0084ff; -fx-background-radius: 20px; -fx-text-fill: white; -fx-padding: 10px;");
-            textFlow.setPadding(new Insets(10, 10, 10, 10));
-            text.setStyle("-fx-fill: white;");
-
-            messageBox.getChildren().add(textFlow);
-
-            Label timeLabel = new Label(getCurrentTime());
-            timeLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #666666;");
-
-            VBox messageContainer = new VBox(messageBox, timeLabel);
-            messageContainer.setAlignment(Pos.CENTER_RIGHT);
-            messageContainer.setSpacing(2);
-
-            messagesContainer.getChildren().add(messageContainer);
-        }
-
-        private void addReceivedMessage(String messageText) {
-            HBox messageBox = new HBox();
-            messageBox.setAlignment(Pos.CENTER_LEFT);
-            messageBox.setPadding(new Insets(5, 10, 5, 5));
-
-            Text text = new Text(messageText);
-            TextFlow textFlow = new TextFlow(text);
-            textFlow.setStyle("-fx-background-color: #e4e6eb; -fx-background-radius: 20px; -fx-padding: 10px;");
-            textFlow.setPadding(new Insets(10, 10, 10, 10));
-
-            messageBox.getChildren().add(textFlow);
-
-            Label timeLabel = new Label(getCurrentTime());
-            timeLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #666666;");
-
-            VBox messageContainer = new VBox(messageBox, timeLabel);
-            messageContainer.setAlignment(Pos.CENTER_LEFT);
-            messageContainer.setSpacing(2);
-
-            messagesContainer.getChildren().add(messageContainer);
-        }
-
-        private String getCurrentTime() {
-            LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            return now.format(formatter);
-        }
-
-        // demo
-        private void simulateReceivedMessage(String originalMessage) {
-
-            String response = "You said: " + originalMessage;
-
-
-            new Thread(() -> {
-                try {
-                    Thread.sleep(1000);
-                    javafx.application.Platform.runLater(() -> {
-                        addReceivedMessage(response);
-                    });
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+        } catch (IOException e) {
+            appendToChat("Error connecting to server: " + e.getMessage());
+            closeEverything();
         }
     }
+
+    @FXML
+    private void sendMessage() {
+        try {
+            if (socket == null || !socket.isConnected()) {
+                appendToChat("Not connected to server. Please enter your username to join the chat");
+                return;
+            }
+            String message = messageField.getText().trim();
+            if (!message.isEmpty() && bufferedWriter != null) {
+                bufferedWriter.write(username + ": " + message);
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+
+                appendToChat(username + ": " + message);
+
+                messageField.clear();
+            }
+        } catch (IOException e) {
+            appendToChat("Error sending message: " + e.getMessage());
+            closeEverything();
+        }
+    }
+
+    private void listenForMessages() {
+        try {
+            String messageFromServer;
+            while (socket.isConnected() && (messageFromServer = bufferedReader.readLine()) != null) {
+                appendToChat(messageFromServer);
+            }
+        } catch (IOException e) {
+            appendToChat("Disconnected from server");
+            closeEverything();
+        }
+    }
+
+    private void appendToChat(String message) {
+        javafx.application.Platform.runLater(() -> {
+            chatArea.appendText(message + "\n");
+        });
+    }
+
+    private void closeEverything() {
+        try {
+            if (bufferedReader != null) bufferedReader.close();
+            if (bufferedWriter != null) bufferedWriter.close();
+            if (socket != null) socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+}

@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.Socket;
 
 
 public class App extends Application {
@@ -24,21 +25,21 @@ public class App extends Application {
     }
 
 
-public static void setRoot(String fxml) throws IOException {
-    scene.setRoot(loadFXML(fxml));
+    public static void setRoot(String fxml) throws IOException {
+        scene.setRoot(loadFXML(fxml));
 
-    if (fxml.equals("UI")) {
-        Stage stage = (Stage) scene.getWindow();
-        stage.setWidth(975);
-        stage.setHeight(620);
-        stage.centerOnScreen();
-    } else if (fxml.equals("LoginView") || fxml.equals("RegisterView")) {
-        Stage stage = (Stage) scene.getWindow();
-        stage.setWidth(400);
-        stage.setHeight(500);
-        stage.centerOnScreen();
+        if (fxml.equals("UI")) {
+            Stage stage = (Stage) scene.getWindow();
+            stage.setWidth(975);
+            stage.setHeight(620);
+            stage.centerOnScreen();
+        } else if (fxml.equals("LoginView") || fxml.equals("RegisterView")) {
+            Stage stage = (Stage) scene.getWindow();
+            stage.setWidth(400);
+            stage.setHeight(500);
+            stage.centerOnScreen();
+        }
     }
-}
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
@@ -62,7 +63,10 @@ public static void setRoot(String fxml) throws IOException {
     public void stop() {
         UserService.getInstance().closeConnection();
     }
-    public static void main(String[] args) {
+    public static void main(String[] args)throws IOException {
+        //Socket socket = new Socket("localhost",1234);
+
+
         launch();
     }
 }
