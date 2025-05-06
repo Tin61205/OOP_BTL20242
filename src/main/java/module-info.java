@@ -4,7 +4,7 @@ module com.training.studyfx {
     requires java.sql;
     requires org.xerial.sqlitejdbc;
     requires org.slf4j;
-    requires org.slf4j.simple;
+    //requires org.slf4j.simple;
     requires java.net.http;
     requires org.json;
 

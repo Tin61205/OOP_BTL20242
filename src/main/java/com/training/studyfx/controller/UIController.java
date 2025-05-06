@@ -104,7 +104,7 @@ public class UIController implements Initializable {
             bot_area.getChildren().clear();
             mainContentArea.getChildren().clear();
             list.getChildren().clear();
-            // mainContentArea.getChildren().add(chatbotView);
+            //mainContentArea.getChildren().add(chatView);
             bot_area.getChildren().add(chatView);
         } catch (IOException e) {
             e.printStackTrace();
