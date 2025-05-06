@@ -5,8 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import com.training.studyfx.server.Server;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 
@@ -16,14 +17,37 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        //startServer();
+        new Thread(() -> {
+            try {
+                ServerSocket serverSocket = new ServerSocket(1234);
+                Server server = new Server(serverSocket);
+                server.startServer();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
         // Start with login view
         scene = new Scene(loadFXML("LoginView"), 400, 500);
         scene.getStylesheets().add(getClass().getResource("/styles/ui.css").toExternalForm());
         stage.setScene(scene);
         stage.setTitle("Chat Application");
         stage.show();
-    }
 
+    }
+    // javafx run with spring boot
+
+    private void startServer() {
+        // Tạo server lắng nghe trên cổng 1234
+        try {
+            ServerSocket serverSocket = new ServerSocket(1234);
+            Server server = new Server(serverSocket);
+            // Bắt đầu server
+            server.startServer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
@@ -63,10 +87,5 @@ public class App extends Application {
     public void stop() {
         UserService.getInstance().closeConnection();
     }
-    public static void main(String[] args)throws IOException {
-        //Socket socket = new Socket("localhost",1234);
 
-
-        launch();
-    }
 }

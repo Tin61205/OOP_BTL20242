@@ -30,3 +30,11 @@ CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
 -- Insert initial admin user (optional)
 INSERT OR IGNORE INTO users (username, password, email, full_name, status)
 VALUES ('bach', 'bach123', 'bach@gmail.com', 'NT_Bach', 'Online');
+
+
+-- value proprety in javafx
+
+
+
+
+

@@ -1,94 +1,59 @@
 package com.training.studyfx.server;
 
 import java.io.*;
-import java.net.Socket;
-import java.util.ArrayList;
+import java.net.*;
 
 public class ClientHandler implements Runnable {
-    public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    private String clientUsername;
 
     public ClientHandler(Socket socket) {
-        try{
-            this.socket = socket;
-            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        this.socket = socket;
+        try {
+            // Khởi tạo các streams cho client
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.clientUsername = bufferedReader.readLine();
-            clientHandlers.add(this);
-            broadcastMessage("SERVER: " + clientUsername + " has entered the chat!");
+            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-
-        }catch (Exception e){
-            closeEverything(socket, bufferedReader, bufferedWriter);
+            // Thêm BufferedWriter vào danh sách client của server
+            Server.addClientWriter(bufferedWriter);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-
     }
 
     @Override
     public void run() {
         String messageFromClient;
-        while(socket.isConnected()){
-            try{
+
+        try {
+            while (socket.isConnected()) {
+                // Đọc tin nhắn từ client
                 messageFromClient = bufferedReader.readLine();
-                broadcastMessage(messageFromClient);
-            }
-            catch (IOException e){
-                closeEverything(socket,bufferedReader,bufferedWriter);
-                break;
-            }
-        }
+                if (messageFromClient != null) {
+                    System.out.println("Message from client: " + messageFromClient);
 
-
-    }
-
-    public void broadcastMessage(String messageToSend){
-        for(ClientHandler clientHandler : clientHandlers){
-            try{
-                if(!clientHandler.clientUsername.equals(clientUsername)){
-                    clientHandler.bufferedWriter.write(messageToSend);
-                    clientHandler.bufferedWriter.newLine();
-                    clientHandler.bufferedWriter.flush();
-
+                    // Gửi tin nhắn đến tất cả các client
+                    Server.sendMessageToAllClients(messageFromClient);
                 }
             }
-            catch (IOException e){
-                closeEverything(socket, bufferedReader, bufferedWriter);
-            }
-
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // Đóng kết nối khi client ngắt kết nối
+            closeConnections();
         }
-
-    }
-    public void removeClientHandler(){
-        clientHandlers.remove(this);
-        broadcastMessage("SERVER: "+ clientUsername + " has left the chat!");
-
     }
 
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter){
-        removeClientHandler();
-        try{
-            if(bufferedReader != null){
-                bufferedReader.close();
-
-            }
-            if(bufferedWriter != null){
-                bufferedWriter.close();
-            }
-            if(socket != null){
-                socket.close();
-            }
-
-        }
-        catch(IOException e){
+    private void closeConnections() {
+        try {
+            // Xóa client khỏi danh sách và đóng các streams
+            Server.getClientWriters().remove(bufferedWriter);
+            if (bufferedReader != null) bufferedReader.close();
+            if (bufferedWriter != null) bufferedWriter.close();
+            if (socket != null) socket.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
-
 }
-
