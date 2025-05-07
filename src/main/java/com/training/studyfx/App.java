@@ -33,7 +33,6 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setTitle("Chat Application");
         stage.show();
-
     }
     // javafx run with spring boot
 
