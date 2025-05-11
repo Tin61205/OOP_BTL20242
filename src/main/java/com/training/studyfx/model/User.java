@@ -9,6 +9,7 @@ public class User implements Serializable {
     private String username;
     private String password;
     private String email;
+    private String fullName;
     private String status;
     private String profileImagePath;
     private List<Message> messages;
@@ -45,6 +46,14 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getStatus() {

@@ -34,7 +34,6 @@ public class App extends Application {
         stage.setTitle("Chat Application");
         stage.show();
     }
-    // javafx run with spring boot
 
     private void startServer() {
         // Tạo server lắng nghe trên cổng 1234
@@ -82,6 +81,7 @@ public class App extends Application {
             throw e;
         }
     }
+
     @Override
     public void stop() {
         UserService.getInstance().closeConnection();

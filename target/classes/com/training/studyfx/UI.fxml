@@ -59,7 +59,7 @@
                         <Image url="@../../../images/chat.png" />
                      </image>
                   </ImageView>
-                  <Label alignment="CENTER" contentDisplay="TOP" prefHeight="38.0" prefWidth="99.0" text="Chat" textOverrun="LEADING_ELLIPSIS">
+                  <Label alignment="CENTER" contentDisplay="TOP" prefHeight="38.0" prefWidth="99.0" text="Global" textOverrun="LEADING_ELLIPSIS">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="15.0" />
                      </font>

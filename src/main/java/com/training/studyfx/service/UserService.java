@@ -1,21 +1,15 @@
 package com.training.studyfx.service;
-
 import com.training.studyfx.model.Message;
 import com.training.studyfx.model.User;
 import java.io.*;
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class UserService {
     private static UserService instance;
     private User currentUser;
     private Connection connection;
     private final String DB_URL = "jdbc:sqlite:studyfx.db";
-    private final String SQL_SCRIPT_PATH = "database/db.sql";
+    private final String SQL_SCRIPT_PATH = "/database/db.sql";
 
     private UserService() {
         initializeDatabase();
@@ -42,13 +36,14 @@ public class UserService {
         }
     }
 
+
     private void executeSqlScript() {
         try {
-            // Read SQL file
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(SQL_SCRIPT_PATH);
+            // Read SQL file from resources
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("database/db.sql");
             if (inputStream == null) {
-                System.err.println("Could not find SQL script: " + SQL_SCRIPT_PATH);
-                // Fall back to creating tables directly
+                //System.err.println("Could not find SQL script: database/db.sql");
+                // create tables directly
                 createTablesDirectly();
                 return;
             }
@@ -86,7 +81,7 @@ public class UserService {
         try {
             Statement stmt = connection.createStatement();
 
-            // Users table
+            // Users table with full_name field
             stmt.execute("CREATE TABLE IF NOT EXISTS users (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "username TEXT NOT NULL UNIQUE, " +
@@ -154,41 +149,42 @@ public class UserService {
         }
     }
 
-    public boolean login(String username, String password) {
-        try {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT * FROM users WHERE username = ? AND password = ?");
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-            ResultSet rs = stmt.executeQuery();
+public boolean login(String username, String password) {
+    try {
+        PreparedStatement stmt = connection.prepareStatement(
+                "SELECT * FROM users WHERE username = ? AND password = ?");
+        stmt.setString(1, username);
+        stmt.setString(2, password);
+        ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                // Create user object from database data
-                currentUser = new User(
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("email")
-                );
-                currentUser.setStatus(rs.getString("status"));
-                currentUser.setProfileImagePath(rs.getString("profile_image_path"));
+        if (rs.next()) {
+            // Create user object from database data
+            currentUser = new User(
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("email")
+            );
+            currentUser.setFullName(rs.getString("full_name"));
+            currentUser.setStatus(rs.getString("status"));
+            currentUser.setProfileImagePath(rs.getString("profile_image_path"));
 
-                // Load user messages
-                loadUserMessages();
-
-                rs.close();
-                stmt.close();
-                return true;
-            }
+            // Load user messages
+            loadUserMessages();
 
             rs.close();
             stmt.close();
-            return false;
-        } catch (SQLException e) {
-            System.err.println("Login error: " + e.getMessage());
-            e.printStackTrace();
-            return false;
+            return true;
         }
+
+        rs.close();
+        stmt.close();
+        return false;
+    } catch (SQLException e) {
+        System.err.println("Login error: " + e.getMessage());
+        e.printStackTrace();
+        return false;
     }
+}
 
     private void loadUserMessages() {
         try {
