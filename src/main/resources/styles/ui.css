@@ -152,3 +152,16 @@
     -fx-wrap-text: true;
 }
 
+
+.join-notification {
+    -fx-background-color: linear-gradient(to right, #4568dc, #a671da);
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(74,112,238,0.3), 5, 0, 2, 2);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-max-width: 350px;
+    -fx-wrap-text: true;
+    -fx-opacity: 0.9;
+}

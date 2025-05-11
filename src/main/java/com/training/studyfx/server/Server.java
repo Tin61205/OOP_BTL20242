@@ -67,12 +67,4 @@ public class Server {
             }
         }
     }
-
-    public static void main(String[] args) throws IOException {
-        // Tạo ServerSocket lắng nghe cổng 4444
-        ServerSocket serverSocket = new ServerSocket(1234);
-        Server server = new Server(serverSocket);
-        // Bắt đầu server
-        server.startServer();
-    }
 }

@@ -46,7 +46,7 @@ public class ChatViewController {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             // Send username to server
-            bufferedWriter.write(username);
+            bufferedWriter.write(username+" has joined the chat");
             bufferedWriter.newLine();
             bufferedWriter.flush();
 
@@ -108,10 +108,15 @@ public class ChatViewController {
 
             HBox messageBox = new HBox();
 
-            if (message.startsWith(username)) {
+            if (message.contains("has joined the chat")) {
+                messageLabel.getStyleClass().add("join-notification");
+                messageBox.setAlignment(Pos.CENTER);
+            }
+            else if (message.startsWith(username)) {
                 messageLabel.getStyleClass().add("mess-global");
                 messageBox.setAlignment(Pos.CENTER_RIGHT);
-            } else {
+            }
+            else {
                 messageLabel.getStyleClass().add("other-global");
                 messageBox.setAlignment(Pos.CENTER_LEFT);
             }
