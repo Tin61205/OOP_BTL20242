@@ -67,6 +67,11 @@
                     <version>${javafx.version}</version>
                 </dependency>
                 <dependency>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                    <version>1.2.11</version>
+                </dependency>
+                <dependency>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-fxml</artifactId>
                     <version>${javafx.version}</version>

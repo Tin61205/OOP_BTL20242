@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import com.training.studyfx.server.Server;
 import java.io.IOException;
@@ -31,6 +32,7 @@ public class App extends Application {
         scene = new Scene(loadFXML("LoginView"), 400, 500);
         scene.getStylesheets().add(getClass().getResource("/styles/ui.css").toExternalForm());
         stage.setScene(scene);
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/logo.png")));
         stage.setTitle("Chat Application");
         stage.show();
     }
