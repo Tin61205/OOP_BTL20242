@@ -149,90 +149,66 @@ public class UserService {
         }
     }
 
-public boolean login(String username, String password) {
-    try {
-        PreparedStatement stmt = connection.prepareStatement(
-                "SELECT * FROM users WHERE username = ? AND password = ?");
-        stmt.setString(1, username);
-        stmt.setString(2, password);
-        ResultSet rs = stmt.executeQuery();
-
-        if (rs.next()) {
-            // Create user object from database data
-            currentUser = new User(
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("email")
-            );
-            currentUser.setFullName(rs.getString("full_name"));
-            currentUser.setStatus(rs.getString("status"));
-            currentUser.setProfileImagePath(rs.getString("profile_image_path"));
-
-            // Load user messages
-            loadUserMessages();
-
-            rs.close();
-            stmt.close();
-            return true;
-        }
-
-        rs.close();
-        stmt.close();
-        return false;
-    } catch (SQLException e) {
-        System.err.println("Login error: " + e.getMessage());
-        e.printStackTrace();
-        return false;
-    }
-}
-
-    private void loadUserMessages() {
+    public boolean login(String username, String password) {
         try {
             PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT * FROM messages WHERE username = ? ORDER BY timestamp");
-            stmt.setString(1, currentUser.getUsername());
+                    "SELECT * FROM users WHERE username = ? AND password = ?");
+            stmt.setString(1, username);
+            stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()) {
-                Message message = new Message(
-                        rs.getString("content"),
-                        rs.getString("sender"),
-                        rs.getInt("is_from_bot") == 1
+            if (rs.next()) {
+                // Create user object from database data
+                currentUser = new User(
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("email")
                 );
-                currentUser.addMessage(message);
+                currentUser.setFullName(rs.getString("full_name"));
+                currentUser.setStatus(rs.getString("status"));
+                currentUser.setProfileImagePath(rs.getString("profile_image_path"));
+
+                // Load user messages
+                loadUserMessages();
+
+                rs.close();
+                stmt.close();
+                return true;
             }
 
             rs.close();
             stmt.close();
+            return false;
         } catch (SQLException e) {
-            System.err.println("Error loading messages: " + e.getMessage());
+            System.err.println("Login error: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
     }
 
-    public void saveMessage(Message message) {
-        if (currentUser == null) return;
+    private void loadUserMessages() {
+            try {
+                PreparedStatement stmt = connection.prepareStatement(
+                        "SELECT * FROM messages WHERE username = ? ORDER BY timestamp");
+                stmt.setString(1, currentUser.getUsername());
+                ResultSet rs = stmt.executeQuery();
 
-        try {
-            PreparedStatement stmt = connection.prepareStatement(
-                    "INSERT INTO messages (content, sender, timestamp, is_from_bot, username) " +
-                            "VALUES (?, ?, ?, ?, ?)");
-            stmt.setString(1, message.getContent());
-            stmt.setString(2, message.getSender());
-            stmt.setString(3, message.getTimestamp().toString());
-            stmt.setInt(4, message.isFromBot() ? 1 : 0);
-            stmt.setString(5, currentUser.getUsername());
+                while (rs.next()) {
+                    Message message = new Message(
+                            rs.getString("content"),
+                            rs.getString("sender"),
+                            rs.getInt("is_from_bot") == 1
+                    );
+                    currentUser.addMessage(message);
+                }
 
-            stmt.executeUpdate();
-            stmt.close();
-
-            // Add to current user's messages list
-            currentUser.addMessage(message);
-        } catch (SQLException e) {
-            System.err.println("Error saving message: " + e.getMessage());
-            e.printStackTrace();
+                rs.close();
+                stmt.close();
+            } catch (SQLException e) {
+                System.err.println("Error loading messages: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
-    }
 
     public void updateUserProfile(String status, String profileImagePath) {
         if (currentUser == null) return;
@@ -256,6 +232,28 @@ public boolean login(String username, String password) {
         }
     }
 
+    public boolean updateProfileImage(String imagePath) {
+        if (currentUser == null) return false;
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                "UPDATE users SET profile_image_path = ? WHERE username = ?");
+            stmt.setString(1, imagePath);
+            stmt.setString(2, currentUser.getUsername());
+            int rowsAffected = stmt.executeUpdate();
+            stmt.close();
+
+            if (rowsAffected > 0) {
+                currentUser.setProfileImagePath(imagePath);
+                return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            System.err.println("Error updating profile image: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
     public void logout() {
         currentUser = null;
     }

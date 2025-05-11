@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 
 public class ProfileViewController implements Initializable {
 
-        private String profileImagePath = "/images/default-profile.png";
+        public String profileImagePath = "/images/default-profile.png";
 
         @FXML
         private ImageView profileImage;
@@ -58,46 +58,61 @@ public class ProfileViewController implements Initializable {
             }
         }
 
-private void loadUserProfile() {
-    UserService userService = UserService.getInstance();
+        private void loadUserProfile() {
+            UserService userService = UserService.getInstance();
+            User currentUser = userService.getCurrentUser();
 
-    // Get current user from UserService
-    User currentUser = userService.getCurrentUser();
+            if (currentUser != null) {
+                // Load user data
+                nameField.setText(currentUser.getFullName() != null ?
+                    currentUser.getFullName() : currentUser.getUsername());
+                emailField.setText(currentUser.getEmail() != null ?
+                    currentUser.getEmail() : "");
+                statusField.setText(currentUser.getStatus() != null ?
+                    currentUser.getStatus() : "Available");
 
-    if (currentUser != null) {
-        // Load user data from the current user object
-        nameField.setText(currentUser.getFullName() != null ?
-            currentUser.getFullName() : currentUser.getUsername());
-        emailField.setText(currentUser.getEmail() != null ?
-            currentUser.getEmail() : "");
-        statusField.setText(currentUser.getStatus() != null ?
-            currentUser.getStatus() : "Available");
+                // Load profile image if available
+                if (currentUser.getProfileImagePath() != null && !currentUser.getProfileImagePath().isEmpty()) {
+                    try {
+                        profileImagePath = currentUser.getProfileImagePath();
+                        Image image;
 
-        // Load profile image if available
-        if (currentUser.getProfileImagePath() != null && !currentUser.getProfileImagePath().isEmpty()) {
-            try {
-                profileImagePath = currentUser.getProfileImagePath();
-                Image image = new Image(getClass().getResourceAsStream(profileImagePath));
-                if (image.isError()) {
-                    // Fallback to default image if the path is invalid
-                    image = new Image(getClass().getResourceAsStream("/images/default-profile.png"));
+                        // Check if it's a resource path or file path
+                        if (profileImagePath.startsWith("/")) {
+                            // Resource path
+                            image = new Image(getClass().getResourceAsStream(profileImagePath));
+                        } else {
+                            // File path
+                            File imageFile = new File(profileImagePath);
+                            if (imageFile.exists()) {
+                                image = new Image(imageFile.toURI().toString());
+                            } else {
+                                // Fallback to default
+                                image = new Image(getClass().getResourceAsStream("/images/default-profile.png"));
+                            }
+                        }
+
+                        profileImage.setImage(image);
+                    } catch (Exception e) {
+                        System.err.println("Error loading profile image: " + e.getMessage());
+                        // Set default image
+                        profileImage.setImage(new Image(getClass().getResourceAsStream("/images/default-profile.png")));
+                    }
+                } else {
+                    // Set default image
+                    profileImagePath = "/images/default-profile.png";
+                    profileImage.setImage(new Image(getClass().getResourceAsStream(profileImagePath)));
                 }
-                profileImage.setImage(image);
-            } catch (Exception e) {
-                System.err.println("Error loading profile image: " + e.getMessage());
-                // Set default image
-                profileImage.setImage(new Image(getClass().getResourceAsStream("/images/default-profile.png")));
+            } else {
+                // Default values if no user is logged in
+                nameField.setText("");
+                emailField.setText("");
+                statusField.setText("Available");
+                profileImagePath = "/images/default-profile.png";
+                profileImage.setImage(new Image(getClass().getResourceAsStream(profileImagePath)));
             }
         }
-    } else {
-        // If no user is logged in, show default values
-        nameField.setText("");
-        emailField.setText("");
-        statusField.setText("Available");
-        profileImagePath = "/images/default-profile.png";
-        profileImage.setImage(new Image(getClass().getResourceAsStream(profileImagePath)));
-    }
-}
+
         private void changeProfilePhoto() {
             if (profileImage == null) return;
 
@@ -110,9 +125,45 @@ private void loadUserProfile() {
             File selectedFile = fileChooser.showOpenDialog(profileImage.getScene().getWindow());
             if (selectedFile != null) {
                 try {
-                    Image image = new Image(selectedFile.toURI().toString());
+                    // Get application data directory
+                    File appDir = new File(System.getProperty("user.home"), ".studyfx");
+                    if (!appDir.exists()) {
+                        appDir.mkdirs();
+                    }
+
+                    // Create images subdirectory if it doesn't exist
+                    File imagesDir = new File(appDir, "images");
+                    if (!imagesDir.exists()) {
+                        imagesDir.mkdirs();
+                    }
+
+                    // Generate a unique filename based on username and timestamp
+                    String username = UserService.getInstance().getCurrentUser().getUsername();
+                    String extension = selectedFile.getName().substring(selectedFile.getName().lastIndexOf('.'));
+                    String newFileName = username + "_" + System.currentTimeMillis() + extension;
+                    File destFile = new File(imagesDir, newFileName);
+
+                    // Copy the file
+                    java.nio.file.Files.copy(
+                        selectedFile.toPath(),
+                        destFile.toPath(),
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                    );
+
+                    // Set the image in UI
+                    Image image = new Image(destFile.toURI().toString());
                     profileImage.setImage(image);
+
+                    // Save path to database (store as absolute path)
+                    profileImagePath = destFile.getAbsolutePath();
+                    UserService.getInstance().updateProfileImage(profileImagePath);
+
+                    saveConfirmationLabel.setText("Profile image updated successfully!");
+                    saveConfirmationLabel.setVisible(true);
+
                 } catch (Exception e) {
+                    saveConfirmationLabel.setText("Error saving image: " + e.getMessage());
+                    saveConfirmationLabel.setVisible(true);
                     e.printStackTrace();
                 }
             }

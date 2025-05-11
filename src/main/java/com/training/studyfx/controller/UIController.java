@@ -1,10 +1,12 @@
 package com.training.studyfx.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.training.studyfx.App;
+import com.training.studyfx.model.User;
 import com.training.studyfx.service.UserService;
 
 import javafx.fxml.FXML;
@@ -13,17 +15,22 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
 public class UIController implements Initializable {
     @FXML
     private HBox Profile;
-
+    @FXML
+    private Circle avt;
     @FXML
     private HBox Chat;
 
@@ -41,6 +48,8 @@ public class UIController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        // Load user avatar into the circle
+        loadUserAvatar();
         try {
 
             loadView("ProfileView");
@@ -153,16 +162,17 @@ public class UIController implements Initializable {
                 }
     }
 
-    private void loadView(String viewName) throws IOException {         // Load main content area
+    private void loadView(String viewName) throws IOException {
         mainContentArea.getChildren().clear();
-            // Find the Chat_View HBox and add the view to it
+        bot_area.getChildren().clear();
+
         HBox chatView = (HBox) mainContentArea.lookup("#Chat_View");
       if (chatView != null) {
             chatView.getChildren().clear();
             chatView.getChildren().add(App.getView(viewName));
         } else {
             // Fallback if Chat_View is not found
-            mainContentArea.getChildren().add(App.getView(viewName));
+            bot_area.getChildren().add(App.getView(viewName));
         }
     }
     @FXML
@@ -206,9 +216,43 @@ public class UIController implements Initializable {
 
         // Add the ListView to the list HBox
         list.getChildren().add(listViewPane);
-
     }
 
+    private void loadUserAvatar() {
+        if (avt == null) return;
+
+        User currentUser = UserService.getInstance().getCurrentUser();
+
+        try {
+            Image image;
+            String imagePath = (currentUser != null && currentUser.getProfileImagePath() != null) ?
+                    currentUser.getProfileImagePath() : "/images/default-profile.png";
+
+            // Check if it's a resource path or file path
+            if (imagePath.startsWith("/")) {
+                // Resource path
+                image = new Image(getClass().getResourceAsStream(imagePath));
+            } else {
+                // File path
+                File imageFile = new File(imagePath);
+                if (imageFile.exists()) {
+                    image = new Image(imageFile.toURI().toString());
+                } else {
+                    // Fallback to default
+                    image = new Image(getClass().getResourceAsStream("/images/default-profile.png"));
+                }
+            }
+
+            // Set the image as fill for the circle
+            avt.setFill(new ImagePattern(image));
+
+        } catch (Exception e) {
+            System.err.println("Error loading avatar image: " + e.getMessage());
+            // Set default image
+            Image defaultImage = new Image(getClass().getResourceAsStream("/images/default-profile.png"));
+            avt.setFill(new ImagePattern(defaultImage));
+        }
+    }
 
 
 }
