@@ -1,4 +1,5 @@
 package com.training.studyfx.controller;
+import com.training.studyfx.App;
 import com.training.studyfx.service.UserService;
 import com.training.studyfx.model.User;
 import javafx.fxml.FXML;
@@ -10,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -125,8 +127,7 @@ public class ProfileViewController implements Initializable {
             File selectedFile = fileChooser.showOpenDialog(profileImage.getScene().getWindow());
             if (selectedFile != null) {
                 try {
-                    // Get application data directory
-                    File appDir = new File(System.getProperty("user.home"), ".studyfx");
+                    File appDir = new File("upload");
                     if (!appDir.exists()) {
                         appDir.mkdirs();
                     }
@@ -173,13 +174,13 @@ public class ProfileViewController implements Initializable {
         private void saveProfile() {
             String status = statusField.getText().trim();
             UserService userService = UserService.getInstance();
-
-
             userService.updateUserProfile(status, profileImagePath);
-
-
             saveConfirmationLabel.setVisible(true);
 
-
+            try {
+                App.setRoot("UI");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
