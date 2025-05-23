@@ -165,3 +165,18 @@
     -fx-wrap-text: true;
     -fx-opacity: 0.9;
 }
+
+
+.emoji-button {
+    -fx-font-size: 16px;
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.emoji-button:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.join-notification, .mess-global, .other-global {
+    -fx-font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+}

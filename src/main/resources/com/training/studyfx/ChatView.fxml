@@ -67,7 +67,9 @@
                 <Font size="14.0" />
             </font>
         </TextField>
-      <ImageView fitHeight="40.0" fitWidth="36.0" onMouseClicked="#sendMessage" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+        <Button fx:id="emojiButton" styleClass="emoji-button" text="😊" onAction="#showEmojiPicker"/>
+
+        <ImageView fitHeight="40.0" fitWidth="36.0" onMouseClicked="#sendMessage" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
          <image>
             <Image url="@../../../images/send_.png" />
          </image>
