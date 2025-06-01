@@ -1,4 +1,5 @@
 package com.training.studyfx.controller;
+import com.training.studyfx.App;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,6 +9,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -31,6 +34,9 @@ public class SettingViewController implements Initializable {
     @FXML
     private Label saveConfirmationLabel;
 
+    @FXML
+    private Button logoutbutton;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         themeSelector.getItems().addAll("Light", "Dark", "System Default");
@@ -40,6 +46,8 @@ public class SettingViewController implements Initializable {
         fontSizeSlider.setValue(14.0);
 
         saveButton.setOnAction(e -> saveSettings());
+        logoutbutton.setOnAction(e -> handleLogout());
+
     }
 
     private void saveSettings() {
@@ -83,4 +91,12 @@ public class SettingViewController implements Initializable {
             scene.getRoot().setStyle("-fx-font-size: " + fontSize + "px;");
         }
     }
+    private void handleLogout() {
+        try {
+            App.setRoot("LoginView");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
