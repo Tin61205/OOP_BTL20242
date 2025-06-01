@@ -1,5 +1,6 @@
 package com.training.studyfx.controller;
 
+import com.training.studyfx.GlobalChatManager;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -29,6 +30,7 @@ public class ChatViewController {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String username;
+    private String oldUsername;
     @FXML
     private Button emojiButton;
 
@@ -41,8 +43,15 @@ public class ChatViewController {
         scrollPane.setVvalue(1.0);
         chatContainer.getStylesheets().add(getClass().getResource("/styles/ui.css").toExternalForm());
 
-
         initEmojiPopup();
+
+//        // Đăng ký lắng nghe tin nhắn mới
+//        chatManager.addMessageListener(this::appendToChat);
+//        // Load lại lịch sử chat mỗi khi vào lại giao diện
+//        chatContainer.getChildren().clear();
+//        for (String msg : chatManager.getChatHistory()) {
+//            appendToChat(msg);
+//        }
 
     }
 
@@ -101,6 +110,7 @@ public class ChatViewController {
     }
 
 
+    //private GlobalChatManager chatManager = GlobalChatManager.getInstance();
 
     @FXML
     private void connectToServer() {
@@ -110,25 +120,45 @@ public class ChatViewController {
                 appendToChat("Please enter a username");
                 return;
             }
+            if(socket == null) {
+                this.socket = new Socket("localhost", 1234);
+                this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            this.socket = new Socket("localhost", 1234);
-            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                appendToChat("Connected to server as " + username);
+                bufferedWriter.write(username + " has joined the chat");
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+                new Thread(this::listenForMessages).start();  // Khởi động thread lắng nghe tin nhắn từ server
+            }
+            else {
+                if (!oldUsername.equals(username)) {
+                    // Gửi thông báo đổi tên lên server
+                    bufferedWriter.write(oldUsername + " has changed your username to " + username);
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                    //appendToChat("You have changed your username to " + username);
+                }
 
-            // Send username to server
-            bufferedWriter.write(username+" has joined the chat");
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
-
-            appendToChat("Connected to server as " + username);
-
-            // Start thread to listen for messages
-            new Thread(this::listenForMessages).start();  // Khởi động thread lắng nghe tin nhắn từ server
-
+            }
+            oldUsername = username;
         } catch (IOException e) {
             appendToChat("Error connecting to server: " + e.getMessage());
             closeEverything();
         }
+
+//        String username = usernameField.getText().trim();
+//        if (username.isEmpty()) {
+//            appendToChat("Please enter a username");
+//            return;
+//        }
+//        chatManager.connect(username);
+//        // Nạp lại lịch sử chat (có thể đã có các dòng "Connected..." từ trước)
+//        chatContainer.getChildren().clear();
+//        for (String msg : chatManager.getChatHistory()) {
+//            appendToChat(msg);
+//        }
+
     }
 
     @FXML
@@ -152,6 +182,13 @@ public class ChatViewController {
             appendToChat("Error sending message: " + e.getMessage());
             closeEverything();
         }
+
+//        String message = messageField.getText().trim();
+//        if (!message.isEmpty()) {
+//            chatManager.sendMessage(message);
+//            messageField.clear();
+//        }
+
     }
 
     private void listenForMessages() {
@@ -180,6 +217,10 @@ public class ChatViewController {
             HBox messageBox = new HBox();
 
             if (message.contains("has joined the chat")) {
+                messageLabel.getStyleClass().add("join-notification");
+                messageBox.setAlignment(Pos.CENTER);
+            }
+            else if (message.contains("has changed your username to")) {
                 messageLabel.getStyleClass().add("join-notification");
                 messageBox.setAlignment(Pos.CENTER);
             }

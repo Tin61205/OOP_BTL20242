@@ -169,7 +169,7 @@ public class UserService {
                 currentUser.setProfileImagePath(rs.getString("profile_image_path"));
 
                 // Load user messages
-                loadUserMessages();
+                //loadUserMessages();
 
                 rs.close();
                 stmt.close();
@@ -186,29 +186,29 @@ public class UserService {
         }
     }
 
-    private void loadUserMessages() {
-            try {
-                PreparedStatement stmt = connection.prepareStatement(
-                        "SELECT * FROM messages WHERE username = ? ORDER BY timestamp");
-                stmt.setString(1, currentUser.getUsername());
-                ResultSet rs = stmt.executeQuery();
-
-                while (rs.next()) {
-                    Message message = new Message(
-                            rs.getString("content"),
-                            rs.getString("sender"),
-                            rs.getInt("is_from_bot") == 1
-                    );
-                    currentUser.addMessage(message);
-                }
-
-                rs.close();
-                stmt.close();
-            } catch (SQLException e) {
-                System.err.println("Error loading messages: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
+//    private void loadUserMessages() {
+//            try {
+//                PreparedStatement stmt = connection.prepareStatement(
+//                        "SELECT * FROM messages WHERE username = ? ORDER BY timestamp");
+//                stmt.setString(1, currentUser.getUsername());
+//                ResultSet rs = stmt.executeQuery();
+//
+//                while (rs.next()) {
+//                    Message message = new Message(
+//                            rs.getString("content"),
+//                            rs.getString("sender"),
+//                            rs.getInt("is_from_bot") == 1
+//                    );
+//                    currentUser.addMessage(message);
+//                }
+//
+//                rs.close();
+//                stmt.close();
+//            } catch (SQLException e) {
+//                System.err.println("Error loading messages: " + e.getMessage());
+//                e.printStackTrace();
+//            }
+//        }
 
     public void updateUserProfile(String status, String profileImagePath) {
         if (currentUser == null) return;
