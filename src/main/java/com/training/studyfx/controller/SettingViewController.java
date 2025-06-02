@@ -105,6 +105,4 @@ public class SettingViewController implements Initializable {
             e.printStackTrace();
         }
     }
-
-
 }
