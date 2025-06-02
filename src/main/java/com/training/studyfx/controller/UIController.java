@@ -52,18 +52,17 @@ public class UIController implements Initializable {
 
     @FXML
     private void handleProfileClick(MouseEvent event) {
-        System.out.println("Profile Clicked!");
         try {
-            // Load the Chatbot view
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/ProfileView.fxml"));
-            Parent ProfileView = loader.load();
+            Parent profileView = loader.load();
 
-            bot_area.getChildren().clear();
-            mainContentArea.getChildren().clear();
-            list.getChildren().clear();
-            // mainContentArea.getChildren().add(chatbotView);
-            bot_area.getChildren().add(ProfileView);
+            // Clear existing content
+            if (bot_area != null) bot_area.getChildren().clear();
+            if (mainContentArea != null) mainContentArea.getChildren().clear();
+            if (list != null) list.getChildren().clear();
 
+            // Add new view
+            if (bot_area != null) bot_area.getChildren().add(profileView);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -71,63 +70,57 @@ public class UIController implements Initializable {
 
     @FXML
     private void handleChatClick() {
-
         try {
-
-            //  load ChatView in the main content area
+            // Load ChatView in the main content area
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/ChatView.fxml"));
             Parent chatView = loader.load();
 
-            bot_area.getChildren().clear();
-            mainContentArea.getChildren().clear();
-            list.getChildren().clear();
-            //mainContentArea.getChildren().add(chatView);
-            bot_area.getChildren().add(chatView);
+            // Clear existing content
+            if (bot_area != null) bot_area.getChildren().clear();
+            if (mainContentArea != null) mainContentArea.getChildren().clear();
+            if (list != null) list.getChildren().clear();
+
+            // Add new view
+            if (bot_area != null) bot_area.getChildren().add(chatView);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @FXML
     private void handleChatbotClick(MouseEvent event) {
-        System.out.println("Chatbot Clicked!");
         try {
-            // Load the Chatbot view
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/ChatbotView.fxml"));
             Parent chatbotView = loader.load();
 
-            bot_area.getChildren().clear();
-            mainContentArea.getChildren().clear();
-            list.getChildren().clear();
-           // mainContentArea.getChildren().add(chatbotView);
-            bot_area.getChildren().add(chatbotView);
+            // Clear existing content
+            if (bot_area != null) bot_area.getChildren().clear();
+            if (mainContentArea != null) mainContentArea.getChildren().clear();
+            if (list != null) list.getChildren().clear();
 
-
-
+            // Add new view
+            if (bot_area != null) bot_area.getChildren().add(chatbotView);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-            @FXML
+    @FXML
     private void handleSettingClick(MouseEvent event) {
-                System.out.println("Setting Clicked!");
-                try {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/SettingView.fxml"));
+            Parent settingView = loader.load();
 
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/SettingView.fxml"));
-                    Parent chatbotView = loader.load();
+            // Clear existing content
+            if (bot_area != null) bot_area.getChildren().clear();
+            if (mainContentArea != null) mainContentArea.getChildren().clear();
+            if (list != null) list.getChildren().clear();
 
-                    bot_area.getChildren().clear();
-                    mainContentArea.getChildren().clear();
-                    list.getChildren().clear();
-                    // mainContentArea.getChildren().add(chatbotView);
-                    bot_area.getChildren().add(chatbotView);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            // Add new view
+            if (bot_area != null) bot_area.getChildren().add(settingView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadView(String viewName) throws IOException {

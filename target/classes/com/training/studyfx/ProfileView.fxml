@@ -1,35 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="584.0" prefWidth="633.0" spacing="20" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.training.studyfx.controller.ProfileViewController">
-       <padding>
-           <Insets bottom="20" left="20" right="20" top="20" />
-       </padding>
+<BorderPane maxHeight="612.0" prefHeight="612.0" prefWidth="634.0" styleClass="profile-container" stylesheets="@../../../styles/ui.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.training.studyfx.controller.ProfileViewController">
 
-       <ImageView fx:id="profileImage" fitHeight="150" fitWidth="206.0" pickOnBounds="true" preserveRatio="true" />
+    <top>
+        <!-- Profile Header Section -->
+        <StackPane prefHeight="179.0" prefWidth="633.0" styleClass="profile-header">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
 
-       <Button fx:id="changePhotoButton" text="Change Photo" />
+            <!-- Profile Image -->
+            <StackPane alignment="CENTER" maxHeight="150" maxWidth="150" styleClass="HBox">
+                <ImageView fx:id="profileImage" fitHeight="120.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image" />
+            </StackPane>
+        </StackPane>
+    </top>
 
-       <HBox alignment="CENTER" spacing="10">
-           <Label text="Name:" />
-           <TextField fx:id="nameField" promptText="Your Name" />
-       </HBox>
+    <center>
+        <VBox maxHeight="-Infinity" prefHeight="411.0" prefWidth="634.0" spacing="20" styleClass="content-area">
+            <!-- Change Photo Button -->
+            <HBox alignment="CENTER" prefHeight="61.0" prefWidth="605.0">
+                <Button fx:id="changePhotoButton" prefHeight="49.0" prefWidth="108.0" styleClass="change-photo-button" text="Change Photo" />
+            </HBox>
 
-       <HBox alignment="CENTER" spacing="10">
-           <Label text="Email:" />
-           <TextField fx:id="emailField" promptText="Your Email" />
-       </HBox>
+            <!-- User Info Section -->
+            <VBox spacing="20">
+                <Label prefHeight="35.0" prefWidth="696.0" styleClass="section-title" text="Personal Information" />
 
-       <HBox alignment="CENTER" spacing="10">
-           <Label text="Status:" />
-           <TextField fx:id="statusField" promptText="Your Status" />
-       </HBox>
+                <GridPane hgap="10" vgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" minWidth="80.0" prefWidth="100.0" />
+                        <ColumnConstraints prefWidth="250.0" />
+                    </columnConstraints>
 
-       <Button fx:id="saveButton" text="Save Profile" />
+                    <Label styleClass="form-label" text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <TextField fx:id="nameField" prefHeight="40.0" prefWidth="381.0" promptText="Your Name" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-       <Label fx:id="saveConfirmationLabel" text="Profile saved successfully!" textFill="green" visible="false" />
-   </VBox>
+                    <Label styleClass="form-label" text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <TextField fx:id="emailField" promptText="Your Email" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label styleClass="form-label" text="Status:" GridPane.rowIndex="2" />
+                    <TextField fx:id="statusField" promptText="Your Status" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                   <Button fx:id="saveButton" styleClass="save-button" text="Save Profile" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <!-- Action Buttons -->
+            <HBox alignment="CENTER" spacing="10" />
+            <HBox alignment="CENTER">
+                <Label fx:id="saveConfirmationLabel" text="Profile saved successfully!" textFill="#27ae60" visible="false" />
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
 
 <AnchorPane id="AnchorPane" prefHeight="580.0" prefWidth="780.0" styleClass="txtfld" stylesheets="@../../../styles/ui.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.training.studyfx.controller.UIController">
    <children>
@@ -27,81 +26,45 @@
                   <Font name="Arial Rounded MT Bold" size="15.0" />
                </font>
             </Label>
-            <HBox fx:id="Profile" layoutX="7.0" layoutY="205.0" onMouseClicked="#handleProfileClick" prefHeight="38.0" prefWidth="136.0" style="-fx-text-fill: white; -fx-background-radius: 20px; -fx-cursor: hand;">
-               <children>
-                  <ImageView fitHeight="32.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../images/user.png" />
-                     </image>
-                  </ImageView>
-                  <Label alignment="CENTER" contentDisplay="TOP" onMouseClicked="#handleProfileClick" prefHeight="38.0" prefWidth="99.0" text="Profile" textOverrun="LEADING_ELLIPSIS">
-                     <font>
-                        <Font name="Arial Rounded MT Bold" size="15.0" />
-                     </font>
-                  </Label>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </HBox>
-            <HBox fx:id="Chat" layoutX="7.0" layoutY="255.0" onMouseClicked="#handleChatClick" prefHeight="38.0" prefWidth="136.0" style=" -fx-text-fill: white; -fx-background-radius: 20px; -fx-cursor: hand;">
-               <children>
-                  <ImageView fitHeight="32.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../images/chat.png" />
-                     </image>
-                  </ImageView>
-                  <Label alignment="CENTER" contentDisplay="TOP" prefHeight="38.0" prefWidth="99.0" text="Global" textOverrun="LEADING_ELLIPSIS">
-                     <font>
-                        <Font name="Arial Rounded MT Bold" size="15.0" />
-                     </font>
-                  </Label>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </HBox>
-            <HBox fx:id="Chatbot" layoutX="4.0" layoutY="306.0" onMouseClicked="#handleChatbotClick" prefHeight="38.0" prefWidth="136.0" style=" -fx-text-fill: white; -fx-background-radius: 20px; -fx-cursor: hand;">
-               <children>
-                  <ImageView fitHeight="33.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../images/chatbot.png" />
-                     </image>
-                  </ImageView>
-                  <Label alignment="CENTER" contentDisplay="TOP" prefHeight="38.0" prefWidth="99.0" text="Chatbot" textOverrun="LEADING_ELLIPSIS">
-                     <font>
-                        <Font name="Arial Rounded MT Bold" size="15.0" />
-                     </font>
-                  </Label>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </HBox>
-            <HBox fx:id="Setting" layoutX="7.0" layoutY="344.0" onMouseClicked="#handleSettingClick" prefHeight="38.0" prefWidth="136.0" style=" -fx-text-fill: white; -fx-background-radius: 20px; -fx-cursor: hand;">
-               <children>
-                  <ImageView fitHeight="33.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../images/settings.png" />
-                     </image>
-                  </ImageView>
-                  <Label alignment="CENTER" contentDisplay="TOP" prefHeight="38.0" prefWidth="99.0" text="Setting" textOverrun="LEADING_ELLIPSIS">
-                     <font>
-                        <Font name="Arial Rounded MT Bold" size="15.0" />
-                     </font>
-                  </Label>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </HBox>
+            <Button fx:id="Profile" layoutX="7.0" layoutY="205.0" onMouseClicked="#handleProfileClick" prefHeight="50.0" prefWidth="140.0" styleClass="nav-button">
+               <graphic>
+                  <HBox alignment="CENTER_LEFT" spacing="10">
+                     <FontIcon iconLiteral="fas-user" styleClass="nav-icon" />
+                     <Label styleClass="nav-label" text="Profile" />
+                  </HBox>
+               </graphic>
+            </Button>
+            <Button fx:id="Chat" layoutX="7.0" layoutY="255.0" onMouseClicked="#handleChatClick" prefHeight="50.0" prefWidth="140.0" styleClass="nav-button">
+               <graphic>
+                  <HBox alignment="CENTER_LEFT" prefWidth="50.0" spacing="10.0">
+                     <FontIcon iconLiteral="fas-globe" iconSize="12" styleClass="nav-icon" />
+                     <Label styleClass="nav-label" text="Global" />
+                  </HBox>
+               </graphic>
+            </Button>
+            <Button fx:id="Chatbot" layoutX="7.0" layoutY="306.0" onMouseClicked="#handleChatbotClick" prefHeight="50.0" prefWidth="140.0" styleClass="nav-button">
+               <graphic>
+                  <HBox alignment="CENTER_LEFT" spacing="10">
+                     <FontIcon iconLiteral="fas-robot" styleClass="nav-icon" />
+                     <Label styleClass="nav-label" text="Chatbot" />
+                  </HBox>
+               </graphic>
+            </Button>
+            <Button fx:id="Setting" layoutX="7.0" layoutY="344.0" onMouseClicked="#handleSettingClick" prefHeight="50.0" prefWidth="140.0" styleClass="nav-button">
+               <graphic>
+                  <HBox alignment="CENTER_LEFT" spacing="10">
+                     <FontIcon iconLiteral="fas-cog" styleClass="nav-icon" />
+                     <Label styleClass="nav-label" text="Setting" />
+                  </HBox>
+               </graphic>
+            </Button>
          </children>
       </Pane>
-      <!-- Add this right before the TextField at the bottom -->
       <AnchorPane fx:id="mainContentArea" layoutX="348.0" layoutY="0.0" prefHeight="581.0" prefWidth="432.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="348.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox fx:id="Chat_View" prefHeight="581.0" prefWidth="432.0" />
-         </children></AnchorPane>
+         </children>
+      </AnchorPane>
       <HBox fx:id="list" layoutX="148.0" prefHeight="580.0" prefWidth="200.0" />
       <AnchorPane fx:id="bot_area" layoutX="147.0" layoutY="-1.0" prefHeight="584.0" prefWidth="633.0" />
    </children>
