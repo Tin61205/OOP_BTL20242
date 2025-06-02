@@ -1,6 +1,7 @@
 package com.training.studyfx.controller;
 
-import com.training.studyfx.GlobalChatManager;
+import com.training.studyfx.ChatHistoryManager;
+import com.training.studyfx.SocketManager;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,27 +17,20 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 
-import java.io.*;
-import java.net.Socket;
+import java.io.IOException;
 
-public class ChatViewController {
+public class ChatViewController implements SocketManager.MessageListener {
     @FXML private ScrollPane scrollPane;
     @FXML private TextField messageField;
     @FXML private TextField usernameField;
     @FXML private VBox chatContainer;
     @FXML private Text emptyStateText;
+    @FXML private Button emojiButton;
 
-    private Socket socket;
-    private BufferedReader bufferedReader;
-    private BufferedWriter bufferedWriter;
-    private String username;
-    private String oldUsername;
-    @FXML
-    private Button emojiButton;
-
-    // Khai báo biến cho popup emoji
     private Popup emojiPopup;
     private GridPane emojiGrid;
+    private SocketManager socketManager;
+    private ChatHistoryManager chatHistoryManager;
 
     public void initialize() {
         scrollPane.setFitToWidth(true);
@@ -44,15 +38,21 @@ public class ChatViewController {
         chatContainer.getStylesheets().add(getClass().getResource("/styles/ui.css").toExternalForm());
 
         initEmojiPopup();
+        socketManager = SocketManager.getInstance();
+        socketManager.addMessageListener(this);
+        
+        chatHistoryManager = ChatHistoryManager.getInstance();
+        loadChatHistory();
+    }
 
-//        // Đăng ký lắng nghe tin nhắn mới
-//        chatManager.addMessageListener(this::appendToChat);
-//        // Load lại lịch sử chat mỗi khi vào lại giao diện
-//        chatContainer.getChildren().clear();
-//        for (String msg : chatManager.getChatHistory()) {
-//            appendToChat(msg);
-//        }
-
+    private void loadChatHistory() {
+        for (String message : chatHistoryManager.loadHistory()) {
+            // Tách timestamp và nội dung tin nhắn
+            String[] parts = message.split(" \\| ", 2);
+            if (parts.length == 2) {
+                appendToChat(parts[1]); // Chỉ hiển thị nội dung tin nhắn
+            }
+        }
     }
 
     @FXML
@@ -66,7 +66,92 @@ public class ChatViewController {
                     emojiButton.localToScreen(emojiButton.getBoundsInLocal()).getMaxY());
         }
     }
-    // Phương thức khởi tạo popup emoji
+
+    @FXML
+    private void connectToServer() {
+        try {
+            String username = usernameField.getText().trim();
+            if (username.isEmpty()) {
+                appendToChat("Please enter a username");
+                return;
+            }
+
+            if (!socketManager.isConnected()) {
+                socketManager.connect(username);
+                appendToChat("Connected to server as " + username);
+            } else {
+                String oldUsername = socketManager.getUsername();
+                if (!oldUsername.equals(username)) {
+                    socketManager.sendMessage(oldUsername + " has changed your username to " + username);
+                }
+            }
+        } catch (IOException e) {
+            appendToChat("Error connecting to server: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void sendMessage() {
+        try {
+            if (!socketManager.isConnected()) {
+                appendToChat("Not connected to server. Please enter your username to join the chat");
+                return;
+            }
+            String message = messageField.getText().trim();
+            if (!message.isEmpty()) {
+                String fullMessage = socketManager.getUsername() + ": " + message;
+                socketManager.sendMessage(fullMessage);
+                // Chỉ lưu tin nhắn khi gửi
+                chatHistoryManager.saveMessage(fullMessage);
+                messageField.clear();
+            }
+        } catch (IOException e) {
+            appendToChat("Error sending message: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void onMessageReceived(String message) {
+        appendToChat(message);
+        // Không lưu tin nhắn khi nhận
+    }
+
+    private void appendToChat(String message) {
+        javafx.application.Platform.runLater(() -> {
+            if (emptyStateText.isVisible()) {
+                emptyStateText.setVisible(false);
+            }
+            Label messageLabel = new Label(message);
+            messageLabel.setWrapText(true);
+            messageLabel.setStyle("-fx-font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;");
+
+            HBox messageBox = new HBox();
+
+            if (message.contains("has joined the chat")) {
+                messageLabel.getStyleClass().add("join-notification");
+                messageBox.setAlignment(Pos.CENTER);
+            }
+            else if (message.contains("has changed your username to")) {
+                messageLabel.getStyleClass().add("join-notification");
+                messageBox.setAlignment(Pos.CENTER);
+            }
+            else if (message.startsWith(socketManager.getUsername())) {
+                messageLabel.getStyleClass().add("mess-global");
+                messageBox.setAlignment(Pos.CENTER_RIGHT);
+            }
+            else {
+                messageLabel.getStyleClass().add("other-global");
+                messageBox.setAlignment(Pos.CENTER_LEFT);
+            }
+
+            messageBox.getChildren().add(messageLabel);
+            chatContainer.getChildren().add(messageBox);
+
+            // Auto-scroll to bottom
+            scrollPane.setVvalue(1.0);
+        });
+    }
+
     private void initEmojiPopup() {
         emojiPopup = new Popup();
         emojiPopup.setAutoHide(true);
@@ -107,189 +192,5 @@ public class ChatViewController {
     private void insertEmoji(String emoji) {
         messageField.setText(messageField.getText() + emoji);
         emojiPopup.hide();
-    }
-
-
-    //private GlobalChatManager chatManager = GlobalChatManager.getInstance();
-
-    @FXML
-    private void connectToServer() {
-        try {
-            this.username = usernameField.getText().trim();
-            if (username.isEmpty()) {
-                appendToChat("Please enter a username");
-                return;
-            }
-            if(socket == null) {
-                this.socket = new Socket("localhost", 1234);
-                this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-                this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-                appendToChat("Connected to server as " + username);
-                bufferedWriter.write(username + " has joined the chat");
-                bufferedWriter.newLine();
-                bufferedWriter.flush();
-                new Thread(this::listenForMessages).start();  // Khởi động thread lắng nghe tin nhắn từ server
-            }
-            else {
-                if (!oldUsername.equals(username)) {
-                    // Gửi thông báo đổi tên lên server
-                    bufferedWriter.write(oldUsername + " has changed your username to " + username);
-                    bufferedWriter.newLine();
-                    bufferedWriter.flush();
-                    //appendToChat("You have changed your username to " + username);
-                }
-
-            }
-            oldUsername = username;
-        } catch (IOException e) {
-            appendToChat("Error connecting to server: " + e.getMessage());
-            closeEverything();
-        }
-
-//        String username = usernameField.getText().trim();
-//        if (username.isEmpty()) {
-//            appendToChat("Please enter a username");
-//            return;
-//        }
-//        chatManager.connect(username);
-//        // Nạp lại lịch sử chat (có thể đã có các dòng "Connected..." từ trước)
-//        chatContainer.getChildren().clear();
-//        for (String msg : chatManager.getChatHistory()) {
-//            appendToChat(msg);
-//        }
-
-    }
-
-    @FXML
-    private void sendMessage() {
-        try {
-            if (socket == null || !socket.isConnected()) {
-                appendToChat("Not connected to server. Please enter your username to join the chat");
-                return;
-            }
-            String message = messageField.getText().trim();
-            if (!message.isEmpty() && bufferedWriter != null) {
-                bufferedWriter.write(username + ": " + message);
-                bufferedWriter.newLine();
-                bufferedWriter.flush();
-
-                //appendToChat(username + ": " + message);  // Hiển thị tin nhắn của mình trên giao diện
-
-                //messageField.clear();
-            }
-        } catch (IOException e) {
-            appendToChat("Error sending message: " + e.getMessage());
-            closeEverything();
-        }
-
-//        String message = messageField.getText().trim();
-//        if (!message.isEmpty()) {
-//            chatManager.sendMessage(message);
-//            messageField.clear();
-//        }
-
-    }
-
-    private void listenForMessages() {
-        try {
-            String messageFromServer;
-            while (socket.isConnected() && (messageFromServer = bufferedReader.readLine()) != null) {
-                appendToChat(messageFromServer);  // Hiển thị tin nhắn nhận từ server
-            }
-        } catch (IOException e) {
-            appendToChat("Disconnected from server");
-            closeEverything();
-        }
-    }
-
-    private void appendToChat(String message) {
-        javafx.application.Platform.runLater(() -> {
-            if (emptyStateText.isVisible()) {
-                emptyStateText.setVisible(false);
-            }
-            Label messageLabel = new Label(message);
-            messageLabel.setWrapText(true);
-
-            messageLabel.setStyle("-fx-font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;");
-
-
-            HBox messageBox = new HBox();
-
-            if (message.contains("has joined the chat")) {
-                messageLabel.getStyleClass().add("join-notification");
-                messageBox.setAlignment(Pos.CENTER);
-            }
-            else if (message.contains("has changed your username to")) {
-                messageLabel.getStyleClass().add("join-notification");
-                messageBox.setAlignment(Pos.CENTER);
-            }
-            else if (message.startsWith(username)) {
-                messageLabel.getStyleClass().add("mess-global");
-                messageBox.setAlignment(Pos.CENTER_RIGHT);
-            }
-            else {
-                messageLabel.getStyleClass().add("other-global");
-                messageBox.setAlignment(Pos.CENTER_LEFT);
-            }
-
-            messageBox.getChildren().add(messageLabel);
-            chatContainer.getChildren().add(messageBox);
-
-            // Auto-scroll to bottom
-            scrollPane.setVvalue(1.0);
-        });
-    }
-    /*
-    private void appendToChat(String message) {
-        javafx.application.Platform.runLater(() -> {
-            if (emptyStateText.isVisible()) {
-                emptyStateText.setVisible(false);
-            }
-
-            Label messageLabel = new Label(message);
-            messageLabel.setWrapText(true);
-
-            // Thêm style hỗ trợ emoji cho label
-            //messageLabel.setStyle("-fx-font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;");
-
-            HBox messageBox = new HBox();
-            messageBox.setPadding(new Insets(5, 10, 5, 10)); // Thêm padding để tin nhắn trông đẹp hơn
-
-            if (message.contains("has joined the chat")) {
-                messageLabel.getStyleClass().add("join-notification");
-                messageBox.setAlignment(Pos.CENTER);
-                // Style cho thông báo tham gia
-                messageLabel.setStyle(messageLabel.getStyle() + "-fx-text-fill: #757575; -fx-font-style: italic;");
-            }
-            else if (message.startsWith(username)) {
-                messageLabel.getStyleClass().add("mess-global");
-                messageBox.setAlignment(Pos.CENTER_RIGHT);
-                // Style cho tin nhắn của người dùng hiện tại
-                messageLabel.setStyle(messageLabel.getStyle() + "-fx-background-color: #e3f2fd; -fx-background-radius: 15px; -fx-padding: 8px 12px;");
-            }
-            else {
-                messageLabel.getStyleClass().add("other-global");
-                messageBox.setAlignment(Pos.CENTER_LEFT);
-                // Style cho tin nhắn của người khác
-                messageLabel.setStyle(messageLabel.getStyle() + "-fx-background-color: #f5f5f5; -fx-background-radius: 15px; -fx-padding: 8px 12px;");
-            }
-
-            messageBox.getChildren().add(messageLabel);
-            chatContainer.getChildren().add(messageBox);
-
-            // Auto-scroll to bottom
-            scrollPane.setVvalue(1.0);
-        });
-    }
-*/
-    private void closeEverything() {
-        try {
-            if (bufferedReader != null) bufferedReader.close();
-            if (bufferedWriter != null) bufferedWriter.close();
-            if (socket != null) socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -1,4 +1,13 @@
-Bot: Hello! I'm your Gemini AI assistant. How can I help you today? [10\:53]
-User: xin chào [10\:53]
-Bot: Chào bạn! Bạn khỏe không? Tôi có thể giúp gì cho bạn?
- [10\:53]
+2025-06-02 13:12:10 | Bach: xin chào
+2025-06-02 13:12:14 | Hieu: 😊
+2025-06-02 13:12:36 | Bach: có gì hot
+2025-06-02 13:12:38 | Hieu: 1
+2025-06-02 13:12:38 | Hieu: 2
+2025-06-02 13:12:39 | Hieu: 3
+2025-06-02 13:12:39 | Hieu: 4
+2025-06-02 13:12:40 | Hieu: 5
+2025-06-02 13:12:40 | Hieu: 6
+2025-06-02 13:12:46 | Bach: hehehe
+2025-06-02 13:14:32 | Hieu: 1
+2025-06-02 13:14:32 | Hieu: 2
+2025-06-02 13:14:33 | Hieu: 3
