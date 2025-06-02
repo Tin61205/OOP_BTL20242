@@ -9,14 +9,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
-
 import java.io.IOException;
 
 public class ChatViewController implements SocketManager.MessageListener {
@@ -26,7 +23,7 @@ public class ChatViewController implements SocketManager.MessageListener {
     @FXML private VBox chatContainer;
     @FXML private Text emptyStateText;
     @FXML private Button emojiButton;
-
+    @FXML private Button remove_his ;
     private Popup emojiPopup;
     private GridPane emojiGrid;
     private SocketManager socketManager;
@@ -164,8 +161,15 @@ public class ChatViewController implements SocketManager.MessageListener {
 
         // Danh sách emoji
         String[] emojis = {
+                // Biểu cảm khuôn mặt
                 "😊", "😂", "😍", "🥰", "😎", "😇", "🤔", "😐", "😒", "😢",
-                "👍", "👌", "👏", "🙏", "🎉", "🔥", "❤️", "💯", "✅", "⭐"
+                "😭", "😠", "😲", "🥳", "🤩", "🤯", "😴", "🤤", "😱", "🥺",
+                "🥲", "🫠", "🥶", "🥵", "🥴", "🤢", "🤮", "🤧", "🥳", "🤠",
+                "🤑", "🤐", "🤫", "🤭", "🧐",
+                // Cử chỉ tay và cơ thể
+                "👍", "👌", "👏", "🙏", "🙌", "🤝", "🤞", "🤏", "🤘", "🤙",
+                "👋", "👎", "👊", "✊", "💪", "🤳", "🤗", "🤷‍♀️", "🤷‍♂️", "🤦‍♀️",
+                "🤦‍♂️", "🙇‍♀️", "🙇‍♂️",
         };
 
         int col = 0;
@@ -179,7 +183,7 @@ public class ChatViewController implements SocketManager.MessageListener {
             emojiGrid.add(emojiBtn, col, row);
 
             col++;
-            if (col > 4) { // 5 emoji mỗi hàng
+            if (col > 9) { // 10 emoji mỗi hàng
                 col = 0;
                 row++;
             }
@@ -192,5 +196,14 @@ public class ChatViewController implements SocketManager.MessageListener {
     private void insertEmoji(String emoji) {
         messageField.setText(messageField.getText() + emoji);
         emojiPopup.hide();
+    }
+
+    @FXML
+    private void removeHistory() {
+        ChatHistoryManager.getInstance().clearHistory();
+        // Clear the chat display
+        chatContainer.getChildren().clear();
+        // Show the empty state message
+        emptyStateText.setVisible(true);
     }
 }

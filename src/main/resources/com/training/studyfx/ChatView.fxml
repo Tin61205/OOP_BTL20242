@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
@@ -13,8 +14,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-
 <VBox prefHeight="584.0" prefWidth="633.0" spacing="10" style="-fx-background-color: #f9f9f9;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.training.studyfx.controller.ChatViewController">
     <padding>
         <Insets bottom="15" left="15" right="15" top="15" />
@@ -25,7 +24,7 @@
         <padding>
             <Insets bottom="15" left="15" right="15" top="15" />
         </padding>
-        <TextField fx:id="usernameField" promptText="Enter your username" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-padding: 8 15;" HBox.hgrow="ALWAYS">
+        <TextField fx:id="usernameField" prefHeight="36.0" prefWidth="409.0" promptText="Enter your username" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-padding: 8 15;" styleClass="message-input" stylesheets="@../../../styles/ui.css" HBox.hgrow="ALWAYS">
             <font>
                 <Font size="14.0" />
             </font>
@@ -35,6 +34,12 @@
                 <Font name="System Bold" size="13.0" />
             </font>
         </Button>
+      <Button fx:id="remove_his" mnemonicParsing="false" onAction="#removeHistory" prefHeight="37.0" prefWidth="89.0" stylesheets="@../../../styles/ui.css" text="Remove">
+         <styleClass>
+            <String fx:value="user-message" />
+            <String fx:value="button-selected" />
+         </styleClass>
+      </Button>
     </HBox>
 
     <!-- Chat Messages Area -->
@@ -62,12 +67,12 @@
         <padding>
             <Insets bottom="10" left="10" right="10" top="10" />
         </padding>
-        <TextField fx:id="messageField" minWidth="450.0" onAction="#sendMessage" prefHeight="36.0" prefWidth="450.0" promptText="Type a message" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-padding: 8 15;" HBox.hgrow="ALWAYS">
+        <TextField fx:id="messageField" minWidth="450.0" onAction="#sendMessage" prefHeight="36.0" prefWidth="450.0" promptText="Type a message" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-padding: 8 15;" styleClass="message-input" stylesheets="@../../../styles/ui.css" HBox.hgrow="ALWAYS">
             <font>
                 <Font size="14.0" />
             </font>
         </TextField>
-        <Button fx:id="emojiButton" styleClass="emoji-button" text="😊" onAction="#showEmojiPicker"/>
+        <Button fx:id="emojiButton" onAction="#showEmojiPicker" styleClass="search-box" stylesheets="@../../../styles/ui.css" text="😊" />
 
         <ImageView fitHeight="40.0" fitWidth="36.0" onMouseClicked="#sendMessage" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
          <image>

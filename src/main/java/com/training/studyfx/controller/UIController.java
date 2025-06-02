@@ -28,17 +28,8 @@ import javafx.scene.Scene;
 
 public class UIController implements Initializable {
     @FXML
-    private HBox Profile;
-    @FXML
     private Circle avt;
-    @FXML
-    private HBox Chat;
 
-    @FXML
-    private HBox Chatbot;
-
-    @FXML
-    private HBox Setting;
     @FXML
     private AnchorPane mainContentArea;
 
@@ -56,31 +47,8 @@ public class UIController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //setupSearch();
-        //setupFilterButtons();
      }
 
-    @FXML
-    private void handleLogout() {
-
-        Scene currentScene = mainContentArea.getScene();
-        Stage stage = (Stage) currentScene.getWindow();
-
-        // Logout the user
-        UserService.getInstance().logout();
-
-        try {
-            // Load the login scene
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/LoginView.fxml"));
-            Scene loginScene = new Scene(loader.load(), 400, 500);
-
-            // Set the new scene on the stage
-            stage.setScene(loginScene);
-            stage.centerOnScreen();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     private void handleProfileClick(MouseEvent event) {
@@ -175,48 +143,12 @@ public class UIController implements Initializable {
             bot_area.getChildren().add(App.getView(viewName));
         }
     }
-    @FXML
-    private TextField searchField;
 
-    @FXML
-    private Button allChatsBtn;
 
-    @FXML
-    private Button savedChatsBtn;
-
-    private void setupFilterButtons() {
-    allChatsBtn.setOnAction(event -> {
-        setFilterButtonSelected(allChatsBtn);
-        System.out.println("Showing all chats");
-        // Here you would add code to show all chats when you're ready
-    });
-    savedChatsBtn.setOnAction(event -> {
-        setFilterButtonSelected(savedChatsBtn);
-        System.out.println("Showing saved chats");
-        // Here you would add code to show saved chats when you're ready
-    });
-}
-    private void setFilterButtonSelected(Button selectedButton) {
-    // Reset styling for all filter buttons
-     allChatsBtn.getStyleClass().remove("button-selected");
-     savedChatsBtn.getStyleClass().remove("button-selected");
-     // Add selected styling to the clicked button
-     selectedButton.getStyleClass().add("button-selected");
-}
     @FXML
     private HBox list;
 
-    private void loadListView() throws IOException {
 
-        list.getChildren().clear();
-
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ListView.fxml"));
-        Pane listViewPane = loader.load();
-
-        // Add the ListView to the list HBox
-        list.getChildren().add(listViewPane);
-    }
 
     private void loadUserAvatar() {
         if (avt == null) return;
