@@ -124,6 +124,7 @@ public class ChatViewController implements SocketManager.MessageListener {
 
             HBox messageBox = new HBox();
 
+            String username = socketManager.getUsername();
             if (message.contains("has joined the chat")) {
                 messageLabel.getStyleClass().add("join-notification");
                 messageBox.setAlignment(Pos.CENTER);
@@ -132,7 +133,7 @@ public class ChatViewController implements SocketManager.MessageListener {
                 messageLabel.getStyleClass().add("join-notification");
                 messageBox.setAlignment(Pos.CENTER);
             }
-            else if (message.startsWith(socketManager.getUsername())) {
+            else if (username != null && message.startsWith(username + ":")) {
                 messageLabel.getStyleClass().add("mess-global");
                 messageBox.setAlignment(Pos.CENTER_RIGHT);
             }

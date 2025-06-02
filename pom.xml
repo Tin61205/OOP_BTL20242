@@ -14,13 +14,6 @@
             </properties>
 
 
-            <repositories>
-                <repository>
-                    <id>spring-milestones</id>
-                    <name>Spring Milestones</name>
-                    <url>https://repo.spring.io/milestone</url>
-                </repository>
-            </repositories>
 
     <dependencies>
                 <!-- SQLite JDBC Driver -->
@@ -31,16 +24,6 @@
                 </dependency>
                 <!-- pom.xml -->
 
-        <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-core</artifactId>
-            <version>${spring-ai.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-vertex-ai-gemini</artifactId>
-            <version>${spring-ai.version}</version>
-        </dependency>
 
 
         <!-- https://mvnrepository.com/artifact/com.google.cloud/google-cloud-aiplatform -->
@@ -50,15 +33,18 @@
             <version>3.61.0</version>
         </dependency>
 
+            <dependency>
+                <groupId>org.kordamp.ikonli</groupId>
+                <artifactId>ikonli-javafx</artifactId>
+                <version>12.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kordamp.ikonli</groupId>
+                <artifactId>ikonli-fontawesome5-pack</artifactId>
+                <version>12.3.1</version>
+            </dependency>
 
 
-
-
-<!--                <dependency>-->
-<!--                    <groupId>org.slf4j</groupId>-->
-<!--                    <artifactId>slf4j-simple</artifactId>-->
-<!--                    <version>2.0.9</version>-->
-<!--                </dependency>-->
 
                 <!-- JavaFX Dependencies -->
                 <dependency>
