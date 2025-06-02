@@ -9,7 +9,6 @@ public class UserService {
     private User currentUser;
     private Connection connection;
     private final String DB_URL = "jdbc:sqlite:studyfx.db";
-    //private final String SQL_SCRIPT_PATH = "/database/db.sql";
 
     private UserService() {
         initializeDatabase();
@@ -27,94 +26,13 @@ public class UserService {
             // Create a connection to the database
             connection = DriverManager.getConnection(DB_URL);
 
-            // Execute SQL script from file
-           // executeSqlScript();
-
         } catch (SQLException e) {
             System.err.println("Database initialization error: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-/*
-    private void executeSqlScript() {
-        try {
-            // Read SQL file from resources
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("database/db.sql");
-            if (inputStream == null) {
-                //System.err.println("Could not find SQL script: database/db.sql");
-                // create tables directly
-                createTablesDirectly();
-                return;
-            }
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder sqlScript = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Skip comments
-                if (!line.trim().startsWith("--")) {
-                    sqlScript.append(line).append(" ");
-                }
-            }
-
-            // Split by semicolon to execute each statement separately
-            String[] statements = sqlScript.toString().split(";");
-
-            Statement stmt = connection.createStatement();
-            for (String statement : statements) {
-                if (!statement.trim().isEmpty()) {
-                    stmt.execute(statement.trim());
-                }
-            }
-            stmt.close();
-
-        } catch (IOException | SQLException e) {
-            System.err.println("Error executing SQL script: " + e.getMessage());
-            e.printStackTrace();
-            // Fall back to creating tables directly
-            createTablesDirectly();
-        }
-    }
-
-    private void createTablesDirectly() {
-        try {
-            Statement stmt = connection.createStatement();
-
-            // Users table with full_name field
-            stmt.execute("CREATE TABLE IF NOT EXISTS users (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "username TEXT NOT NULL UNIQUE, " +
-                    "password TEXT NOT NULL, " +
-                    "email TEXT UNIQUE, " +
-                    "full_name TEXT, " +
-                    "status TEXT DEFAULT 'Available', " +
-                    "profile_image_path TEXT DEFAULT '/images/default_profile.png', " +
-                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
-                    ")");
-
-            // Messages table
-            stmt.execute("CREATE TABLE IF NOT EXISTS messages (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "content TEXT NOT NULL, " +
-                    "sender TEXT NOT NULL, " +
-                    "timestamp TEXT NOT NULL, " +
-                    "is_from_bot INTEGER NOT NULL, " +
-                    "username TEXT NOT NULL, " +
-                    "FOREIGN KEY (username) REFERENCES users(username)" +
-                    ")");
-
-            // Insert default user if it doesn't exist
-            stmt.execute("INSERT OR IGNORE INTO users (username, password, email, full_name, status) " +
-                    "VALUES ('bach', 'bach123', 'bach@gmail.com', 'NT_Bach', 'Online')");
-
-            stmt.close();
-        } catch (SQLException e) {
-            System.err.println("Error creating tables directly: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-*/
     public boolean register(String username, String password, String email) {
         try {
             // Check if username already exists

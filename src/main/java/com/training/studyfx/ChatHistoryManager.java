@@ -40,7 +40,7 @@ public class ChatHistoryManager {
                 history.add(line);
             }
         } catch (IOException e) {
-            // File có thể chưa tồn tại, không cần xử lý lỗi
+            e.printStackTrace();
         }
         return history;
     }
