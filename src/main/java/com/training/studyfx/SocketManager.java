@@ -89,4 +89,11 @@ public class SocketManager {
     public String getUsername() {
         return username;
     }
+    public void reset() {
+        disconnect();
+        username = null;
+        messageListeners.clear();
+        instance = null;
+    }
+
 } 

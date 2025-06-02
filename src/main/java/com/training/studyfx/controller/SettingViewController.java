@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.training.studyfx.SocketManager;
+
 public class SettingViewController implements Initializable {
 
     @FXML
@@ -93,10 +95,16 @@ public class SettingViewController implements Initializable {
     }
     private void handleLogout() {
         try {
+            if (SocketManager.getInstance().isConnected()) {
+                SocketManager.getInstance().sendMessage(SocketManager.getInstance().getUsername() + " has left the chat");
+            }
+            SocketManager.getInstance().reset();
             App.setRoot("LoginView");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
 }
