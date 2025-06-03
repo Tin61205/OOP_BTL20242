@@ -24,7 +24,7 @@
         <padding>
             <Insets bottom="15" left="15" right="15" top="15" />
         </padding>
-        <TextField fx:id="usernameField" prefHeight="36.0" prefWidth="409.0" promptText="Enter your username" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-padding: 8 15;" styleClass="message-input" stylesheets="@../../../styles/ui.css" HBox.hgrow="ALWAYS">
+        <TextField fx:id="usernameField" prefHeight="39.0" prefWidth="363.0" promptText="Enter your username" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-padding: 8 15;" styleClass="message-input" stylesheets="@../../../styles/ui.css" HBox.hgrow="ALWAYS">
             <font>
                 <Font size="14.0" />
             </font>
