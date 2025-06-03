@@ -357,3 +357,9 @@
 .nav-button:hover .nav-label {
     -fx-text-fill: #2196F3;
 }
+
+
+.user-message, .bot-message, .mess-global, .other-global, .join-notification {
+    -fx-font-family: 'Arial', 'Tahoma', 'Roboto', 'Noto Sans', 'Segoe UI', 'sans-serif';
+    -fx-font-size: 16px;
+}

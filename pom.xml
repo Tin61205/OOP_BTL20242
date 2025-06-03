@@ -67,6 +67,12 @@
                     <artifactId>json</artifactId>
                     <version>20240303</version>
                 </dependency>
+            
+              <dependency>
+                <groupId>hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>1.8.0.10</version>
+              </dependency>
             </dependencies>
 
             <build>

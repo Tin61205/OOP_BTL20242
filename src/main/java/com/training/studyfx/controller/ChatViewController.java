@@ -2,6 +2,7 @@ package com.training.studyfx.controller;
 
 import com.training.studyfx.ChatHistoryManager;
 import com.training.studyfx.SocketManager;
+import com.training.studyfx.service.GeminiService;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,9 +13,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import java.io.IOException;
+
 
 public class ChatViewController implements SocketManager.MessageListener {
     @FXML private ScrollPane scrollPane;
@@ -28,6 +31,7 @@ public class ChatViewController implements SocketManager.MessageListener {
     private GridPane emojiGrid;
     private SocketManager socketManager;
     private ChatHistoryManager chatHistoryManager;
+    private GeminiService geminiService;
 
     public void initialize() {
         scrollPane.setFitToWidth(true);
@@ -39,6 +43,7 @@ public class ChatViewController implements SocketManager.MessageListener {
         socketManager.addMessageListener(this);
         
         chatHistoryManager = ChatHistoryManager.getInstance();
+        geminiService = new GeminiService();
         loadChatHistory();
     }
 
@@ -96,10 +101,48 @@ public class ChatViewController implements SocketManager.MessageListener {
             }
             String message = messageField.getText().trim();
             if (!message.isEmpty()) {
-                String fullMessage = socketManager.getUsername() + ": " + message;
-                socketManager.sendMessage(fullMessage);
-                // Chỉ lưu tin nhắn khi gửi
-                chatHistoryManager.saveMessage(fullMessage);
+                if (message.startsWith("@bot")) {
+                    // Xử lý tin nhắn cho Gemini
+                    String botMessage = message.substring(4).trim(); // Bỏ "@bot" ở đầu
+                    String systemPrompt = "Bạn là chatbot assistant của một công ty.Hãy trả lời một cách chuyên nghiệp , độ dài vừa phải ,không dài dòng .Có thể dùng thêm emoji nếu cần.Không được xuống dòng";
+                    String prompt = systemPrompt + botMessage;
+                    appendToChat(socketManager.getUsername() + ": " + message);
+                    chatHistoryManager.saveMessage(socketManager.getUsername() + ": " + message);
+                    
+                    // Hiển thị "Bot đang nhập..."
+                    appendToChat("Bot: Đang nhập...");
+                    
+                    // Gọi Gemini trong thread riêng
+                    new Thread(() -> {
+                        try {
+                            String botResponse = geminiService.generateResponse(prompt);
+                            javafx.application.Platform.runLater(() -> {
+                                removeLastMessage();
+                         
+
+                                String botMsg = "Bot: " + botResponse.replace("\n", "\\n");
+                  
+                                chatHistoryManager.saveMessage(botMsg);
+                                // Gửi tin nhắn bot lên server để mọi người cùng thấy
+                                try {
+                                    socketManager.sendMessage(botMsg);
+                                } catch (IOException ex) {
+                                    appendToChat("Lỗi gửi tin nhắn r : " + ex.getMessage());
+                                }
+                            });
+                        } catch (Exception e) {
+                            javafx.application.Platform.runLater(() -> {
+                                removeLastMessage();
+                                appendToChat("Lỗi gì đó rồi: " + e.getMessage());
+                            });
+                        }
+                    }).start();
+                } else {
+                    // Xử lý tin nhắn thông thường
+                    String fullMessage = socketManager.getUsername() + ": " + message;
+                    socketManager.sendMessage(fullMessage);
+                    chatHistoryManager.saveMessage(fullMessage);
+                }
                 messageField.clear();
             }
         } catch (IOException e) {
@@ -110,7 +153,6 @@ public class ChatViewController implements SocketManager.MessageListener {
     @Override
     public void onMessageReceived(String message) {
         appendToChat(message);
-        // Không lưu tin nhắn khi nhận
     }
 
     private void appendToChat(String message) {
@@ -118,9 +160,12 @@ public class ChatViewController implements SocketManager.MessageListener {
             if (emptyStateText.isVisible()) {
                 emptyStateText.setVisible(false);
             }
-            Label messageLabel = new Label(message);
+            String displayMessage = message.replace("\\n", "\n");
+            Label messageLabel = new Label(displayMessage);
+            //Label messageLabel = new Label(message);
+            messageLabel.setMaxWidth(800);
             messageLabel.setWrapText(true);
-            messageLabel.setStyle("-fx-font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;");
+
 
             HBox messageBox = new HBox();
 
@@ -137,7 +182,11 @@ public class ChatViewController implements SocketManager.MessageListener {
                 messageLabel.getStyleClass().add("mess-global");
                 messageBox.setAlignment(Pos.CENTER_RIGHT);
             }
-            else {
+            else if(message.startsWith("Bot:")){
+                messageLabel.getStyleClass().add("bot-message");
+                messageBox.setAlignment(Pos.CENTER_RIGHT);
+            }
+            else  {
                 messageLabel.getStyleClass().add("other-global");
                 messageBox.setAlignment(Pos.CENTER_LEFT);
             }
@@ -206,5 +255,12 @@ public class ChatViewController implements SocketManager.MessageListener {
         chatContainer.getChildren().clear();
         // Show the empty state message
         emptyStateText.setVisible(true);
+    }
+
+    private void removeLastMessage() {
+        int count = chatContainer.getChildren().size();
+        if (count > 0) {
+            chatContainer.getChildren().remove(count - 1);
+        }
     }
 }

@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import com.training.studyfx.server.Server;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
+
 
 
 public class App extends Application {
