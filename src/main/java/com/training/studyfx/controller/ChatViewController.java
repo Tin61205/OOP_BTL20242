@@ -118,7 +118,7 @@ public class ChatViewController implements SocketManager.MessageListener {
                             String botResponse = geminiService.generateResponse(prompt);
                             javafx.application.Platform.runLater(() -> {
                                 removeLastMessage();
-                         
+
 
                                 String botMsg = "Bot: " + botResponse.replace("\n", "\\n");
                   

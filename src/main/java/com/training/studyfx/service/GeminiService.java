@@ -45,7 +45,12 @@ public class GeminiService {
         JSONArray parts = new JSONArray();
         JSONObject part = new JSONObject();
 
-        part.put("text", userMessage);  // Nội dung chat người dùng
+        // Thêm system prompt để format markdown
+        String enhancedMessage = "Hãy trả lời bằng định dạng markdown khi cần thiết. " +
+                "Sử dụng **bold** cho từ khóa quan trọng, *italic* cho nhấn mạnh, " +
+                "và bullet points (*) cho danh sách. Câu hỏi: " + userMessage;
+        
+        part.put("text", enhancedMessage);  // Nội dung chat người dùng
         parts.put(part);                // Đóng gói nó lại
         content.put("parts", parts);
         contents.put(content);

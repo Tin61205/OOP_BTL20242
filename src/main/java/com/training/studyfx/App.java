@@ -54,8 +54,8 @@ public class App extends Application {
 
         if (fxml.equals("UI")) {
             Stage stage = (Stage) scene.getWindow();
-            stage.setWidth(785);
-            stage.setHeight(620);
+            stage.setWidth(900);  // Tăng width để chatbot có đủ không gian
+            stage.setHeight(720); // Tăng height để hiển thị tốt hơn
             stage.centerOnScreen();
         } else if (fxml.equals("LoginView") || fxml.equals("RegisterView")) {
             Stage stage = (Stage) scene.getWindow();

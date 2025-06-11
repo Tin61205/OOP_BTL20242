@@ -11,16 +11,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="580.0" prefWidth="625.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.training.studyfx.controller.ChatbotViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="680.0" prefWidth="825.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.training.studyfx.controller.ChatbotViewController">
    <children>
-      <VBox prefHeight="580.0" prefWidth="432.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <VBox prefHeight="680.0" prefWidth="825.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label alignment="CENTER" prefHeight="49.0" prefWidth="825.0" style="-fx-background-color: #f0f0f0;" text="Chatbot Assistant" textFill="#0084ff">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <ScrollPane fx:id="chatbotScrollPane" fitToWidth="true" prefHeight="471.0" prefWidth="704.0" VBox.vgrow="ALWAYS">
+            <ScrollPane fx:id="chatbotScrollPane" fitToWidth="true" prefHeight="571.0" prefWidth="825.0" VBox.vgrow="ALWAYS">
                <content>
                   <VBox fx:id="chatbotMessagesContainer" spacing="10.0">
                      <padding>
@@ -32,7 +32,7 @@
             <HBox alignment="CENTER" prefHeight="60.0" spacing="10.0">
                <children>
 
-                  <TextField fx:id="chatbotInput" prefHeight="40.0" prefWidth="555.0" promptText="Ask the chatbot..." stylesheets="@../../../styles/ui.css">
+                  <TextField fx:id="chatbotInput" prefHeight="40.0" prefWidth="755.0" promptText="Ask the chatbot..." stylesheets="@../../../styles/ui.css">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
