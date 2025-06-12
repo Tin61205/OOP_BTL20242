@@ -40,9 +40,15 @@ public class UIController implements Initializable {
 
         // Load user avatar into the circle
         loadUserAvatar();
-        try {
+        String targetTab = App.getTargetTab(); // lấy tab cần chuyển đến
+        App.clearNextTab(); // xoá sau khi dùng
 
-            loadView("ProfileView");
+        try {
+            if ("setting".equalsIgnoreCase(targetTab)) {
+                handleSettingClick(null); // gọi luôn hàm load SettingView
+            } else {
+                loadView("ProfileView"); // mặc định
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -107,7 +113,7 @@ public class UIController implements Initializable {
     @FXML
     private void handleSettingClick(MouseEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/SettingView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/ProfileSettingView.fxml"));
             Parent settingView = loader.load();
 
             // Clear existing content

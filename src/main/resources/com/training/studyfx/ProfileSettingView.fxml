@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="700.0" prefWidth="700.0" styleClass="profile-container" stylesheets="@../../../styles/ui.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.training.studyfx.controller.ProfileSettingController">
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <VBox spacing="20">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+           <children>
+   
+               <!-- Change Photo -->
+               <HBox alignment="CENTER">
+      <children>
+                      <Button fx:id="changePhotoButton" prefHeight="49.0" prefWidth="108.0" styleClass="change-photo-button" text="Change Photo" />
+      </children>
+               </HBox>
+   
+               <!-- Personal Info -->
+               <VBox spacing="20">
+      <children>
+                      <Label styleClass="section-title" text="Personal Information">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin></Label>
+                      <GridPane hgap="10" vgap="15">
+                          <columnConstraints>
+                              <ColumnConstraints halignment="RIGHT" minWidth="80.0" prefWidth="100.0" />
+                              <ColumnConstraints prefWidth="250.0" />
+                        <ColumnConstraints prefWidth="250.0" />
+                          </columnConstraints>
+                         <children>
+                             <Label text="Name:" GridPane.rowIndex="0" />
+                             <TextField fx:id="nameField" promptText="Your Name" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+         
+                             <Label text="Email:" GridPane.rowIndex="1" />
+                             <TextField fx:id="emailField" promptText="Your Email" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         
+                             <Label text="Status:" GridPane.rowIndex="2" />
+                             <TextField fx:id="statusField" promptText="Your Status" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                          <VBox spacing="15.0" GridPane.rowIndex="4">
+                              <padding>
+                                  <Insets bottom="20" left="20" right="20" top="20" />
+                              </padding>
+                             <children>
+                     
+                                 <!-- Bottom Buttons -->
+                                 <HBox alignment="CENTER_RIGHT" spacing="10">
+                        <children>
+                                        <Label fx:id="saveConfirmationLabel" text="Changes saved successfully!" textFill="green" visible="false" />
+                        </children>
+                                 </HBox>
+                     
+                                 <!-- Logout -->
+                                 <HBox alignment="CENTER_RIGHT" />
+                             </children>
+                          </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                           <children>
+                                  <Button fx:id="saveButton" prefHeight="37.0" prefWidth="144.0" style="-fx-background-color: #0084ff; -fx-text-fill: white;" text="Save Changes" />
+                           </children>
+                           <GridPane.margin>
+                              <Insets top="5.0" />
+                           </GridPane.margin>
+                           <padding>
+                              <Insets top="4.0" />
+                           </padding>
+                        </VBox>
+                            <Button fx:id="logoutbutton" prefHeight="37.0" prefWidth="118.0" text="Log out" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                           <GridPane.margin>
+                              <Insets left="130.0" top="100.0" />
+                           </GridPane.margin>
+                        </Button>
+                         </children>
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
+                      </GridPane>
+      </children>
+               </VBox>
+   
+               <!-- Confirmation -->
+               <HBox alignment="CENTER" />
+           </children>
+        </VBox>
+    </center>
+   <top>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+               <Label text="Settings" textFill="#0084ff">
+                   <font>
+                       <Font name="System Bold" size="24.0" />
+                   </font>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+               </Label>
+               <StackPane maxHeight="150" maxWidth="150">
+                  <children>
+                      <ImageView fx:id="profileImage" fitHeight="120.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image" />
+                  </children>
+               <VBox.margin>
+                  <Insets left="260.0" />
+               </VBox.margin>
+               </StackPane>
+         </children>
+      </VBox>
+   </top>
+</BorderPane>

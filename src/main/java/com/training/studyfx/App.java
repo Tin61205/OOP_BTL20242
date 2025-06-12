@@ -15,6 +15,18 @@ import java.net.ServerSocket;
 public class App extends Application {
 
     private static Scene scene;
+    private static String TargetTab = null;
+    public static void setTargetTab(String tabName) {
+        TargetTab = tabName;
+    }
+
+    public static String getTargetTab() {
+        return TargetTab;
+    }
+
+    public static void clearNextTab() {
+        TargetTab = null;
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
