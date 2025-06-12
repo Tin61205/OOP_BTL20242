@@ -109,7 +109,7 @@
                <children>
                      <StackPane maxHeight="150" maxWidth="150">
                         <children>
-                            <ImageView fx:id="profileImage" fitHeight="120.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image" />
+                            <ImageView fx:id="profileImage" fitHeight="173.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image" />
                         </children>
                      </StackPane>
                      <Label text="Settings" textFill="WHITE">
