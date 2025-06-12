@@ -1,131 +1,207 @@
-<?xml version="1.0" encoding="UTF-8"?>
+package com.training.studyfx.controller;
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+import com.training.studyfx.App;
+import com.training.studyfx.SocketManager;
+import com.training.studyfx.model.User;
+import com.training.studyfx.service.UserService;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 
-<BorderPane prefHeight="700.0" prefWidth="700.0" styleClass="profile-container" stylesheets="@../../../styles/ui.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.training.studyfx.controller.ProfileSettingController">
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-    <!-- MAIN CONTENT -->
-    <center>
-        <VBox spacing="20">
-            <padding>
-                <Insets bottom="20" left="20" right="20" top="20" />
-            </padding>
-           <children>
-   
-               <!-- Change Photo -->
-               <HBox alignment="CENTER">
-      <children>
-                      <Button fx:id="changePhotoButton" prefHeight="49.0" prefWidth="108.0" styleClass="change-photo-button" text="Change Photo" />
-      </children>
-               </HBox>
-   
-               <!-- Personal Info -->
-               <VBox spacing="20">
-      <children>
-                      <Label style="-fx-text-fill: #0084ff;" styleClass="section-title" text="Personal Information">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin></Label>
-                      <GridPane hgap="10" vgap="15">
-                          <columnConstraints>
-                              <ColumnConstraints halignment="RIGHT" minWidth="80.0" prefWidth="100.0" />
-                              <ColumnConstraints prefWidth="250.0" />
-                        <ColumnConstraints prefWidth="250.0" />
-                          </columnConstraints>
-                         <children>
-                             <Label text="Name:" GridPane.rowIndex="0" />
-                             <TextField fx:id="nameField" promptText="Your Name" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-         
-                             <Label text="Email:" GridPane.rowIndex="1" />
-                             <TextField fx:id="emailField" promptText="Your Email" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-         
-                             <Label text="Status:" GridPane.rowIndex="2" />
-                             <TextField fx:id="statusField" promptText="Your Status" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                          <VBox spacing="15.0" GridPane.rowIndex="4">
-                              <padding>
-                                  <Insets bottom="20" left="20" right="20" top="20" />
-                              </padding>
-                             <children>
-                     
-                                 <!-- Bottom Buttons -->
-                                 <HBox alignment="CENTER_RIGHT" spacing="10">
-                        <children>
-                                        <Label fx:id="saveConfirmationLabel" text="Changes saved successfully!" textFill="green" visible="false" />
-                        </children>
-                                 </HBox>
-                     
-                                 <!-- Logout -->
-                                 <HBox alignment="CENTER_RIGHT" />
-                             </children>
-                          </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                           <GridPane.margin>
-                              <Insets top="5.0" />
-                           </GridPane.margin>
-                           <padding>
-                              <Insets top="4.0" />
-                           </padding>
-                        </VBox>
-                            <Button fx:id="logoutbutton" prefHeight="37.0" prefWidth="118.0" text="Log out" GridPane.columnIndex="2" GridPane.rowIndex="4">
-                           <GridPane.margin>
-                              <Insets left="130.0" top="100.0" />
-                           </GridPane.margin>
-                        </Button>
-                            <Button fx:id="saveButton" prefHeight="37.0" prefWidth="125.0" style="-fx-background-color: #0084ff; -fx-text-fill: white;" text="Save Changes" GridPane.columnIndex="2" GridPane.rowIndex="4">
-                           <GridPane.margin>
-                              <Insets top="100.0" />
-                           </GridPane.margin>
-                        </Button>
-                         </children>
-                     <rowConstraints>
-                        <RowConstraints />
-                        <RowConstraints />
-                        <RowConstraints />
-                        <RowConstraints />
-                        <RowConstraints />
-                        <RowConstraints />
-                     </rowConstraints>
-                      </GridPane>
-      </children>
-               </VBox>
-   
-               <!-- Confirmation -->
-               <HBox alignment="CENTER" />
-           </children>
-        </VBox>
-    </center>
-   <top>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-         <children>
-            <StackPane prefHeight="198.0" prefWidth="700.0" style="-fx-background-color: #0084ff;" styleClass="profile-header">
-               <children>
-                     <StackPane maxHeight="150" maxWidth="150">
-                        <children>
-                            <ImageView fx:id="profileImage" fitHeight="173.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image" />
-                        </children>
-                     </StackPane>
-                     <Label text="Settings" textFill="WHITE">
-                         <font>
-                             <Font name="System Bold" size="24.0" />
-                         </font>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <padding>
-                        <Insets bottom="100.0" right="550.0" />
-                     </padding>
-                     </Label>
-               </children>
-            </StackPane>
-         </children>
-      </VBox>
-   </top>
-</BorderPane>
+public class ProfileSettingController implements Initializable {
+    public String profileImagePath = "/images/default-profile.png";
+
+    @FXML
+    private ImageView profileImage;
+
+    @FXML
+    private TextField nameField;
+
+    @FXML
+    private TextField emailField;
+
+    @FXML
+    private TextField statusField;
+
+    @FXML
+    private Label saveConfirmationLabel;
+
+    @FXML
+    private Button changePhotoButton;
+
+    @FXML
+    private Button saveButton;
+
+    @FXML
+    private Button logoutbutton;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Check if UI components are properly loaded
+        if (nameField == null || emailField == null || statusField == null) {
+            System.err.println("Error: UI fields are null in ProfileViewController");
+            return;
+        }
+        if (logoutbutton != null) {
+            logoutbutton.setOnAction(e -> handleLogout());
+        }
+
+        // Load user profile data
+        loadUserProfile();
+
+        if (changePhotoButton != null) {
+            changePhotoButton.setOnAction(e -> changeProfilePhoto());
+        }
+
+        if (saveButton != null) {
+            saveButton.setOnAction(e -> saveProfile());
+        }
+    }
+
+    private void loadUserProfile() {
+        UserService userService = UserService.getInstance();
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser != null) {
+            // Load user data
+            nameField.setText(currentUser.getFullName() != null ?
+                    currentUser.getFullName() : currentUser.getUsername());
+            emailField.setText(currentUser.getEmail() != null ?
+                    currentUser.getEmail() : "");
+            statusField.setText(currentUser.getStatus() != null ?
+                    currentUser.getStatus() : "Available");
+
+            // Load profile image if available
+            if (currentUser.getProfileImagePath() != null && !currentUser.getProfileImagePath().isEmpty()) {
+                try {
+                    profileImagePath = currentUser.getProfileImagePath();
+                    Image image;
+
+                    // Check if it's a resource path or file path
+                    if (profileImagePath.startsWith("/")) {
+                        // Resource path
+                        image = new Image(getClass().getResourceAsStream(profileImagePath));
+                    } else {
+                        // File path
+                        File imageFile = new File(profileImagePath);
+                        if (imageFile.exists()) {
+                            image = new Image(imageFile.toURI().toString());
+                        } else {
+                            // Fallback to default
+                            image = new Image(getClass().getResourceAsStream("/images/default-profile.png"));
+                        }
+                    }
+
+                    profileImage.setImage(image);
+                } catch (Exception e) {
+                    System.err.println("Error loading profile image: " + e.getMessage());
+                    // Set default image
+                    profileImage.setImage(new Image(getClass().getResourceAsStream("/images/default-profile.png")));
+                }
+            } else {
+                // Set default image
+                profileImagePath = "/images/default-profile.png";
+                profileImage.setImage(new Image(getClass().getResourceAsStream(profileImagePath)));
+            }
+        } else {
+            // Default values if no user is logged in
+            nameField.setText("");
+            emailField.setText("");
+            statusField.setText("Available");
+            profileImagePath = "/images/default-profile.png";
+            profileImage.setImage(new Image(getClass().getResourceAsStream(profileImagePath)));
+        }
+    }
+
+    private void changeProfilePhoto() {
+        if (profileImage == null) return;
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Profile Image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(profileImage.getScene().getWindow());
+        if (selectedFile != null) {
+            try {
+                File appDir = new File("upload");
+                if (!appDir.exists()) {
+                    appDir.mkdirs();
+                }
+
+                // Create images subdirectory if it doesn't exist
+                File imagesDir = new File(appDir, "images");
+                if (!imagesDir.exists()) {
+                    imagesDir.mkdirs();
+                }
+
+                // Generate a unique filename based on username and timestamp
+                String username = UserService.getInstance().getCurrentUser().getUsername();
+                String extension = selectedFile.getName().substring(selectedFile.getName().lastIndexOf('.'));
+                String newFileName = username + "_" + System.currentTimeMillis() + extension;
+                File destFile = new File(imagesDir, newFileName);
+
+                // Copy the file
+                java.nio.file.Files.copy(
+                        selectedFile.toPath(),
+                        destFile.toPath(),
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                );
+
+                // Set the image in UI
+                Image image = new Image(destFile.toURI().toString());
+                profileImage.setImage(image);
+
+                // Save path to database (store as absolute path)
+                profileImagePath = destFile.getAbsolutePath();
+                UserService.getInstance().updateProfileImage(profileImagePath);
+
+                saveConfirmationLabel.setText("Profile image updated successfully!");
+                saveConfirmationLabel.setVisible(true);
+
+            } catch (Exception e) {
+                saveConfirmationLabel.setText("Error saving image: " + e.getMessage());
+                saveConfirmationLabel.setVisible(true);
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private void saveProfile() {
+        String status = statusField.getText().trim();
+        UserService userService = UserService.getInstance();
+        userService.updateUserProfile(status, profileImagePath);
+        saveConfirmationLabel.setVisible(true);
+
+        try {
+            App.setTargetTab("setting");
+            App.setRoot("UI");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void handleLogout() {
+        try {
+            if (SocketManager.getInstance().isConnected()) {
+                SocketManager.getInstance().sendMessage(SocketManager.getInstance().getUsername() + " has left the chat");
+            }
+            SocketManager.getInstance().reset();
+            App.setRoot("LoginView");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
