@@ -67,9 +67,6 @@
                              </children>
                           </VBox>
                         <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                           <children>
-                                  <Button fx:id="saveButton" prefHeight="37.0" prefWidth="144.0" style="-fx-background-color: #0084ff; -fx-text-fill: white;" text="Save Changes" />
-                           </children>
                            <GridPane.margin>
                               <Insets top="5.0" />
                            </GridPane.margin>
@@ -80,6 +77,11 @@
                             <Button fx:id="logoutbutton" prefHeight="37.0" prefWidth="118.0" text="Log out" GridPane.columnIndex="2" GridPane.rowIndex="4">
                            <GridPane.margin>
                               <Insets left="130.0" top="100.0" />
+                           </GridPane.margin>
+                        </Button>
+                            <Button fx:id="saveButton" prefHeight="37.0" prefWidth="125.0" style="-fx-background-color: #0084ff; -fx-text-fill: white;" text="Save Changes" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                           <GridPane.margin>
+                              <Insets top="100.0" />
                            </GridPane.margin>
                         </Button>
                          </children>
