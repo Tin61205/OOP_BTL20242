@@ -9,87 +9,113 @@
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="580.0" prefWidth="780.0" styleClass="txtfld" stylesheets="@../../../styles/ui.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.training.studyfx.controller.UIController">
+<AnchorPane id="AnchorPane" prefHeight="580.0" prefWidth="780.0" styleClass="txtfld"
+            stylesheets="@../../../styles/ui.css"
+            xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.training.studyfx.controller.UIController">
    <children>
+      <!-- Sidebar -->
       <Pane prefHeight="583.0" prefWidth="148.0" style="-fx-background-color: #0084ff;" styleClass="side-bar">
          <children>
             <Circle fx:id="avt" fill="WHITE" layoutX="75.0" layoutY="75.0" radius="68.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
                <effect>
                   <DropShadow>
                      <color>
-                        <Color blue="0.7631579041481018" green="0.7631579041481018" red="0.7631579041481018" />
+                        <Color blue="0.763" green="0.763" red="0.763"/>
                      </color>
                   </DropShadow>
                </effect>
             </Circle>
             <Label layoutX="61.0" layoutY="155.0" text="You">
                <font>
-                  <Font name="Arial Rounded MT Bold" size="15.0" />
+                  <Font name="Arial Rounded MT Bold" size="15.0"/>
                </font>
             </Label>
-            <Button fx:id="Profile" layoutX="7.0" layoutY="205.0" onMouseClicked="#handleProfileClick" prefHeight="50.0" prefWidth="140.0" styleClass="nav-button">
+
+            <!-- ✅ About button thay cho Profile -->
+            <Button fx:id="About" layoutX="7.0" layoutY="205.0" onMouseClicked="#handleAboutClick"
+                    prefHeight="50.0" prefWidth="140.0" styleClass="nav-button">
                <graphic>
                   <HBox alignment="CENTER_LEFT" spacing="10">
                      <children>
-                        <FontIcon iconLiteral="fas-user" styleClass="nav-icon" />
-                        <Label styleClass="nav-label" text="Profile" />
+                        <FontIcon iconLiteral="fas-user" styleClass="nav-icon"/>
+                        <Label styleClass="nav-label" text="About"/>
                      </children>
                      <effect>
-                        <ColorAdjust brightness="1.0" contrast="-0.29" hue="-0.29" saturation="-0.19" />
+                        <ColorAdjust brightness="1.0" contrast="-0.29" hue="-0.29" saturation="-0.19"/>
                      </effect>
                   </HBox>
                </graphic>
             </Button>
-            <Button fx:id="Chat" layoutX="7.0" layoutY="255.0" onMouseClicked="#handleChatClick" prefHeight="50.0" prefWidth="140.0" styleClass="nav-button">
-               <graphic>
-                  <HBox alignment="CENTER_LEFT" prefWidth="50.0" spacing="10.0">
-                     <children>
-                        <FontIcon iconLiteral="fas-globe" iconSize="12" styleClass="nav-icon" />
-                        <Label styleClass="nav-label" text="Global" />
-                     </children>
-                     <effect>
-                        <ColorAdjust brightness="1.0" contrast="-0.29" hue="-0.29" saturation="-0.2" />
-                     </effect>
-                  </HBox>
-               </graphic>
-               <effect>
-                  <ColorAdjust />
-               </effect>
-            </Button>
-            <Button fx:id="Chatbot" layoutX="7.0" layoutY="306.0" onMouseClicked="#handleChatbotClick" prefHeight="50.0" prefWidth="140.0" styleClass="nav-button">
+
+            <!-- Chat -->
+            <Button fx:id="Chat" layoutX="7.0" layoutY="255.0" onMouseClicked="#handleChatClick"
+                    prefHeight="50.0" prefWidth="140.0" styleClass="nav-button">
                <graphic>
                   <HBox alignment="CENTER_LEFT" spacing="10">
                      <children>
-                        <FontIcon iconLiteral="fas-robot" styleClass="nav-icon" />
-                        <Label styleClass="nav-label" text="Chatbot" />
+                        <FontIcon iconLiteral="fas-globe" iconSize="12" styleClass="nav-icon"/>
+                        <Label styleClass="nav-label" text="Global"/>
                      </children>
                      <effect>
-                        <ColorAdjust brightness="1.0" contrast="-0.29" hue="-0.29" saturation="-0.2" />
+                        <ColorAdjust brightness="1.0" contrast="-0.29" hue="-0.29" saturation="-0.2"/>
                      </effect>
                   </HBox>
                </graphic>
             </Button>
-            <Button fx:id="Setting" layoutX="7.0" layoutY="344.0" onMouseClicked="#handleSettingClick" prefHeight="50.0" prefWidth="140.0" styleClass="nav-button">
+
+            <!-- Chatbot -->
+            <Button fx:id="Chatbot" layoutX="7.0" layoutY="306.0" onMouseClicked="#handleChatbotClick"
+                    prefHeight="50.0" prefWidth="140.0" styleClass="nav-button">
                <graphic>
                   <HBox alignment="CENTER_LEFT" spacing="10">
                      <children>
-                        <FontIcon iconLiteral="fas-cog" styleClass="nav-icon" />
-                        <Label styleClass="nav-label" text="Setting" />
+                        <FontIcon iconLiteral="fas-robot" styleClass="nav-icon"/>
+                        <Label styleClass="nav-label" text="Chatbot"/>
                      </children>
                      <effect>
-                        <ColorAdjust brightness="1.0" contrast="-0.29" hue="-0.29" saturation="-0.2" />
+                        <ColorAdjust brightness="1.0" contrast="-0.29" hue="-0.29" saturation="-0.2"/>
+                     </effect>
+                  </HBox>
+               </graphic>
+            </Button>
+
+            <!-- Setting -->
+            <Button fx:id="Setting" layoutX="7.0" layoutY="344.0" onMouseClicked="#handleSettingClick"
+                    prefHeight="50.0" prefWidth="140.0" styleClass="nav-button">
+               <graphic>
+                  <HBox alignment="CENTER_LEFT" spacing="10">
+                     <children>
+                        <FontIcon iconLiteral="fas-cog" styleClass="nav-icon"/>
+                        <Label styleClass="nav-label" text="Setting"/>
+                     </children>
+                     <effect>
+                        <ColorAdjust brightness="1.0" contrast="-0.29" hue="-0.29" saturation="-0.2"/>
                      </effect>
                   </HBox>
                </graphic>
             </Button>
          </children>
       </Pane>
-      <AnchorPane fx:id="mainContentArea" layoutX="348.0" layoutY="0.0" prefHeight="581.0" prefWidth="432.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="348.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+      <!-- Nội dung chính -->
+      <AnchorPane fx:id="mainContentArea" layoutX="348.0" layoutY="0.0"
+                  prefHeight="581.0" prefWidth="432.0"
+                  AnchorPane.bottomAnchor="-1.0"
+                  AnchorPane.leftAnchor="348.0"
+                  AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="0.0">
          <children>
-            <HBox fx:id="Chat_View" prefHeight="581.0" prefWidth="432.0" />
+            <HBox fx:id="Chat_View" prefHeight="581.0" prefWidth="432.0"/>
          </children>
       </AnchorPane>
-      <HBox fx:id="list" layoutX="148.0" prefHeight="580.0" prefWidth="200.0" />
-      <AnchorPane fx:id="bot_area" layoutX="147.0" layoutY="-1.0" prefHeight="584.0" prefWidth="633.0" />
+
+      <!-- Danh sách phụ -->
+      <HBox fx:id="list" layoutX="148.0" prefHeight="580.0" prefWidth="200.0"/>
+
+      <!-- Khu vực nội dung phụ -->
+      <AnchorPane fx:id="bot_area" layoutX="147.0" layoutY="-1.0"
+                  prefHeight="584.0" prefWidth="633.0"/>
    </children>
 </AnchorPane>
