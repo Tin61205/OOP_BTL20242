@@ -6,34 +6,36 @@ import com.training.studyfx.model.User;
 import com.training.studyfx.service.GeminiService;
 import com.training.studyfx.service.UserService;
 import com.training.studyfx.util.MarkdownToHtml;
+import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Popup;
-import javafx.scene.web.WebView;
 import javafx.scene.layout.Region;
-import javafx.animation.FadeTransition;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.web.WebView;
+import javafx.stage.Popup;
 import javafx.util.Duration;
+
 import java.io.IOException;
-import javafx.application.Platform;
-import javafx.scene.Node;
 
 public class ChatViewController implements SocketManager.MessageListener {
+
     @FXML private ScrollPane scrollPane;
     @FXML private TextField messageField;
     @FXML private TextField usernameField;
     @FXML private VBox chatContainer;
     @FXML private Text emptyStateText;
     @FXML private Button emojiButton;
+
     private Popup emojiPopup;
     private GridPane emojiGrid;
     private SocketManager socketManager;
@@ -41,26 +43,21 @@ public class ChatViewController implements SocketManager.MessageListener {
     private GeminiService geminiService;
     private User currentUser = UserService.getInstance().getCurrentUser();
 
-
     public void initialize() {
         scrollPane.setFitToWidth(true);
         scrollPane.setVvalue(1.0);
         chatContainer.getStylesheets().add(getClass().getResource("/styles/ui.css").toExternalForm());
 
-        // Thêm xử lý scroll cho ScrollPane
         scrollPane.setOnScroll(event -> {
             double deltaY = event.getDeltaY();
-            double currentVValue = scrollPane.getVvalue();
-            double newVValue = currentVValue - (deltaY / scrollPane.getHeight());
+            double newVValue = scrollPane.getVvalue() - (deltaY / scrollPane.getHeight());
             scrollPane.setVvalue(Math.max(0, Math.min(1, newVValue)));
             event.consume();
         });
 
-        // Thêm xử lý scroll cho chatContainer
         chatContainer.setOnScroll(event -> {
             double deltaY = event.getDeltaY();
-            double currentVValue = scrollPane.getVvalue();
-            double newVValue = currentVValue - (deltaY / scrollPane.getHeight());
+            double newVValue = scrollPane.getVvalue() - (deltaY / scrollPane.getHeight());
             scrollPane.setVvalue(Math.max(0, Math.min(1, newVValue)));
             event.consume();
         });
@@ -68,29 +65,23 @@ public class ChatViewController implements SocketManager.MessageListener {
         initEmojiPopup();
         socketManager = SocketManager.getInstance();
         socketManager.addMessageListener(this);
-        
+
         chatHistoryManager = ChatHistoryManager.getInstance();
         geminiService = new GeminiService();
         loadChatHistory();
 
         connectToServer();
-
     }
 
     private void loadChatHistory() {
         for (String message : chatHistoryManager.loadHistory()) {
-            // Tách timestamp và nội dung tin nhắn
             String[] parts = message.split(" \\| ", 2);
             if (parts.length == 2) {
-                appendToChat(parts[1]); // Chỉ hiển thị nội dung tin nhắn
+                appendToChat(parts[1]);
             }
         }
         currentUser = UserService.getInstance().getCurrentUser();
-        if(currentUser.getFullName() != null) {
-            currentUser.bietdanh = currentUser.getFullName();
-        }
-        else currentUser.bietdanh = currentUser.getUsername();
-
+        currentUser.bietdanh = currentUser.getFullName() != null ? currentUser.getFullName() : currentUser.getUsername();
     }
 
     @FXML
@@ -98,24 +89,15 @@ public class ChatViewController implements SocketManager.MessageListener {
         if (emojiPopup.isShowing()) {
             emojiPopup.hide();
         } else {
-            // Hiển thị popup dưới nút emoji
             emojiPopup.show(emojiButton.getScene().getWindow(),
                     emojiButton.localToScreen(emojiButton.getBoundsInLocal()).getMinX(),
                     emojiButton.localToScreen(emojiButton.getBoundsInLocal()).getMaxY());
         }
     }
 
-
     private void connectToServer() {
         try {
-            // Kiểm tra nếu đã kết nối thì bỏ qua
             if (socketManager.isConnected()) return;
-
-//            String username = usernameField.getText().trim();
-//            if (username.isEmpty()) {
-//                appendToChat("Please enter a username");
-//                return;
-//            }
 
             if (!socketManager.isConnected()) {
                 socketManager.connect(currentUser.bietdanh);
@@ -141,25 +123,21 @@ public class ChatViewController implements SocketManager.MessageListener {
             String message = messageField.getText().trim();
             if (!message.isEmpty()) {
                 if (message.startsWith("@bot")) {
-                    // Xử lý tin nhắn cho Gemini
-                    String botMessage = message.substring(4).trim(); // Bỏ "@bot" ở đầu
+                    String botMessage = message.substring(4).trim();
                     String systemPrompt = "Bạn là chatbot assistant của một công ty.Hãy trả lời một cách chuyên nghiệp , độ dài vừa phải ,không dài dòng mà đi vào trọng tâm .";
                     String prompt = systemPrompt + botMessage;
                     appendToChat(socketManager.getUsername() + ": " + message);
                     chatHistoryManager.saveMessage(socketManager.getUsername() + ": " + message);
-                    
-                    // Hiển thị "Bot đang nhập..."
+
                     appendToChat("Bot: Đang nhập...");
-                    
-                    // Gọi Gemini trong thread riêng
+
                     new Thread(() -> {
                         try {
                             String botResponse = geminiService.generateResponse(prompt);
-                            javafx.application.Platform.runLater(() -> {
+                            Platform.runLater(() -> {
                                 removeLastMessage();
                                 String botMsg = "@#$%^01naffajg: " + botResponse.replace("\n", "<br>");
                                 chatHistoryManager.saveMessage(botMsg);
-                                // Gửi tin nhắn bot lên server để mọi người cùng thấy
                                 try {
                                     socketManager.sendMessage(botMsg);
                                 } catch (IOException ex) {
@@ -167,14 +145,13 @@ public class ChatViewController implements SocketManager.MessageListener {
                                 }
                             });
                         } catch (Exception e) {
-                            javafx.application.Platform.runLater(() -> {
+                            Platform.runLater(() -> {
                                 removeLastMessage();
                                 appendToChat("Lỗi gì đó rồi: " + e.getMessage());
                             });
                         }
                     }).start();
                 } else {
-                    // Xử lý tin nhắn thông thường
                     String fullMessage = socketManager.getUsername() + ": " + message;
                     socketManager.sendMessage(fullMessage);
                     chatHistoryManager.saveMessage(fullMessage);
@@ -192,70 +169,41 @@ public class ChatViewController implements SocketManager.MessageListener {
     }
 
     private void appendToChat(String message) {
-        javafx.application.Platform.runLater(() -> {
-            if (emptyStateText.isVisible()) {
-                emptyStateText.setVisible(false);
-            }
-            
+        Platform.runLater(() -> {
+            if (emptyStateText.isVisible()) emptyStateText.setVisible(false);
+
             Node messageNode;
             String username = socketManager.getUsername();
-            
+
             if (message.startsWith("@#$%^01naffajg:")) {
-                // Xử lý tin nhắn bot bằng WebView
-                String prefix = "@#$%^01naffajg:";
-                String content = message.substring(prefix.length()).replace("<br>", "\n");
-                
+                String content = message.substring("@#$%^01naffajg:".length()).replace("<br>", "\n");
                 WebView webView = new WebView();
                 webView.setPrefHeight(Region.USE_COMPUTED_SIZE);
-                webView.setMaxHeight(Double.MAX_VALUE);
                 webView.setMaxWidth(Double.MAX_VALUE);
-                
                 webView.setPrefWidth(950);
                 webView.setMinWidth(950);
-
-                // Enable JavaScript và xử lý scroll
                 webView.getEngine().setJavaScriptEnabled(true);
-                
-                // Xử lý scroll event
-                webView.setOnScroll(event -> {
-                    if (scrollPane != null) {
-                        double deltaY = event.getDeltaY();
-                        double currentVValue = scrollPane.getVvalue();
-                        double newVValue = currentVValue - (deltaY / scrollPane.getHeight());
-                        scrollPane.setVvalue(Math.max(0, Math.min(1, newVValue)));
-                        event.consume();
-                    }
-                });
-                
-                // Chuyển đổi markdown thành HTML
+
                 String htmlContent = MarkdownToHtml.convertToHtml(content);
                 webView.getEngine().loadContent(htmlContent);
-                
-                // Điều chỉnh chiều cao theo nội dung
+
                 webView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
                     if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
                         Platform.runLater(() -> {
-                            // Disable internal scrolling
                             webView.getEngine().executeScript("document.body.style.overflow = 'hidden';");
-                            
-                            // Auto resize height
                             Object heightObj = webView.getEngine().executeScript("document.body.scrollHeight");
                             if (heightObj instanceof Number) {
                                 double height = ((Number) heightObj).doubleValue();
                                 webView.setPrefHeight(height + 20);
-                                webView.setMinHeight(height + 20);
-                                webView.setMaxHeight(height + 20);
                             }
-                            
                             scrollToBottom();
                         });
                     }
                 });
-                
+
                 webView.setOpacity(0);
                 messageNode = webView;
             } else {
-                // Sử dụng Label cho tin nhắn thông thường
                 Label messageLabel = new Label(message);
                 messageLabel.setMaxWidth(800);
                 messageLabel.setWrapText(true);
@@ -264,73 +212,59 @@ public class ChatViewController implements SocketManager.MessageListener {
             }
 
             HBox messageBox = new HBox();
-            
-            if (message.contains("has joined the chat")) {
+            if (message.contains("has joined the chat") || message.contains("has changed your username to")) {
                 messageNode.getStyleClass().add("join-notification");
                 messageBox.setAlignment(Pos.CENTER);
-            }
-            else if (message.contains("has changed your username to")) {
-                messageNode.getStyleClass().add("join-notification");
-                messageBox.setAlignment(Pos.CENTER);
-            }
-            else if (username != null && message.startsWith(username + ":")) {
+            } else if (username != null && message.startsWith(username + ":")) {
                 messageNode.getStyleClass().add("mess-global");
                 messageBox.setAlignment(Pos.CENTER_RIGHT);
-            }
-            else if(message.startsWith("Bot:")) {
+            } else if (message.startsWith("Bot:")) {
                 messageNode.getStyleClass().add("bot-message");
                 messageBox.setAlignment(Pos.CENTER_RIGHT);
-            }
-            else {
+            } else {
                 messageNode.getStyleClass().add("other-global");
                 messageBox.setAlignment(Pos.CENTER_LEFT);
             }
 
             messageBox.getChildren().add(messageNode);
             chatContainer.getChildren().add(messageBox);
-            
-            // Apply fade transition
+
             applyFadeTransition(messageNode);
-            
-            // Auto-scroll to bottom
             scrollToBottom();
         });
     }
-    
+
     private void applyFadeTransition(Node node) {
-        FadeTransition ft = new FadeTransition(Duration.millis(500), node);
-        ft.setFromValue(0);
-        ft.setToValue(1);
-        ft.play();
+        FadeTransition fade = new FadeTransition(Duration.millis(500), node);
+        fade.setFromValue(0);
+        fade.setToValue(1);
+        fade.play();
     }
-    
+
     private void scrollToBottom() {
-        Platform.runLater(() -> {
-            scrollPane.setVvalue(1.0);
-            Platform.runLater(() -> {
-                scrollPane.setVvalue(1.0);
-            });
+        // Đợi 50ms để đảm bảo layout xong mới scroll
+        javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(Duration.millis(50));
+        pause.setOnFinished(e -> {
+            chatContainer.layout(); // Cập nhật layout
+            scrollPane.setVvalue(1.0); // Cuộn xuống cuối
         });
+        pause.play();
     }
 
     private void initEmojiPopup() {
         emojiPopup = new Popup();
         emojiPopup.setAutoHide(true);
-
         emojiGrid = new GridPane();
         emojiGrid.setPadding(new Insets(10));
         emojiGrid.setHgap(5);
         emojiGrid.setVgap(5);
         emojiGrid.setStyle("-fx-background-color: white; -fx-border-color: gray; -fx-border-width: 1;");
 
-        // Danh sách emoji
         String[] emojis = {
-                // Biểu cảm khuôn mặt
                 "😊", "😂", "😍", "🥰", "😎", "😇", "🤔", "😐", "😒", "😢",
                 "😭", "😠", "😲", "🥳", "🤩", "🤯", "😴", "🤤", "😱", "🥺",
                 "🥲", "🫠", "🥶", "🥵", "🥴", "🤢", "🤮", "🤧", "🥳", "🤠",
                 "🤑", "🤐", "🤫", "🤭", "🧐",
-                // Cử chỉ tay và cơ thể
                 "👍", "👌", "👏", "🙏", "🙌", "🤝", "🤞", "🤏", "🤘", "🤙",
                 "👋", "👎", "👊", "✊", "💪", "🤳", "🤗", "🤷‍♀️", "🤷‍♂️", "🤦‍♀️",
                 "🤦‍♂️", "🙇‍♀️", "🙇‍♂️",
@@ -338,16 +272,12 @@ public class ChatViewController implements SocketManager.MessageListener {
 
         int col = 0;
         int row = 0;
-
         for (String emoji : emojis) {
             Button emojiBtn = new Button(emoji);
             emojiBtn.setStyle("-fx-background-color: transparent;");
             emojiBtn.setOnAction(e -> insertEmoji(emoji));
-
             emojiGrid.add(emojiBtn, col, row);
-
-            col++;
-            if (col > 9) { // 10 emoji mỗi hàng
+            if (++col > 9) {
                 col = 0;
                 row++;
             }
@@ -356,7 +286,6 @@ public class ChatViewController implements SocketManager.MessageListener {
         emojiPopup.getContent().add(emojiGrid);
     }
 
-    // Phương thức chèn emoji vào text input
     private void insertEmoji(String emoji) {
         messageField.setText(messageField.getText() + emoji);
         emojiPopup.hide();
@@ -365,9 +294,7 @@ public class ChatViewController implements SocketManager.MessageListener {
     @FXML
     private void removeHistory() {
         ChatHistoryManager.getInstance().clearHistory();
-        // Clear the chat display
         chatContainer.getChildren().clear();
-        // Show the empty state message
         emptyStateText.setVisible(true);
     }
 
