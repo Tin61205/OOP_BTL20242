@@ -10,6 +10,7 @@ public class User implements Serializable {
     private String password;
     private String email;
     private String fullName;
+    public String bietdanh;
     private String status;
     private String profileImagePath;
     private List<Message> messages;

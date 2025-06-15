@@ -52,3 +52,11 @@ Hy vọng thông tin này hữu ích cho bạn.
 2025-06-12 20:27:06 | bach: hehehe
 2025-06-12 20:44:34 | bach: @bot tính hướng đối tượng là gì
 2025-06-12 20:44:38 | @#$%^01naffajg: Chào bạn,<br><br>Tôi là chatbot assistant của công ty. Rất vui được hỗ trợ bạn.<br><br>**Tính hướng đối tượng (Object-Oriented Programming - OOP)** là một **phương pháp lập trình** tập trung vào việc **tổ chức mã nguồn** thành các **đối tượng**. Mỗi đối tượng là một **thực thể** có:<br><br>*   **Thuộc tính (Attributes):** *Dữ liệu* mô tả trạng thái của đối tượng.<br>*   **Phương thức (Methods):** *Hành vi* mà đối tượng có thể thực hiện.<br><br>**Các khái niệm chính** của OOP bao gồm:<br><br>*   **Tính đóng gói (Encapsulation):** Ẩn *thông tin* bên trong đối tượng và chỉ cho phép truy cập thông qua các *phương thức* được định nghĩa.<br>*   **Tính kế thừa (Inheritance):** Cho phép một *lớp* (class) kế thừa các *thuộc tính* và *phương thức* từ một *lớp cha*.<br>*   **Tính đa hình (Polymorphism):** Khả năng của các *đối tượng* khác nhau phản ứng theo những cách khác nhau đối với cùng một *lệnh gọi*.<br>*   **Tính trừu tượng (Abstraction):** Tập trung vào các *đặc điểm* quan trọng của đối tượng và bỏ qua các chi tiết không cần thiết.<br><br>Hy vọng thông tin này hữu ích cho bạn. Nếu bạn có bất kỳ câu hỏi nào khác, đừng ngần ngại hỏi nhé!<br>
+2025-06-15 10:39:54 | null: chao
+2025-06-15 10:40:02 | null: alo
+2025-06-15 10:41:59 | NT_Bach: chao ae
+2025-06-15 10:45:14 | null: chao
+2025-06-15 10:54:35 | NT_Bach: chao ae
+2025-06-15 10:54:39 | NT_Bach: chao Son
+2025-06-15 10:55:19 | abcd: chao bach
+2025-06-15 10:55:26 | NT_Bach: chao abcd

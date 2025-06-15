@@ -2,7 +2,9 @@ package com.training.studyfx.controller;
 
 import com.training.studyfx.ChatHistoryManager;
 import com.training.studyfx.SocketManager;
+import com.training.studyfx.model.User;
 import com.training.studyfx.service.GeminiService;
+import com.training.studyfx.service.UserService;
 import com.training.studyfx.util.MarkdownToHtml;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -37,6 +39,8 @@ public class ChatViewController implements SocketManager.MessageListener {
     private SocketManager socketManager;
     private ChatHistoryManager chatHistoryManager;
     private GeminiService geminiService;
+    private User currentUser = UserService.getInstance().getCurrentUser();
+
 
     public void initialize() {
         scrollPane.setFitToWidth(true);
@@ -68,6 +72,9 @@ public class ChatViewController implements SocketManager.MessageListener {
         chatHistoryManager = ChatHistoryManager.getInstance();
         geminiService = new GeminiService();
         loadChatHistory();
+
+        connectToServer();
+
     }
 
     private void loadChatHistory() {
@@ -78,6 +85,12 @@ public class ChatViewController implements SocketManager.MessageListener {
                 appendToChat(parts[1]); // Chỉ hiển thị nội dung tin nhắn
             }
         }
+        currentUser = UserService.getInstance().getCurrentUser();
+        if(currentUser.getFullName() != null) {
+            currentUser.bietdanh = currentUser.getFullName();
+        }
+        else currentUser.bietdanh = currentUser.getUsername();
+
     }
 
     @FXML
@@ -92,22 +105,25 @@ public class ChatViewController implements SocketManager.MessageListener {
         }
     }
 
-    @FXML
+
     private void connectToServer() {
         try {
-            String username = usernameField.getText().trim();
-            if (username.isEmpty()) {
-                appendToChat("Please enter a username");
-                return;
-            }
+            // Kiểm tra nếu đã kết nối thì bỏ qua
+            if (socketManager.isConnected()) return;
+
+//            String username = usernameField.getText().trim();
+//            if (username.isEmpty()) {
+//                appendToChat("Please enter a username");
+//                return;
+//            }
 
             if (!socketManager.isConnected()) {
-                socketManager.connect(username);
-                appendToChat("Connected to server as " + username);
+                socketManager.connect(currentUser.bietdanh);
+                appendToChat("Connected to server as " + currentUser.bietdanh);
             } else {
                 String oldUsername = socketManager.getUsername();
-                if (!oldUsername.equals(username)) {
-                    socketManager.sendMessage(oldUsername + " has changed your username to " + username);
+                if (!oldUsername.equals(currentUser.bietdanh)) {
+                    socketManager.sendMessage(oldUsername + " has changed your username to " + currentUser.bietdanh);
                 }
             }
         } catch (IOException e) {

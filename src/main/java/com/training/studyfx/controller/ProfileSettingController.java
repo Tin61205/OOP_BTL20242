@@ -76,6 +76,10 @@ public class ProfileSettingController implements Initializable {
             // Load user data
             nameField.setText(currentUser.getFullName() != null ?
                     currentUser.getFullName() : currentUser.getUsername());
+
+            //currentUser.bietdanh = nameField.getText();
+
+
             emailField.setText(currentUser.getEmail() != null ?
                     currentUser.getEmail() : "");
             statusField.setText(currentUser.getStatus() != null ?
