@@ -53,8 +53,9 @@ public class ChatViewController implements SocketManager.MessageListener {
         // Thêm xử lý scroll cho ScrollPane
         scrollPane.setOnScroll(event -> {
             double deltaY = event.getDeltaY();
-            double currentVValue = scrollPane.getVvalue();
-            double newVValue = currentVValue - (deltaY / scrollPane.getHeight());
+//            double currentVValue = scrollPane.getVvalue();
+//            double newVValue = currentVValue - (deltaY / scrollPane.getHeight());
+            double newVValue = scrollPane.getVvalue() - (deltaY / scrollPane.getHeight());
             scrollPane.setVvalue(Math.max(0, Math.min(1, newVValue)));
             event.consume();
         });
@@ -62,8 +63,9 @@ public class ChatViewController implements SocketManager.MessageListener {
         // Thêm xử lý scroll cho chatContainer
         chatContainer.setOnScroll(event -> {
             double deltaY = event.getDeltaY();
-            double currentVValue = scrollPane.getVvalue();
-            double newVValue = currentVValue - (deltaY / scrollPane.getHeight());
+//            double currentVValue = scrollPane.getVvalue();
+//            double newVValue = currentVValue - (deltaY / scrollPane.getHeight());
+            double newVValue = scrollPane.getVvalue() - (deltaY / scrollPane.getHeight());
             scrollPane.setVvalue(Math.max(0, Math.min(1, newVValue)));
             event.consume();
         });
@@ -207,15 +209,15 @@ public class ChatViewController implements SocketManager.MessageListener {
                 webView.getEngine().setJavaScriptEnabled(true);
                 
                 // Xử lý scroll event
-                webView.setOnScroll(event -> {
-                    if (scrollPane != null) {
-                        double deltaY = event.getDeltaY();
-                        double currentVValue = scrollPane.getVvalue();
-                        double newVValue = currentVValue - (deltaY / scrollPane.getHeight());
-                        scrollPane.setVvalue(Math.max(0, Math.min(1, newVValue)));
-                        event.consume();
-                    }
-                });
+//                webView.setOnScroll(event -> {
+//                    if (scrollPane != null) {
+//                        double deltaY = event.getDeltaY();
+//                        double currentVValue = scrollPane.getVvalue();
+//                        double newVValue = currentVValue - (deltaY / scrollPane.getHeight());
+//                        scrollPane.setVvalue(Math.max(0, Math.min(1, newVValue)));
+//                        event.consume();
+//                    }
+//                });
                 
                 // Chuyển đổi markdown thành HTML
                 String htmlContent = MarkdownToHtml.convertToHtml(content);
@@ -233,8 +235,8 @@ public class ChatViewController implements SocketManager.MessageListener {
                             if (heightObj instanceof Number) {
                                 double height = ((Number) heightObj).doubleValue();
                                 webView.setPrefHeight(height + 20);
-                                webView.setMinHeight(height + 20);
-                                webView.setMaxHeight(height + 20);
+//                                webView.setMinHeight(height + 20);
+//                                webView.setMaxHeight(height + 20);
                             }
                             
                             scrollToBottom();
@@ -295,12 +297,19 @@ public class ChatViewController implements SocketManager.MessageListener {
     }
     
     private void scrollToBottom() {
-        Platform.runLater(() -> {
-            scrollPane.setVvalue(1.0);
-            Platform.runLater(() -> {
-                scrollPane.setVvalue(1.0);
-            });
+//        Platform.runLater(() -> {
+//            scrollPane.setVvalue(1.0);
+//            Platform.runLater(() -> {
+//                scrollPane.setVvalue(1.0);
+//            });
+//        });
+        // Đợi 50ms để đảm bảo layout xong mới scroll
+        javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(Duration.millis(50));
+        pause.setOnFinished(e -> {
+            chatContainer.layout(); // Cập nhật layout
+            scrollPane.setVvalue(1.0); // Cuộn xuống cuối
         });
+        pause.play();
     }
 
     private void initEmojiPopup() {
