@@ -22,12 +22,4 @@ public class ChatMessage {
         return text;
     }
 
-    public MessageType getType() {
-        return type;
-    }
-
-    // New getter for timestamp
-    public String getTimestamp() {
-        return timestamp;
-    }
 }

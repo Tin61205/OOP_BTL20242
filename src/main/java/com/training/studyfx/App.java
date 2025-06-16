@@ -49,18 +49,6 @@ public class App extends Application {
         stage.show();
     }
 
-    private void startServer() {
-        // Tạo server lắng nghe trên cổng 1234
-        try {
-            ServerSocket serverSocket = new ServerSocket(1234);
-            Server server = new Server(serverSocket);
-            // Bắt đầu server
-            server.startServer();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
 

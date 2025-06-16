@@ -22,15 +22,4 @@ public class Message implements Serializable {
         return content;
     }
 
-    public String getSender() {
-        return sender;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public boolean isFromBot() {
-        return isFromBot;
-    }
 }

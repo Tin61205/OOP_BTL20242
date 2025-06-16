@@ -6,6 +6,9 @@ import com.training.studyfx.model.User;
 import com.training.studyfx.service.GeminiService;
 import com.training.studyfx.service.UserService;
 import com.training.studyfx.util.MarkdownToHtml;
+import com.training.studyfx.exception.ChatException;
+import com.training.studyfx.exception.ConnectionException;
+import com.training.studyfx.exception.MessageException;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -108,14 +111,7 @@ public class ChatViewController implements SocketManager.MessageListener {
 
     private void connectToServer() {
         try {
-            // Kiểm tra nếu đã kết nối thì bỏ qua
             if (socketManager.isConnected()) return;
-
-//            String username = usernameField.getText().trim();
-//            if (username.isEmpty()) {
-//                appendToChat("Please enter a username");
-//                return;
-//            }
 
             if (!socketManager.isConnected()) {
                 socketManager.connect(currentUser.bietdanh);
@@ -127,7 +123,7 @@ public class ChatViewController implements SocketManager.MessageListener {
                 }
             }
         } catch (IOException e) {
-            appendToChat("Error connecting to server: " + e.getMessage());
+            throw new ConnectionException("Không thể kết nối đến server: " + e.getMessage(), e);
         }
     }
 
@@ -135,23 +131,19 @@ public class ChatViewController implements SocketManager.MessageListener {
     private void sendMessage() {
         try {
             if (!socketManager.isConnected()) {
-                appendToChat("Not connected to server. Please enter your username to join the chat");
-                return;
+                throw new ConnectionException("Chưa kết nối đến server. Vui lòng nhập username để tham gia chat");
             }
             String message = messageField.getText().trim();
             if (!message.isEmpty()) {
                 if (message.startsWith("@bot")) {
-                    // Xử lý tin nhắn cho Gemini
-                    String botMessage = message.substring(4).trim(); // Bỏ "@bot" ở đầu
+                    String botMessage = message.substring(4).trim();
                     String systemPrompt = "Bạn là chatbot assistant của một công ty.Hãy trả lời một cách chuyên nghiệp , độ dài vừa phải ,không dài dòng mà đi vào trọng tâm .";
                     String prompt = systemPrompt + botMessage;
                     appendToChat(socketManager.getUsername() + ": " + message);
                     chatHistoryManager.saveMessage(socketManager.getUsername() + ": " + message);
                     
-                    // Hiển thị "Bot đang nhập..."
                     appendToChat("Bot: Đang nhập...");
                     
-                    // Gọi Gemini trong thread riêng
                     new Thread(() -> {
                         try {
                             String botResponse = geminiService.generateResponse(prompt);
@@ -159,22 +151,20 @@ public class ChatViewController implements SocketManager.MessageListener {
                                 removeLastMessage();
                                 String botMsg = "@#$%^01naffajg: " + botResponse.replace("\n", "<br>");
                                 chatHistoryManager.saveMessage(botMsg);
-                                // Gửi tin nhắn bot lên server để mọi người cùng thấy
                                 try {
                                     socketManager.sendMessage(botMsg);
                                 } catch (IOException ex) {
-                                    appendToChat("Lỗi gửi tin nhắn r : " + ex.getMessage());
+                                    throw new MessageException("Lỗi gửi tin nhắn: " + ex.getMessage(), ex);
                                 }
                             });
                         } catch (Exception e) {
                             javafx.application.Platform.runLater(() -> {
                                 removeLastMessage();
-                                appendToChat("Lỗi gì đó rồi: " + e.getMessage());
+                                throw new ChatException("Lỗi xử lý tin nhắn bot: " + e.getMessage(), e);
                             });
                         }
                     }).start();
                 } else {
-                    // Xử lý tin nhắn thông thường
                     String fullMessage = socketManager.getUsername() + ": " + message;
                     socketManager.sendMessage(fullMessage);
                     chatHistoryManager.saveMessage(fullMessage);
@@ -182,7 +172,7 @@ public class ChatViewController implements SocketManager.MessageListener {
                 messageField.clear();
             }
         } catch (IOException e) {
-            appendToChat("Error sending message: " + e.getMessage());
+            throw new MessageException("Lỗi gửi tin nhắn: " + e.getMessage(), e);
         }
     }
 
