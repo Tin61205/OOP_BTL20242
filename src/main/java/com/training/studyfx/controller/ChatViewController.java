@@ -73,7 +73,7 @@ public class ChatViewController implements SocketManager.MessageListener {
         initEmojiPopup();
         socketManager = SocketManager.getInstance();
         socketManager.addMessageListener(this);
-        
+
         chatHistoryManager = ChatHistoryManager.getInstance();
         geminiService = new GeminiService();
         loadChatHistory();
@@ -143,9 +143,9 @@ public class ChatViewController implements SocketManager.MessageListener {
                     String prompt = systemPrompt + botMessage;
                     appendToChat(socketManager.getUsername() + ": " + message);
                     chatHistoryManager.saveMessage(socketManager.getUsername() + ": " + message);
-                    
+
                     appendToChat("Bot: Đang nhập...");
-                    
+
                     new Thread(() -> {
                         try {
                             String botResponse = geminiService.generateResponse(prompt);
@@ -188,26 +188,26 @@ public class ChatViewController implements SocketManager.MessageListener {
             if (emptyStateText.isVisible()) {
                 emptyStateText.setVisible(false);
             }
-            
+
             Node messageNode;
             String username = socketManager.getUsername();
-            
+
             if (message.startsWith("@#$%^01naffajg:")) {
                 // Xử lý tin nhắn bot bằng WebView
                 String prefix = "@#$%^01naffajg:";
                 String content = message.substring(prefix.length()).replace("<br>", "\n");
-                
+
                 WebView webView = new WebView();
                 webView.setPrefHeight(Region.USE_COMPUTED_SIZE);
                 webView.setMaxHeight(Double.MAX_VALUE);
                 webView.setMaxWidth(Double.MAX_VALUE);
-                
+
                 webView.setPrefWidth(950);
                 webView.setMinWidth(950);
 
                 // Enable JavaScript và xử lý scroll
                 webView.getEngine().setJavaScriptEnabled(true);
-                
+
                 // Xử lý scroll event
 //                webView.setOnScroll(event -> {
 //                    if (scrollPane != null) {
@@ -218,18 +218,18 @@ public class ChatViewController implements SocketManager.MessageListener {
 //                        event.consume();
 //                    }
 //                });
-                
+
                 // Chuyển đổi markdown thành HTML
                 String htmlContent = MarkdownToHtml.convertToHtml(content);
                 webView.getEngine().loadContent(htmlContent);
-                
+
                 // Điều chỉnh chiều cao theo nội dung
                 webView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
                     if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
                         Platform.runLater(() -> {
                             // Disable internal scrolling
                             webView.getEngine().executeScript("document.body.style.overflow = 'hidden';");
-                            
+
                             // Auto resize height
                             Object heightObj = webView.getEngine().executeScript("document.body.scrollHeight");
                             if (heightObj instanceof Number) {
@@ -238,12 +238,12 @@ public class ChatViewController implements SocketManager.MessageListener {
 //                                webView.setMinHeight(height + 20);
 //                                webView.setMaxHeight(height + 20);
                             }
-                            
+
                             scrollToBottom();
                         });
                     }
                 });
-                
+
                 webView.setOpacity(0);
                 messageNode = webView;
             } else {
@@ -256,7 +256,7 @@ public class ChatViewController implements SocketManager.MessageListener {
             }
 
             HBox messageBox = new HBox();
-            
+
             if (message.contains("has joined the chat")) {
                 messageNode.getStyleClass().add("join-notification");
                 messageBox.setAlignment(Pos.CENTER);
@@ -280,22 +280,22 @@ public class ChatViewController implements SocketManager.MessageListener {
 
             messageBox.getChildren().add(messageNode);
             chatContainer.getChildren().add(messageBox);
-            
+
             // Apply fade transition
             applyFadeTransition(messageNode);
-            
+
             // Auto-scroll to bottom
             scrollToBottom();
         });
     }
-    
+
     private void applyFadeTransition(Node node) {
         FadeTransition ft = new FadeTransition(Duration.millis(500), node);
         ft.setFromValue(0);
         ft.setToValue(1);
         ft.play();
     }
-    
+
     private void scrollToBottom() {
 //        Platform.runLater(() -> {
 //            scrollPane.setVvalue(1.0);

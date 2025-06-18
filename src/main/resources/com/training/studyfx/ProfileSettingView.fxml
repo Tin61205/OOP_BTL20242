@@ -1,92 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
 
-<BorderPane prefHeight="700.0" prefWidth="700.0" styleClass="profile-container" stylesheets="@../../../styles/ui.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.training.studyfx.controller.ProfileSettingController">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.training.studyfx.controller.ProfileSettingController"
+            style="-fx-background-color: #f3f7fa;">
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" prefHeight="54.0" style="-fx-background-color: #0084ff;" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <padding>
+            <Insets top="8.0" bottom="8.0" left="28.0" right="20.0" />
+        </padding>
+        <children>
+            <Label text="⚙ Settings" textFill="WHITE">
+                <font>
+                    <Font name="Segoe UI Semibold" size="20.0" />
+                </font>
+            </Label>
+        </children>
+    </HBox>
 
-    <!-- HEADER SECTION -->
-    <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="40.0" style="-fx-background-color: #0084ff;">
-            <padding>
-                <Insets top="8.0" bottom="8.0" left="20.0" right="20.0" />
-            </padding>
-            <children>
-                <Label text="⚙ Settings" textFill="WHITE">
-                    <font>
-                        <Font name="Segoe UI Semibold" size="18.0" />
-                    </font>
-                </Label>
-            </children>
-        </HBox>
-    </top>
-
-    <!-- MAIN CONTENT -->
-    <center>
-        <VBox spacing="20" alignment="TOP_CENTER">
-            <padding>
-                <Insets top="20" left="30" right="30" bottom="20" />
-            </padding>
-            <children>
-
-                <!-- Avatar Image -->
-                <ImageView fx:id="profileImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image">
-                    <effect>
-                        <DropShadow radius="5" color="#999999" />
-                    </effect>
-                </ImageView>
-
-                <!-- Change Photo Button -->
-                <HBox alignment="CENTER">
-                    <Button fx:id="changePhotoButton" text="📸 Change Photo"
-                            prefHeight="36.0" minWidth="140.0"
-                            style="-fx-font-size: 13px; -fx-background-color: #0084ff; -fx-text-fill: white; -fx-background-radius: 6;" />
-                </HBox>
-
-                <!-- Personal Info Card -->
-                <VBox style="-fx-background-color: #f9f9f9; -fx-background-radius: 8; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0.3, 0, 2);">
-                    <children>
-                        <!-- Section Title -->
-                        <Label text="📝 Personal Information" style="-fx-text-fill: #0084ff; -fx-font-size: 15px; -fx-font-weight: bold;" />
-
-                        <!-- Personal Info Form -->
-                        <GridPane hgap="10" vgap="12">
-                            <columnConstraints>
-                                <ColumnConstraints halignment="RIGHT" minWidth="80.0" />
-                                <ColumnConstraints prefWidth="250.0" />
-                                <ColumnConstraints prefWidth="250.0" />
-                            </columnConstraints>
-                            <children>
-                                <Label text="👤 Name:" GridPane.rowIndex="0" />
-                                <TextField fx:id="nameField" promptText="Your Name" style="-fx-background-radius: 6; -fx-border-color: #ccc; -fx-border-radius: 6; -fx-padding: 6;" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-                                <Label text="📧 Email:" GridPane.rowIndex="1" />
-                                <TextField fx:id="emailField" promptText="Your Email" style="-fx-background-radius: 6; -fx-border-color: #ccc; -fx-border-radius: 6; -fx-padding: 6;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-                                <Label text="💬 Status:" GridPane.rowIndex="2" />
-                                <TextField fx:id="statusField" promptText="Your Status" style="-fx-background-radius: 6; -fx-border-color: #ccc; -fx-border-radius: 6; -fx-padding: 6;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-
-                                <Label fx:id="saveConfirmationLabel" text="✅ Changes saved successfully!" textFill="green" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-
-                                <!-- Action Buttons -->
-                                <HBox spacing="10.0" alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.columnSpan="2">
-                                    <children>
-                                        <Button fx:id="saveButton" text="💾 Save Changes" prefHeight="37.0" prefWidth="140.0"
-                                                style="-fx-background-color: #0084ff; -fx-text-fill: white; -fx-background-radius: 6;" />
-                                        <Button fx:id="logoutbutton" text="🚪 Log out" prefHeight="37.0" prefWidth="110.0"
-                                                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 6;" />
-                                    </children>
-                                </HBox>
-                            </children>
-                        </GridPane>
-                    </children>
-                </VBox>
-            </children>
+    <!-- Main content: căn giữa dọc và ngang -->
+    <VBox alignment="CENTER" spacing="24"
+          AnchorPane.topAnchor="54.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <!-- Avatar & Change Photo -->
+        <VBox alignment="CENTER" spacing="12">
+            <ImageView fx:id="profileImage" fitHeight="108.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true" styleClass="profile-image">
+                <effect>
+                    <DropShadow radius="8" color="#a3a3a3" />
+                </effect>
+            </ImageView>
+            <Button fx:id="changePhotoButton" text="📸 Change Photo"
+                    prefHeight="38.0" minWidth="150.0"
+                    style="-fx-font-size: 14px; -fx-background-color: #0084ff; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-weight: bold;" />
         </VBox>
-    </center>
-</BorderPane>
+
+        <!-- Card info: luôn căn giữa, nổi bật, maxWidth hợp lý -->
+        <VBox maxWidth="520"
+              alignment="CENTER"
+              spacing="22"
+              style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 32 36 32 36; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.11), 18, 0.23, 0, 4);">
+            <Label text="🗂️ Personal Information"
+                   style="-fx-text-fill: #0084ff; -fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 0 0 8 0;" />
+
+            <!-- Personal Info Form -->
+            <GridPane hgap="12" vgap="14" alignment="CENTER">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" minWidth="82.0" />
+                    <ColumnConstraints prefWidth="240.0" />
+                </columnConstraints>
+                <children>
+                    <Label text="👤 Name:" GridPane.rowIndex="0" style="-fx-font-size: 14px;" />
+                    <TextField fx:id="nameField" promptText="Your Name"
+                               style="-fx-background-radius: 7; -fx-border-color: #ccc; -fx-border-radius: 7; -fx-padding: 7; -fx-font-size: 14px;"
+                               GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <Label text="📧 Email:" GridPane.rowIndex="1" style="-fx-font-size: 14px;" />
+                    <TextField fx:id="emailField" promptText="Your Email"
+                               style="-fx-background-radius: 7; -fx-border-color: #ccc; -fx-border-radius: 7; -fx-padding: 7; -fx-font-size: 14px;"
+                               GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label text="💬 Status:" GridPane.rowIndex="2" style="-fx-font-size: 14px;" />
+                    <TextField fx:id="statusField" promptText="Your Status"
+                               style="-fx-background-radius: 7; -fx-border-color: #ccc; -fx-border-radius: 7; -fx-padding: 7; -fx-font-size: 14px;"
+                               GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                    <Label fx:id="saveConfirmationLabel" text="✅ Changes saved successfully!" textFill="green" visible="false"
+                           style="-fx-font-size: 13px; -fx-font-style: italic;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                </children>
+            </GridPane>
+
+            <!-- Action Buttons -->
+            <HBox spacing="16.0" alignment="CENTER">
+                <Button fx:id="saveButton" text="💾 Save Changes" prefHeight="38.0" prefWidth="150.0"
+                        style="-fx-background-color: #0084ff; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 15px; -fx-font-weight: bold;" />
+                <Button fx:id="logoutbutton" text="🚪 Log out" prefHeight="38.0" prefWidth="120.0"
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 15px; -fx-font-weight: bold;" />
+            </HBox>
+        </VBox>
+    </VBox>
+</AnchorPane>

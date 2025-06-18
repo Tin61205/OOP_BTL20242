@@ -1,54 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Pos?>
 
-<VBox xmlns="http://javafx.com/javafx/8"
-      xmlns:fx="http://javafx.com/fxml"
-      alignment="CENTER"
-      spacing="10.0"
-      prefWidth="480.0"
-      prefHeight="440.0"
-      style="-fx-padding: 20; -fx-background-color: white;"
-      fx:controller="com.training.studyfx.controller.AboutController">
+<AnchorPane xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml"
+            style="-fx-background-color: transparent;">
+    <VBox alignment="CENTER"
+          prefWidth="1000"
+          prefHeight="600"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <!-- Card About -->
+        <VBox alignment="TOP_CENTER"
+              maxWidth="520"
+              spacing="20"
+              style="
+                -fx-background-color: white;
+                -fx-background-radius: 24px;
+                -fx-padding: 32 36 36 36;
+                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.09), 18, 0, 0, 4);">
 
-    <Label text="💬 Giới thiệu ứng dụng"
-           style="-fx-font-size: 24px; -fx-text-fill: #0084ff; -fx-font-weight: bold;" />
+            <!-- Tiêu đề -->
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="🗨️" style="-fx-font-size: 2.1em;" />
+                <Label text="Giới thiệu ứng dụng"
+                       style="-fx-font-size: 2em; -fx-text-fill: #0084ff; -fx-font-weight: bold;" />
+            </HBox>
 
-    <Separator prefWidth="440"/>
+            <Separator />
 
-    <Text wrappingWidth="440" style="-fx-font-size: 14px;">
-        Ứng dụng ChatBot này được phát triển nhằm hỗ trợ sinh viên và người học trong quá trình tự học, ôn luyện
-        hoặc tương tác với hệ thống trí tuệ nhân tạo một cách đơn giản và hiệu quả.
-    </Text>
+            <!-- Mô tả -->
+            <Label wrapText="true"
+                   alignment="CENTER"
+                   style="-fx-font-size: 1.1em; -fx-text-fill: #333;">
+                Ứng dụng ChatBot này được phát triển nhằm hỗ trợ sinh viên và người học trong quá trình tự học, ôn luyện hoặc tương tác với hệ thống trí tuệ nhân tạo một cách đơn giản và hiệu quả.
+            </Label>
 
-    <Separator prefWidth="440"/>
+            <Separator />
 
-    <Label text="🛠️ Phiên bản: v1.0.0" style="-fx-font-size: 14px;" />
-    <Label text="📅 Cập nhật: 06/2025" style="-fx-font-size: 14px;" />
+            <!-- Thông tin version -->
+            <HBox spacing="28" alignment="CENTER">
+                <Label text="🛠️ Phiên bản: v1.0.0" style="-fx-font-size: 14px;" />
+                <Label text="📅 Cập nhật: 06/2025" style="-fx-font-size: 14px;" />
+            </HBox>
 
-    <Separator prefWidth="440"/>
+            <Separator />
 
-    <Label text="✨ Cải tiến mới:"
-           style="-fx-font-weight: bold; -fx-text-fill: #0084ff; -fx-font-size: 14px;" />
-    <VBox spacing="5.0" alignment="CENTER_LEFT">
-        <Label text="• Giao diện dễ dùng, hiện đại" />
-        <Label text="• Tối ưu hóa tốc độ xử lý" />
-        <Label text="• Sửa lỗi hiển thị tiếng Việt" />
-        <Label text="• Ghi nhớ lịch sử trò chuyện" />
+            <!-- Cải tiến mới (giữa card) -->
+            <VBox spacing="8" alignment="CENTER">
+                <Label text="✨ Cải tiến mới:"
+                       style="-fx-font-weight: bold; -fx-text-fill: #0084ff; -fx-font-size: 1.1em;" />
+                <VBox spacing="5.0" alignment="CENTER">
+                    <Label text="• Giao diện dễ dùng, hiện đại" style="-fx-font-size: 14px;"/>
+                    <Label text="• Tối ưu hóa tốc độ xử lý" style="-fx-font-size: 14px;"/>
+                    <Label text="• Sửa lỗi hiển thị tiếng Việt" style="-fx-font-size: 14px;"/>
+                    <Label text="• Ghi nhớ lịch sử trò chuyện" style="-fx-font-size: 14px;"/>
+                </VBox>
+            </VBox>
+
+            <Separator />
+
+            <!-- Liên hệ (giữa card) -->
+            <VBox spacing="8" alignment="CENTER">
+                <Label text="📩 Liên hệ:"
+                       style="-fx-font-weight: bold; -fx-text-fill: #0084ff; -fx-font-size: 1.1em;" />
+                <VBox spacing="5.0" alignment="CENTER">
+                    <Label text="• Email: support@example.com" style="-fx-font-size: 14px;"/>
+                    <Label text="• Website: https://yourprojectsite.com" style="-fx-font-size: 14px;"/>
+                    <Label text="• Github: github.com/yourproject" style="-fx-font-size: 14px;"/>
+                </VBox>
+            </VBox>
+
+        </VBox>
     </VBox>
-
-    <Separator prefWidth="440"/>
-
-    <Label text="📩 Liên hệ:"
-           style="-fx-font-weight: bold; -fx-text-fill: #0084ff; -fx-font-size: 14px;" />
-    <VBox spacing="5.0" alignment="CENTER_LEFT">
-        <Label text="• Email: support@example.com" />
-        <Label text="• Website: https://yourprojectsite.com" />
-        <Label text="• Github: github.com/yourproject" />
-    </VBox>
-
-</VBox>
+</AnchorPane>

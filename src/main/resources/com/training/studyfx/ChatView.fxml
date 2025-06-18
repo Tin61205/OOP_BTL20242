@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="584.0" prefWidth="950.0" spacing="10" style="-fx-background-color: #f9f9f9;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.training.studyfx.controller.ChatViewController">
+<VBox maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="584.0" prefWidth="1050.0" spacing="10" style="-fx-background-color: #f9f9f9;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.training.studyfx.controller.ChatViewController">
     <padding>
         <Insets bottom="15" left="15" right="15" top="15" />
     </padding>
@@ -26,10 +26,10 @@
     </HBox>
 
     <!-- Chat Messages Area -->
-    <ScrollPane fx:id="scrollPane" fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: #e0e0e0; -fx-border-radius: 10px; -fx-background-radius: 10px;" VBox.vgrow="ALWAYS">
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="never" style="-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: #e0e0e0; -fx-border-radius: 10px; -fx-background-radius: 10px;" VBox.vgrow="ALWAYS">
         <content>
             <StackPane>
-                <VBox fx:id="chatContainer" prefWidth="599.0" spacing="15" style="-fx-background-color: white; -fx-padding: 15px;">
+                <VBox fx:id="chatContainer" spacing="15" style="-fx-background-color: white; -fx-padding: 15px;">
                     <padding>
                         <Insets bottom="10" left="10" right="10" top="10" />
                     </padding>

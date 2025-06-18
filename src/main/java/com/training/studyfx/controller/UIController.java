@@ -31,24 +31,17 @@ public class UIController implements Initializable {
     @FXML
     private AnchorPane mainContentArea;
 
-    @FXML
-    private AnchorPane bot_area;
-
-    @FXML
-    private HBox list;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Load user avatar into the circle
         loadUserAvatar();
-        String targetTab = App.getTargetTab(); // lấy tab cần chuyển đến
-        App.clearNextTab(); // xoá sau khi dùng
+        String targetTab = App.getTargetTab();
+        App.clearNextTab();
 
         try {
             if ("setting".equalsIgnoreCase(targetTab)) {
-                handleSettingClick(null); // gọi luôn hàm load SettingView
+                loadView("ProfileSettingView.fxml");
             } else {
-                loadView("AboutView"); // mặc định: load AboutView thay vì ProfileView
+                loadView("AboutView.fxml"); // mặc định
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,14 +51,7 @@ public class UIController implements Initializable {
     @FXML
     private void handleAboutClick(MouseEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/AboutView.fxml"));
-            Parent aboutView = loader.load();
-
-            if (bot_area != null) bot_area.getChildren().clear();
-            if (mainContentArea != null) mainContentArea.getChildren().clear();
-            if (list != null) list.getChildren().clear();
-
-            if (bot_area != null) bot_area.getChildren().add(aboutView);
+            loadView("AboutView.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,14 +60,7 @@ public class UIController implements Initializable {
     @FXML
     private void handleChatClick() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/ChatView.fxml"));
-            Parent chatView = loader.load();
-
-            if (bot_area != null) bot_area.getChildren().clear();
-            if (mainContentArea != null) mainContentArea.getChildren().clear();
-            if (list != null) list.getChildren().clear();
-
-            if (bot_area != null) bot_area.getChildren().add(chatView);
+            loadView("ChatView.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,14 +69,7 @@ public class UIController implements Initializable {
     @FXML
     private void handleChatbotClick(MouseEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/ChatbotView.fxml"));
-            Parent chatbotView = loader.load();
-
-            if (bot_area != null) bot_area.getChildren().clear();
-            if (mainContentArea != null) mainContentArea.getChildren().clear();
-            if (list != null) list.getChildren().clear();
-
-            if (bot_area != null) bot_area.getChildren().add(chatbotView);
+            loadView("ChatbotView.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -106,29 +78,21 @@ public class UIController implements Initializable {
     @FXML
     private void handleSettingClick(MouseEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/training/studyfx/ProfileSettingView.fxml"));
-            Parent settingView = loader.load();
-
-            if (bot_area != null) bot_area.getChildren().clear();
-            if (mainContentArea != null) mainContentArea.getChildren().clear();
-            if (list != null) list.getChildren().clear();
-
-            if (bot_area != null) bot_area.getChildren().add(settingView);
+            loadView("ProfileSettingView.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void loadView(String viewName) throws IOException {
-        mainContentArea.getChildren().clear();
-        bot_area.getChildren().clear();
-
-        HBox chatView = (HBox) mainContentArea.lookup("#Chat_View");
-        if (chatView != null) {
-            chatView.getChildren().clear();
-            chatView.getChildren().add(App.getView(viewName));
-        } else {
-            bot_area.getChildren().add(App.getView(viewName));
+    private void loadView(String fxmlFile) throws IOException {
+        if (mainContentArea != null) {
+            mainContentArea.getChildren().clear();
+            Parent view = FXMLLoader.load(getClass().getResource("/com/training/studyfx/" + fxmlFile));
+            mainContentArea.getChildren().add(view);
+            AnchorPane.setTopAnchor(view, 0.0);
+            AnchorPane.setBottomAnchor(view, 0.0);
+            AnchorPane.setLeftAnchor(view, 0.0);
+            AnchorPane.setRightAnchor(view, 0.0);
         }
     }
 

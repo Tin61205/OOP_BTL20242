@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
@@ -48,12 +49,26 @@ public class ChatbotViewController implements Initializable {
         // Setup scroll behavior
         if (chatbotScrollPane != null) {
             // Enable smooth scrolling
-            chatbotScrollPane.setPannable(false);
+            chatbotScrollPane.setPannable(true);
             chatbotScrollPane.setFitToWidth(true);
-            chatbotScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            chatbotScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
             chatbotScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+            // Tối ưu hiệu suất
+            chatbotScrollPane.setCache(true);
+            chatbotScrollPane.setCacheShape(true);
+            //Xử lý scroll
+            chatbotScrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
+                //scroll dọc
+                if (event.getDeltaY() != 0){
+                    double deltaY = event.getDeltaY();
+                    double newVValue = chatbotScrollPane.getVvalue() - (deltaY / chatbotScrollPane.getHeight());
+                    chatbotScrollPane.setVvalue(Math.max(0, Math.min(1, newVValue)));
+                    event.consume();
+                }
+            });
         }
-        
+
         if (chatbotMessagesContainer != null) {
             addBotMessage("**Chào bạn!** Tôi là *Chatbot cá nhân* của bạn. Tôi có thể giúp gì cho bạn hôm nay?");
         }
@@ -116,7 +131,7 @@ public class ChatbotViewController implements Initializable {
         int count = chatbotMessagesContainer.getChildren().size();
         if (count > 0) {
             Node lastNode = chatbotMessagesContainer.getChildren().get(count - 1);
-            
+
             if (lastNode instanceof HBox) {
                 HBox hbox = (HBox) lastNode;
                 if (hbox.getChildren().size() > 0) {
@@ -144,23 +159,23 @@ public class ChatbotViewController implements Initializable {
 
     private void addStyledMessageToContainer(String messageText, String styleClass, boolean isMarkdown) {
         Node messageNode;
-        
+
         if (isMarkdown && "bot-message".equals(styleClass)) {
             // Xử lý markdown cho tin nhắn bot bằng WebView
             String content = messageText;
             if (messageText.startsWith("Bot: ")) {
                 content = messageText.substring(5); // Bỏ "Bot: " prefix
             }
-            
+
             WebView webView = new WebView();
             webView.setPrefHeight(Region.USE_COMPUTED_SIZE);
             webView.setMaxHeight(Double.MAX_VALUE);
             webView.setMaxWidth(800); // Tăng width để phù hợp với UI mới
             webView.getEngine().setUserStyleSheetLocation(null);
-            
+
             // Disable WebView scrolling để cho phép parent ScrollPane handle scroll
             webView.getEngine().setJavaScriptEnabled(true);
-            
+
             // Enable mouse scroll passthrough từ WebView lên ScrollPane
             webView.setOnScroll(event -> {
                 // Pass scroll events to parent ScrollPane
@@ -169,18 +184,18 @@ public class ChatbotViewController implements Initializable {
                 }
                 event.consume();
             });
-            
+
             // Chuyển đổi markdown thành HTML
             String htmlContent = MarkdownToHtml.convertToHtml(content);
             webView.getEngine().loadContent(htmlContent);
-            
+
             // Điều chỉnh chiều cao theo nội dung và disable internal scrolling
             webView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
                 if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
                     Platform.runLater(() -> {
                         // Disable internal scrolling
                         webView.getEngine().executeScript("document.body.style.overflow = 'hidden';");
-                        
+
                         // Auto resize height
                         Object heightObj = webView.getEngine().executeScript("document.body.scrollHeight");
                         if (heightObj instanceof Number) {
@@ -189,13 +204,13 @@ public class ChatbotViewController implements Initializable {
                             webView.setMinHeight(height + 20);
                             webView.setMaxHeight(height + 20);
                         }
-                        
-                                                 // Auto scroll to bottom after a short delay
+
+                        // Auto scroll to bottom after a short delay
                          scrollToBottom();
                     });
                 }
             });
-            
+
             webView.setOpacity(0); // Start invisible
             messageNode = webView;
         } else {
@@ -236,7 +251,7 @@ public class ChatbotViewController implements Initializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return LocalDateTime.now().format(formatter);
     }
-    
+
     private void scrollToBottom() {
         Platform.runLater(() -> {
             // Multiple attempts to ensure scroll works
