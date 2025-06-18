@@ -75,7 +75,7 @@ public class ProfileSettingController implements Initializable {
         if (currentUser != null) {
             // Load user data
             nameField.setText(currentUser.getFullName() != null ?
-                    currentUser.getFullName() : currentUser.getUsername());
+                    currentUser.getFullName() : "Default Name");
 
             //currentUser.bietdanh = nameField.getText();
 
@@ -184,9 +184,10 @@ public class ProfileSettingController implements Initializable {
 
 
     private void saveProfile() {
+        String name = nameField.getText().trim();
         String status = statusField.getText().trim();
         UserService userService = UserService.getInstance();
-        userService.updateUserProfile(status, profileImagePath);
+        userService.updateUserProfile(name, status, profileImagePath);
         saveConfirmationLabel.setVisible(true);
 
         try {

@@ -60,6 +60,7 @@ Hy vọng thông tin này hữu ích cho bạn.
 2025-06-15 10:54:39 | NT_Bach: chao Son
 2025-06-15 10:55:19 | abcd: chao bach
 2025-06-15 10:55:26 | NT_Bach: chao abcd
+<<<<<<< Updated upstream
 2025-06-16 21:04:06 | NT_Bach: chao ae
 2025-06-16 21:04:09 | NT_Bach: 1
 2025-06-16 21:04:10 | NT_Bach: 2
@@ -89,3 +90,54 @@ Hy vọng thông tin này hữu ích cho bạn.
 2025-06-16 21:10:33 | NT_Bach: a
 2025-06-16 21:14:12 | NT_Bach: chao ae
 2025-06-16 21:14:15 | NT_Bach: toi la Bach
+=======
+2025-06-16 20:46:08 | NT_Bach: hehehe
+2025-06-16 20:46:16 | NT_Bach: @bot javafx là gì
+2025-06-16 20:46:20 | @#$%^01naffajg: Chào bạn,<br><br>Tôi là chatbot assistant của công ty.<br><br>**JavaFX** là một **toolkit phần mềm** dựa trên Java, được sử dụng để xây dựng các ứng dụng *rich client* (RIA) có thể chạy trên nhiều nền tảng khác nhau.<br><br>Dưới đây là một số điểm chính về JavaFX:<br><br>*   **Giao diện người dùng (UI):** JavaFX cung cấp một tập hợp phong phú các điều khiển UI, layout, và hiệu ứng để tạo ra giao diện người dùng hấp dẫn và tương tác.<br>*   **Đồ họa vector:** JavaFX sử dụng đồ họa vector, cho phép ứng dụng có thể mở rộng và hiển thị sắc nét trên các màn hình có độ phân giải khác nhau.<br>*   **CSS Styling:**  Giao diện JavaFX có thể được tùy chỉnh bằng CSS, giúp tách biệt phần giao diện và logic ứng dụng, dễ dàng bảo trì và thay đổi giao diện.<br>*   **Data binding:**  JavaFX hỗ trợ data binding, giúp tự động đồng bộ dữ liệu giữa UI và model.<br>*   **Hỗ trợ đa nền tảng:** JavaFX có thể chạy trên các hệ điều hành khác nhau như Windows, macOS và Linux.<br>*   **Tích hợp Java:** JavaFX được xây dựng trên Java, tận dụng các thư viện và framework Java hiện có.<br><br>Tóm lại, JavaFX là một lựa chọn tốt để phát triển các ứng dụng desktop hiện đại và đa nền tảng với giao diện người dùng đẹp mắt và hiệu năng cao.<br>
+2025-06-16 21:10:25 | NT_Bach: heheeh
+2025-06-16 21:10:28 | NT_Bach: xin chào
+2025-06-16 21:10:36 | NT_Bach: hehehe
+2025-06-16 21:10:36 | NT_Bach: he
+2025-06-16 21:10:37 | NT_Bach: eheh
+2025-06-16 21:10:37 | NT_Bach: ehehe
+2025-06-16 21:10:37 | NT_Bach: ehe
+2025-06-16 21:10:38 | NT_Bach: he
+2025-06-16 21:10:38 | NT_Bach: eh
+2025-06-16 21:10:38 | NT_Bach: eh
+2025-06-16 21:10:38 | NT_Bach: eh
+2025-06-16 21:10:39 | NT_Bach: eh
+2025-06-16 21:10:39 | NT_Bach: eh
+2025-06-16 21:10:39 | NT_Bach: eh
+2025-06-16 21:10:39 | NT_Bach: ehe
+2025-06-16 21:10:40 | NT_Bach: h
+2025-06-16 21:12:45 | NT_Bach: xin chào
+2025-06-16 21:12:48 | NT_Bach: ehehehe
+2025-06-16 21:12:48 | NT_Bach: heh
+2025-06-16 21:12:49 | NT_Bach: e
+2025-06-16 21:12:49 | NT_Bach: e
+2025-06-16 21:12:50 | NT_Bach: e1
+2025-06-16 21:12:50 | NT_Bach: 2
+2025-06-16 21:12:50 | NT_Bach: 3
+2025-06-16 21:12:51 | NT_Bach: 3
+2025-06-16 21:12:51 | NT_Bach: 4
+2025-06-16 21:12:51 | NT_Bach: 5
+2025-06-16 21:12:52 | NT_Bach: 6
+2025-06-16 21:12:52 | NT_Bach: 7
+2025-06-16 21:12:53 | NT_Bach: 5
+2025-06-16 21:12:58 | NT_Bach: âfaaaaaaaaaaaaaaa
+2025-06-16 21:13:01 | NT_Bach: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2025-06-16 21:13:04 | NT_Bach: q
+2025-06-16 21:13:05 | NT_Bach: a
+2025-06-16 21:13:05 | NT_Bach: a
+2025-06-16 21:13:06 | NT_Bach: a
+2025-06-16 21:13:06 | NT_Bach: a
+2025-06-16 21:13:06 | NT_Bach: a
+2025-06-16 21:13:07 | NT_Bach: a
+2025-06-16 21:13:08 | NT_Bach: 2
+2025-06-16 21:13:09 | NT_Bach: 3
+2025-06-16 21:13:10 | NT_Bach: 4
+2025-06-16 21:13:11 | NT_Bach: 5
+2025-06-16 21:13:11 | NT_Bach: 6
+2025-06-16 21:13:12 | NT_Bach: 7
+2025-06-16 21:13:20 | NT_Bach: bach nè
+>>>>>>> Stashed changes
