@@ -104,7 +104,7 @@ public class UserService {
         }
     }
 
-    public void updateUserProfile(String status, String profileImagePath) {
+    public void updateUserProfile(String fullName, String status, String profileImagePath) {
         if (currentUser == null) return;
 
         try {
@@ -127,15 +127,17 @@ public class UserService {
 
             // Cập nhật cơ sở dữ liệu
             PreparedStatement stmt = connection.prepareStatement(
-                    "UPDATE users SET status = ?, profile_image_path = ? WHERE username = ?");
-            stmt.setString(1, status);
-            stmt.setString(2, finalImagePath);
-            stmt.setString(3, currentUser.getUsername());
+                    "UPDATE users SET full_name = ?, status = ?, profile_image_path = ? WHERE username = ?");
+            stmt.setString(1, fullName);
+            stmt.setString(2, status);
+            stmt.setString(3, finalImagePath);
+            stmt.setString(4, currentUser.getUsername());
 
             stmt.executeUpdate();
             stmt.close();
 
             // Cập nhật đối tượng người dùng hiện tại
+            currentUser.setFullName(fullName);
             currentUser.setStatus(status);
             // Không cần cập nhật đường dẫn lại vì đã được cập nhật trong updateProfileImage
         } catch (SQLException e) {
