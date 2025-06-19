@@ -6,13 +6,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.io.InputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 public class GeminiService {
 
@@ -23,6 +22,9 @@ public class GeminiService {
 
     public GeminiService(String apiKey) {
         this.apiKey = apiKey;
+        if (apiKey == null || apiKey.isEmpty()) {
+            throw new IllegalArgumentException("API key không được để trống. Vui lòng kiểm tra file config.properties");
+        }
         this.endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + apiKey;
         this.httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(15))
@@ -30,28 +32,48 @@ public class GeminiService {
     }
 
     public GeminiService() {
-
-        this("AIzaSyBv7KAeo7PU5NfWu8lmqR1Zvp8e6Cby51U");  //API KEY
+        this(loadApiKeyFromConfig());
+    }
+    
+    private static String loadApiKeyFromConfig() {
+        Properties properties = new Properties();
+        try (InputStream input = GeminiService.class.getClassLoader().getResourceAsStream("config.properties")) {
+            if (input == null) {
+                System.err.println("Không tìm thấy file config.properties");
+                return ""; // Trả về rỗng nếu không tìm thấy file
+            }
+            properties.load(input);
+            String apiKey = properties.getProperty("gemini.api.key", "");
+            if (apiKey.isEmpty()) {
+                System.err.println("API key không được cấu hình trong file config.properties");
+            }
+            return apiKey;
+        } catch (IOException e) {
+            System.err.println("Lỗi khi đọc file config.properties: " + e.getMessage());
+            return "";
+        }
     }
 
-//    public GeminiService withTemperature(float temperature) {
-//        this.temperature = Math.max(0.0f, Math.min(1.0f, temperature));
-//        return this;
-//    }
+    /**
+     * Kiểm tra xem API key có hợp lệ không
+     * @return true nếu API key hợp lệ, false nếu không
+     */
+    public boolean isApiKeyValid() {
+        return apiKey != null && !apiKey.isEmpty();
+    }
 
     public String generateResponse(String userMessage) throws Exception {
+        if (!isApiKeyValid()) {
+            throw new IllegalStateException("API key không hợp lệ hoặc chưa được cấu hình");
+        }
+        
         JSONObject requestBody = new JSONObject();
         JSONArray contents = new JSONArray();
         JSONObject content = new JSONObject();
         JSONArray parts = new JSONArray();
         JSONObject part = new JSONObject();
 
-        // Thêm system prompt để format markdown
-        String enhancedMessage = "Hãy trả lời bằng định dạng markdown khi cần thiết. " +
-                "Sử dụng **bold** cho từ khóa quan trọng, *italic* cho nhấn mạnh, " +
-                "và bullet points (*) cho danh sách. Câu hỏi: " + userMessage;
-        
-        part.put("text", enhancedMessage);  // Nội dung chat người dùng
+        part.put("text", userMessage);  // Nội dung chat người dùng
         parts.put(part);                // Đóng gói nó lại
         content.put("parts", parts);
         contents.put(content);
@@ -105,11 +127,4 @@ public class GeminiService {
         }
     }
 
-//    public Map<String, Object> generateRichResponse(String userMessage) throws Exception {
-//        String textResponse = generateResponse(userMessage);
-//        Map<String, Object> richResponse = new HashMap<>();
-//        richResponse.put("text", textResponse);
-//        richResponse.put("success", true);
-//        return richResponse;
-//    }
 }

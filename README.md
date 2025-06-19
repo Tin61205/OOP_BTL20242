@@ -53,6 +53,15 @@ Chỉnh sửa file `src/main/resources/config.properties`:
 gemini.api.key=YOUR_GEMINI_API_KEY_HERE
 ```
 
+Để lấy API key cho Gemini AI:
+1. Truy cập [Google AI Studio](https://aistudio.google.com/)
+2. Đăng nhập với tài khoản Google của bạn
+3. Vào mục "API keys" trong menu
+4. Tạo API key mới và sao chép
+5. Dán API key vào file `config.properties`
+
+**Lưu ý**: API key là thông tin nhạy cảm, không nên chia sẻ hoặc đưa lên GitHub. File `config.properties` đã được thêm vào `.gitignore` để tránh vô tình commit.
+
 ### 3. Compile và chạy
 ```bash
 # Compile dự án
@@ -76,6 +85,15 @@ mvn javafx:run
 2. Ứng dụng tự động kết nối đến server
 3. Gõ tin nhắn và nhấn Enter hoặc nút Send
 4. Sử dụng nút emoji để thêm biểu cảm
+5. Để gọi bot trong chat nhóm, sử dụng cú pháp `@bot [câu hỏi]`, ví dụ: `@bot Cho tôi biết thời tiết hôm nay`
+6. Để chia sẻ hình ảnh, bạn có thể kéo và thả hình ảnh vào khung chat hoặc sử dụng nút tải lên
+
+### Chia sẻ hình ảnh
+1. Trong chat nhóm hoặc chat với bot, nhấn vào nút tải lên hình ảnh
+2. Chọn hình ảnh từ máy tính của bạn
+3. Hình ảnh sẽ được tải lên và chia sẻ trong cuộc trò chuyện
+4. Các định dạng hỗ trợ: JPG, PNG, GIF
+5. Kích thước tối đa: 5MB
 
 ### Chat với AI Bot
 1. Chọn tab "Chatbot"
@@ -83,6 +101,9 @@ mvn javafx:run
 3. AI sẽ phản hồi và hiển thị dưới dạng HTML được format đẹp với CSS styling
 4. Nội dung hỗ trợ headers, code blocks, lists, bold/italic text
 5. Lịch sử chat được lưu trong phiên làm việc
+6. Bot có thể trả lời nhiều loại câu hỏi, từ học thuật đến giải trí
+
+> **Lưu ý**: Nếu gặp lỗi "API key không hợp lệ hoặc chưa được cấu hình", hãy kiểm tra file `src/main/resources/config.properties` và đảm bảo API key đã được cấu hình đúng.
 
 ### Cài đặt Profile
 1. Chọn tab "Settings"
@@ -93,36 +114,67 @@ mvn javafx:run
 ## 📁 Cấu trúc dự án
 
 ```
-src/
-├── main/
-│   ├── java/com/training/studyfx/
-│   │   ├── controller/          # Controllers cho từng màn hình
-│   │   │   ├── LoginController.java
-│   │   │   ├── ChatViewController.java
-│   │   │   ├── ChatbotViewController.java
-│   │   │   └── ProfileSettingController.java
-│   │   ├── model/              # Data models
-│   │   │   ├── User.java
-│   │   │   ├── Message.java
-│   │   │   └── ChatMessage.java
-│   │   ├── service/            # Business logic
-│   │   │   ├── UserService.java
-│   │   │   └── GeminiService.java
-│   │   ├── server/             # Server components
-│   │   │   ├── Server.java
-│   │   │   └── ClientHandler.java
-│   │   ├── util/               # Utilities
-│   │   │   └── MarkdownToHtml.java # Chuyển đổi Markdown sang HTML
-│   │   └── exception/          # Custom exceptions
-│   └── resources/
-│       ├── com/training/studyfx/   # FXML files
-│       ├── images/                 # Icons và ảnh
-│       ├── styles/                 # CSS files
-│       └── config.properties       # Cấu hình
-├── upload/                     # User uploaded files
-│   ├── images/                 # Chat images
-│   └── profile_images/         # Profile pictures
-└── studyfx.db                  # SQLite database
+OOP_BTL20242/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   ├── com/training/studyfx/
+│   │   │   │   ├── App.java                    # Entry point của ứng dụng
+│   │   │   │   ├── ChatHistoryManager.java     # Quản lý lịch sử chat
+│   │   │   │   ├── SocketManager.java          # Quản lý kết nối socket
+│   │   │   │   ├── controller/                 # Controllers cho từng màn hình
+│   │   │   │   │   ├── AboutController.java    # Controller cho màn hình About
+│   │   │   │   │   ├── ChatbotViewController.java  # Controller cho chatbot AI
+│   │   │   │   │   ├── ChatViewController.java    # Controller cho chat nhóm
+│   │   │   │   │   ├── LoginController.java       # Controller đăng nhập
+│   │   │   │   │   ├── ProfileSettingController.java  # Cài đặt profile
+│   │   │   │   │   ├── RegisterController.java    # Controller đăng ký
+│   │   │   │   │   └── UIController.java          # Controller chính
+│   │   │   │   ├── exception/                  # Custom exceptions
+│   │   │   │   │   ├── ChatException.java
+│   │   │   │   │   ├── ConnectionException.java
+│   │   │   │   │   └── MessageException.java
+│   │   │   │   ├── model/                      # Data models
+│   │   │   │   │   ├── ChatMessage.java        # Model tin nhắn chat
+│   │   │   │   │   ├── Message.java            # Model tin nhắn cơ bản
+│   │   │   │   │   └── User.java               # Model người dùng
+│   │   │   │   ├── server/                     # Server components
+│   │   │   │   │   ├── ClientHandler.java      # Xử lý client kết nối
+│   │   │   │   │   └── Server.java             # Server socket
+│   │   │   │   ├── service/                    # Business logic
+│   │   │   │   │   ├── GeminiService.java      # Tích hợp Google Gemini AI, đọc API key từ config.properties
+│   │   │   │   │   └── UserService.java        # Xử lý logic người dùng
+│   │   │   │   └── util/                       # Utilities
+│   │   │   │       └── MarkdownToHtml.java     # Chuyển đổi Markdown sang HTML
+│   │   │   └── module-info.java                # Module definitions
+│   │   └── resources/
+│   │       ├── com/training/studyfx/           # FXML files
+│   │       │   ├── AboutView.fxml              # Giao diện About
+│   │       │   ├── ChatbotView.fxml            # Giao diện chatbot
+│   │       │   ├── ChatView.fxml               # Giao diện chat nhóm
+│   │       │   ├── ListView.fxml               # Giao diện danh sách
+│   │       │   ├── LoginView.fxml              # Giao diện đăng nhập
+│   │       │   ├── ProfileSettingView.fxml     # Giao diện cài đặt profile
+│   │       │   ├── RegisterView.fxml           # Giao diện đăng ký
+│   │       │   └── UI.fxml                     # Giao diện chính
+│   │       ├── config.properties               # Cấu hình (API keys, etc.)
+│   │       ├── images/                         # Icons và ảnh
+│   │       │   ├── avt.jpg
+│   │       │   ├── chat.png
+│   │       │   ├── chatbot.png
+│   │       │   ├── default_profile.png
+│   │       │   ├── logo.png
+│   │       │   ├── send.png
+│   │       │   └── ... (các hình ảnh khác)
+│   │       └── styles/
+│   │           └── ui.css                      # Stylesheet chính
+├── upload/                                     # User uploaded files
+│   ├── images/                                 # Chat images
+│   └── profile_images/                         # Profile pictures
+├── chat_history.txt                            # Lưu trữ lịch sử chat
+├── nbactions.xml                               # Cấu hình NetBeans
+├── pom.xml                                     # Maven dependencies
+└── studyfx.db                                  # SQLite database
 ```
 
 
@@ -130,6 +182,22 @@ src/
 ## 📝 License
 
 Dự án này được phát triển cho Project OOP tại HUST.
+
+## 👥 Tác giả và đóng góp
+
+Dự án được phát triển bởi nhóm sinh viên của lớp OOP BTL 2024-2:
+
+- **Nguyễn Văn A** - *Trưởng nhóm* - [Email](mailto:example@example.com)
+- **Trần Thị B** - *UI/UX Designer* - [Email](mailto:example@example.com)
+- **Lê Văn C** - *Backend Developer* - [Email](mailto:example@example.com)
+- **Phạm Thị D** - *Frontend Developer* - [Email](mailto:example@example.com)
+- **Hoàng Văn E** - *Database Engineer* - [Email](mailto:example@example.com)
+
+### Liên hệ và hỗ trợ
+
+Nếu bạn có bất kỳ câu hỏi hoặc đề xuất nào, vui lòng liên hệ với chúng tôi qua email: [example@example.com](mailto:example@example.com)
+
+## ❓ Xử lý sự cố thường gặp
 
 ---
 

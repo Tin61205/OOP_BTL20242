@@ -42,17 +42,17 @@ public class ChatbotViewController implements Initializable {
 
     private final GeminiService geminiService = new GeminiService();
 
-    // Store chat messages for the current session only.
+    // Danh sách lưu trữ lịch sử trò chuyện
     private List<ChatMessage> chatHistory = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Setup scroll behavior
+
         if (chatbotScrollPane != null) {
             // Enable smooth scrolling
             chatbotScrollPane.setPannable(true);
             chatbotScrollPane.setFitToWidth(true); // Fit to width để nội dung chiếm hết chiều rộng
-            chatbotScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Không hiển thị thanh cuộn ngang
+            chatbotScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             chatbotScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
             
             // Đặt thanh cuộn ở bên phải
@@ -121,7 +121,6 @@ public class ChatbotViewController implements Initializable {
     private void addUserMessage(String text) {
         ChatMessage message = new ChatMessage(text, MessageType.USER, getCurrentTime());
         chatHistory.add(message);
-        // Không thêm "User: " vào tin nhắn người dùng để hiển thị đẹp hơn
         addStyledMessageToContainer(message.getText(), "user-message", false);
     }
 
@@ -159,30 +158,7 @@ public class ChatbotViewController implements Initializable {
                     return;
                 }
             }
-            
-            // Nếu không tìm thấy typing indicator ở node cuối cùng, kiểm tra tất cả các node
-            for (int i = count - 1; i >= 0; i--) {
-                Node node = chatbotMessagesContainer.getChildren().get(i);
-                if (node instanceof Label) {
-                    Label label = (Label) node;
-                    if (label.getText().contains("Typing...")) {
-                        chatbotMessagesContainer.getChildren().remove(i);
-                        return;
-                    }
-                } else if (node instanceof HBox) {
-                    HBox hbox = (HBox) node;
-                    if (hbox.getChildren().size() > 0) {
-                        Node child = hbox.getChildren().get(0);
-                        if (child instanceof Label) {
-                            Label label = (Label) child;
-                            if (label.getText().contains("Typing...")) {
-                                chatbotMessagesContainer.getChildren().remove(i);
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
+
         }
     }
 
@@ -305,7 +281,7 @@ public class ChatbotViewController implements Initializable {
             hbox.getChildren().add(messageNode);
             chatbotMessagesContainer.getChildren().add(hbox);
             applyFadeTransition(messageNode);
-            // Auto scroll for bot messages is handled in WebView load listener
+            // Tự động cuộn xuống cuối cùng nếu tin nhắn không phải Markdown
             if (!isMarkdown) {
                 scrollToBottom();
             }

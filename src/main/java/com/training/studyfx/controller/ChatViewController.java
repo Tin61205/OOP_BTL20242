@@ -18,13 +18,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.scene.web.WebView;
-import javafx.scene.layout.Region;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 import java.io.IOException;
@@ -55,8 +53,7 @@ public class ChatViewController implements SocketManager.MessageListener {
         // Thêm xử lý scroll cho ScrollPane
         scrollPane.setOnScroll(event -> {
             double deltaY = event.getDeltaY();
-//            double currentVValue = scrollPane.getVvalue();
-//            double newVValue = currentVValue - (deltaY / scrollPane.getHeight());
+
             double newVValue = scrollPane.getVvalue() - (deltaY / scrollPane.getHeight());
             scrollPane.setVvalue(Math.max(0, Math.min(1, newVValue)));
             event.consume();
@@ -65,8 +62,6 @@ public class ChatViewController implements SocketManager.MessageListener {
         // Thêm xử lý scroll cho chatContainer
         chatContainer.setOnScroll(event -> {
             double deltaY = event.getDeltaY();
-//            double currentVValue = scrollPane.getVvalue();
-//            double newVValue = currentVValue - (deltaY / scrollPane.getHeight());
             double newVValue = scrollPane.getVvalue() - (deltaY / scrollPane.getHeight());
             scrollPane.setVvalue(Math.max(0, Math.min(1, newVValue)));
             event.consume();
@@ -141,7 +136,7 @@ public class ChatViewController implements SocketManager.MessageListener {
             if (!message.isEmpty()) {
                 if (message.startsWith("@bot")) {
                     String botMessage = message.substring(4).trim();
-                    String systemPrompt = "Bạn là chatbot assistant của một công ty.Hãy trả lời một cách chuyên nghiệp , độ dài vừa phải ,không dài dòng mà đi vào trọng tâm .";
+                    String systemPrompt = "Bạn là chatbot assistant của nhóm 6 OOP.Hãy trả lời một cách chuyên nghiệp , độ dài vừa phải ,không dài dòng mà đi vào trọng tâm .";
                     String prompt = systemPrompt + botMessage;
                     appendToChat(socketManager.getUsername() + ": " + message);
                     chatHistoryManager.saveMessage(socketManager.getUsername() + ": " + message);
@@ -324,12 +319,6 @@ public class ChatViewController implements SocketManager.MessageListener {
     }
 
     private void scrollToBottom() {
-//        Platform.runLater(() -> {
-//            scrollPane.setVvalue(1.0);
-//            Platform.runLater(() -> {
-//                scrollPane.setVvalue(1.0);
-//            });
-//        });
         // Đợi 50ms để đảm bảo layout xong mới scroll
         javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(Duration.millis(50));
         pause.setOnFinished(e -> {
@@ -388,14 +377,6 @@ public class ChatViewController implements SocketManager.MessageListener {
         emojiPopup.hide();
     }
 
-    @FXML
-    private void removeHistory() {
-        ChatHistoryManager.getInstance().clearHistory();
-        // Clear the chat display
-        chatContainer.getChildren().clear();
-        // Show the empty state message
-        emptyStateText.setVisible(true);
-    }
 
     private void removeLastMessage() {
         int count = chatContainer.getChildren().size();

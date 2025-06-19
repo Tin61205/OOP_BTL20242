@@ -245,7 +245,7 @@ public class MarkdownToHtml {
     }
     
     private static String processItalic(String text) {
-        // Italic with *text* (but not **text**)
+
         Pattern pattern = Pattern.compile("(?<!\\*)\\*([^*]+)\\*(?!\\*)");
         Matcher matcher = pattern.matcher(text);
         
@@ -332,22 +332,25 @@ public class MarkdownToHtml {
         return text;
     }
     
-    private static String processLineBreaks(String text) {
-        // Convert double line breaks to paragraphs
-        text = text.replaceAll("\n\n+", "</p><p>");
-        
-        // Convert single line breaks to <br>
-        text = text.replaceAll("(?<!>)\n(?!<)", "<br>");
-        
-        // Wrap in paragraph tags
-        if (!text.startsWith("<")) {
-            text = "<p>" + text + "</p>";
-        }
-        
-        return text;
+private static String processLineBreaks(String text) {
+    // Chuyển đổi các dòng trống liên tiếp thành thẻ đoạn văn
+    text = text.replaceAll("\n\n+", "</p><p>");
+
+    // Chuyển đổi các dòng trống đơn thành thẻ xuống dòng
+    text = text.replaceAll("(?<!>)\n(?!<)", "<br>");
+
+    // Bao bọc nội dung trong thẻ đoạn văn nếu chưa có thẻ nào
+    if (!text.startsWith("<")) {
+        text = "<p>" + text + "</p>";
     }
+
+    return text;
+}
     
     private static String escapeHtml(String text) {
+        if (text == null) {
+            return "";
+        }
         return text.replace("&", "&amp;")
                   .replace("<", "&lt;")
                   .replace(">", "&gt;")
