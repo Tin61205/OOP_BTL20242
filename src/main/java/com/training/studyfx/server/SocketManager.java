@@ -1,4 +1,4 @@
-package com.training.studyfx;
+package com.training.studyfx.server;
 
 import java.io.*;
 import java.net.Socket;

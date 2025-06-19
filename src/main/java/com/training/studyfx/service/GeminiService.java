@@ -30,13 +30,14 @@ public class GeminiService {
     }
 
     public GeminiService() {
+
         this("AIzaSyBv7KAeo7PU5NfWu8lmqR1Zvp8e6Cby51U");  //API KEY
     }
 
-    public GeminiService withTemperature(float temperature) {
-        this.temperature = Math.max(0.0f, Math.min(1.0f, temperature));
-        return this;
-    }
+//    public GeminiService withTemperature(float temperature) {
+//        this.temperature = Math.max(0.0f, Math.min(1.0f, temperature));
+//        return this;
+//    }
 
     public String generateResponse(String userMessage) throws Exception {
         JSONObject requestBody = new JSONObject();
@@ -104,11 +105,11 @@ public class GeminiService {
         }
     }
 
-    public Map<String, Object> generateRichResponse(String userMessage) throws Exception {
-        String textResponse = generateResponse(userMessage);
-        Map<String, Object> richResponse = new HashMap<>();
-        richResponse.put("text", textResponse);
-        richResponse.put("success", true);
-        return richResponse;
-    }
+//    public Map<String, Object> generateRichResponse(String userMessage) throws Exception {
+//        String textResponse = generateResponse(userMessage);
+//        Map<String, Object> richResponse = new HashMap<>();
+//        richResponse.put("text", textResponse);
+//        richResponse.put("success", true);
+//        return richResponse;
+//    }
 }

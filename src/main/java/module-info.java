@@ -17,4 +17,6 @@ module com.training.studyfx {
     exports com.training.studyfx.model;
     exports com.training.studyfx.service;
     exports com.training.studyfx.server;
+    opens com.training.studyfx.service to javafx.fxml;
+    opens com.training.studyfx.server to javafx.fxml;
 }

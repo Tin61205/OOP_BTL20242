@@ -141,3 +141,10 @@ Hy vọng thông tin này hữu ích cho bạn.
 2025-06-16 21:13:12 | NT_Bach: 7
 2025-06-16 21:13:20 | NT_Bach: bach nè
 >>>>>>> Stashed changes
+2025-06-19 15:40:49 | Bach_NT: chao ae
+2025-06-19 15:42:46 | Bach_NT: Viện Nghiên cứu và Ứng dụng Trí tuệ nhân tạo (AI4LIFE), Đại học Bách khoa Hà Nội chúc mừng nhóm nghiên cứu của TS. Bùi Thị Mai Anh đã xuất sắc giành giải thưởng "Best Paper Award" tại EASE 2025 – một hội thảo quốc tế uy tín thuộc lĩnh vực Kỹ thuật phần mềm (Software Engineering).📄 Tên bài báo:Bake Two Cakes with One Oven: RL for Defusing Popularity Bias and Cold-start in Third-Party Library Recommendations👥 Tác giả:Hoang Minh Vuong, Anh Bui Thi Mai, Phuong Nguyen Thanh, Davide Di Ruscio🔍 Nghiên cứu đề xuất một giải pháp sáng tạo dựa trên học tăng cường (Reinforcement Learning) nhằm đồng thời giải quyết hai thách thức lớn trong TPL recommendation: popularity bias và cold-start.
+2025-06-19 15:43:20 | Bach_NT: abcdefghijklmnnopqrstuvw
+2025-06-19 16:51:01 | Bach_NT: alo
+2025-06-19 16:51:47 | TSon: chao
+2025-06-19 16:52:03 | TSon: alo
+2025-06-19 16:52:08 | Bach_NT: oge

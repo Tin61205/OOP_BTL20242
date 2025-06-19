@@ -1,7 +1,7 @@
 package com.training.studyfx.controller;
 
-import com.training.studyfx.ChatHistoryManager;
-import com.training.studyfx.SocketManager;
+import com.training.studyfx.service.ChatHistoryManager;
+import com.training.studyfx.server.SocketManager;
 import com.training.studyfx.model.User;
 import com.training.studyfx.service.GeminiService;
 import com.training.studyfx.service.UserService;
@@ -19,7 +19,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.scene.web.WebView;

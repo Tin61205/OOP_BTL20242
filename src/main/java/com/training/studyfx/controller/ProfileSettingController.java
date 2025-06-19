@@ -1,7 +1,7 @@
 package com.training.studyfx.controller;
 
 import com.training.studyfx.App;
-import com.training.studyfx.SocketManager;
+import com.training.studyfx.server.SocketManager;
 import com.training.studyfx.model.User;
 import com.training.studyfx.service.UserService;
 import javafx.fxml.FXML;
