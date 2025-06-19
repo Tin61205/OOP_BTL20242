@@ -365,3 +365,32 @@
     -fx-font-family: 'Arial', 'Tahoma', 'Roboto', 'Noto Sans', 'Segoe UI', 'sans-serif';
     -fx-font-size: 16px;
 }
+
+/* Scrollpane style */
+.right-aligned-scrollpane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.right-aligned-scrollpane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.right-aligned-scrollpane > .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.right-aligned-scrollpane > .scroll-bar:vertical > .thumb {
+    -fx-background-color: #c0c0c0;
+    -fx-background-radius: 5em;
+}
+
+.right-aligned-scrollpane > .scroll-bar:vertical > .thumb:hover {
+    -fx-background-color: #a0a0a0;
+}
+
+.right-aligned-scrollpane > .corner {
+    -fx-background-color: transparent;
+}

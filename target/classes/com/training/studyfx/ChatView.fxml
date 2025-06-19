@@ -26,7 +26,7 @@
     </HBox>
 
     <!-- Chat Messages Area -->
-    <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="never" style="-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: #e0e0e0; -fx-border-radius: 10px; -fx-background-radius: 10px;" VBox.vgrow="ALWAYS">
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="never" prefHeight="440.0" prefWidth="1039.0" style="-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: #e0e0e0;" VBox.vgrow="ALWAYS">
         <content>
             <StackPane>
                 <VBox fx:id="chatContainer" spacing="15" style="-fx-background-color: white; -fx-padding: 15px;">

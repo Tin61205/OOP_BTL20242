@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.scene.web.WebView;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
 import javafx.scene.Node;
 import javafx.util.Duration;
 import java.time.LocalDateTime;
@@ -50,9 +51,12 @@ public class ChatbotViewController implements Initializable {
         if (chatbotScrollPane != null) {
             // Enable smooth scrolling
             chatbotScrollPane.setPannable(true);
-            chatbotScrollPane.setFitToWidth(true);
-            chatbotScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+            chatbotScrollPane.setFitToWidth(true); // Fit to width để nội dung chiếm hết chiều rộng
+            chatbotScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Không hiển thị thanh cuộn ngang
             chatbotScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+            
+            // Đặt thanh cuộn ở bên phải
+            chatbotScrollPane.getStyleClass().add("right-aligned-scrollpane");
 
             // Tối ưu hiệu suất
             chatbotScrollPane.setCache(true);
@@ -70,6 +74,9 @@ public class ChatbotViewController implements Initializable {
         }
 
         if (chatbotMessagesContainer != null) {
+            // Căn lề phải cho toàn bộ container
+            chatbotMessagesContainer.setAlignment(Pos.CENTER_LEFT);
+            
             addBotMessage("**Chào bạn!** Tôi là *Chatbot cá nhân* của bạn. Tôi có thể giúp gì cho bạn hôm nay?");
         }
         if (chatbotInput != null) {
@@ -114,7 +121,8 @@ public class ChatbotViewController implements Initializable {
     private void addUserMessage(String text) {
         ChatMessage message = new ChatMessage(text, MessageType.USER, getCurrentTime());
         chatHistory.add(message);
-        addStyledMessageToContainer("User: " + message.getText(), "user-message", false);
+        // Không thêm "User: " vào tin nhắn người dùng để hiển thị đẹp hơn
+        addStyledMessageToContainer(message.getText(), "user-message", false);
     }
 
     private void addBotMessage(String text) {
@@ -140,6 +148,7 @@ public class ChatbotViewController implements Initializable {
                         Label label = (Label) child;
                         if (label.getText().contains("Typing...")) {
                             chatbotMessagesContainer.getChildren().remove(count - 1);
+                            return;
                         }
                     }
                 }
@@ -147,11 +156,32 @@ public class ChatbotViewController implements Initializable {
                 Label lastLabel = (Label) lastNode;
                 if (lastLabel.getText().contains("Typing...")) {
                     chatbotMessagesContainer.getChildren().remove(count - 1);
+                    return;
                 }
-            } else if (lastNode instanceof WebView) {
-                // Không cần kiểm tra nội dung WebView vì typing indicator luôn là Label
-                // Chỉ xóa nếu đây là node cuối cùng được thêm
-                chatbotMessagesContainer.getChildren().remove(count - 1);
+            }
+            
+            // Nếu không tìm thấy typing indicator ở node cuối cùng, kiểm tra tất cả các node
+            for (int i = count - 1; i >= 0; i--) {
+                Node node = chatbotMessagesContainer.getChildren().get(i);
+                if (node instanceof Label) {
+                    Label label = (Label) node;
+                    if (label.getText().contains("Typing...")) {
+                        chatbotMessagesContainer.getChildren().remove(i);
+                        return;
+                    }
+                } else if (node instanceof HBox) {
+                    HBox hbox = (HBox) node;
+                    if (hbox.getChildren().size() > 0) {
+                        Node child = hbox.getChildren().get(0);
+                        if (child instanceof Label) {
+                            Label label = (Label) child;
+                            if (label.getText().contains("Typing...")) {
+                                chatbotMessagesContainer.getChildren().remove(i);
+                                return;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -168,10 +198,18 @@ public class ChatbotViewController implements Initializable {
             }
 
             WebView webView = new WebView();
+            webView.setPrefWidth(800);
             webView.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            webView.setMaxHeight(Double.MAX_VALUE);
-            webView.setMaxWidth(800); // Tăng width để phù hợp với UI mới
+            webView.setMinHeight(50);
+            webView.setMaxWidth(Double.MAX_VALUE);
             webView.getEngine().setUserStyleSheetLocation(null);
+            
+            // Thêm CSS cho WebView
+            webView.setStyle("-fx-background-color: #e8f5e9; -fx-background-radius: 12px; -fx-border-radius: 12px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 3, 0, 0, 1); -fx-padding: 10px;");
+            
+            // Thêm padding cho WebView
+            Insets padding = new Insets(10, 10, 10, 10);
+            VBox.setMargin(webView, padding);
 
             // Disable WebView scrolling để cho phép parent ScrollPane handle scroll
             webView.getEngine().setJavaScriptEnabled(true);
@@ -187,7 +225,20 @@ public class ChatbotViewController implements Initializable {
 
             // Chuyển đổi markdown thành HTML
             String htmlContent = MarkdownToHtml.convertToHtml(content);
-            webView.getEngine().loadContent(htmlContent);
+            String cssStyle = "<style>"
+                    + "body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; padding: 10px; margin: 0; color: #2e7d32; width: 780px; }"
+                    + "pre { background-color: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; max-width: 760px; }"
+                    + "code { font-family: 'Consolas', 'Monaco', monospace; color: #d32f2f; }"
+                    + "img { max-width: 100%; height: auto; }"
+                    + "table { border-collapse: collapse; width: 100%; max-width: 760px; }"
+                    + "th, td { border: 1px solid #ddd; padding: 8px; }"
+                    + "th { background-color: #f2f2f2; }"
+                    + "h1, h2, h3, h4, h5, h6 { color: #1565c0; margin-top: 10px; margin-bottom: 5px; }"
+                    + "strong { color: #1976d2; }"
+                    + "em { color: #388e3c; }"
+                    + "p { max-width: 760px; }"
+                    + "</style>";
+            webView.getEngine().loadContent(cssStyle + htmlContent);
 
             // Điều chỉnh chiều cao theo nội dung và disable internal scrolling
             webView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
@@ -201,8 +252,7 @@ public class ChatbotViewController implements Initializable {
                         if (heightObj instanceof Number) {
                             double height = ((Number) heightObj).doubleValue();
                             webView.setPrefHeight(height + 20); // Add some padding
-                            webView.setMinHeight(height + 20);
-                            webView.setMaxHeight(height + 20);
+                            webView.setMinHeight(height);
                         }
 
                         // Auto scroll to bottom after a short delay
@@ -217,21 +267,43 @@ public class ChatbotViewController implements Initializable {
             // Sử dụng Label cho tin nhắn thông thường
             Label messageLabel = new Label(messageText);
             messageLabel.setFont(new Font(14));
-            messageLabel.getStyleClass().add(styleClass);
+            
+            // Thêm CSS trực tiếp cho tin nhắn người dùng
+            if ("user-message".equals(styleClass)) {
+                messageLabel.setStyle("-fx-background-color: #1982FC; -fx-text-fill: white; -fx-padding: 10px 15px; -fx-background-radius: 18px 18px 0px 18px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 1);");
+            } else {
+                messageLabel.getStyleClass().add(styleClass);
+            }
+            
             messageLabel.setWrapText(true);
+            messageLabel.setMaxWidth(500);
             messageLabel.setOpacity(0); // Start invisible
             messageNode = messageLabel;
         }
 
         if ("user-message".equals(styleClass)) {
-            HBox hbox = new HBox(messageNode);
+            HBox hbox = new HBox();
             hbox.setAlignment(Pos.CENTER_RIGHT);
+            hbox.setMaxWidth(Double.MAX_VALUE);
+            hbox.setPadding(new Insets(5, 10, 5, 10));
+            
+            // Thêm region trống bên trái để đẩy tin nhắn sang phải
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+            hbox.getChildren().addAll(spacer, messageNode);
+            
             chatbotMessagesContainer.getChildren().add(hbox);
             applyFadeTransition(messageNode);
             // Auto scroll for user messages
             scrollToBottom();
         } else {
-            chatbotMessagesContainer.getChildren().add(messageNode);
+            // Đối với tin nhắn bot, đặt trong HBox để căn lề trái
+            HBox hbox = new HBox();
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            hbox.setMaxWidth(Double.MAX_VALUE);
+            hbox.setPadding(new Insets(5, 10, 5, 10));
+            hbox.getChildren().add(messageNode);
+            chatbotMessagesContainer.getChildren().add(hbox);
             applyFadeTransition(messageNode);
             // Auto scroll for bot messages is handled in WebView load listener
             if (!isMarkdown) {

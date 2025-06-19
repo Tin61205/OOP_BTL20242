@@ -18,6 +18,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
@@ -47,6 +49,7 @@ public class ChatViewController implements SocketManager.MessageListener {
     public void initialize() {
         scrollPane.setFitToWidth(true);
         scrollPane.setVvalue(1.0);
+        scrollPane.getStyleClass().add("right-aligned-scrollpane");
         chatContainer.getStylesheets().add(getClass().getResource("/styles/ui.css").toExternalForm());
 
         // Thêm xử lý scroll cho ScrollPane
@@ -201,26 +204,35 @@ public class ChatViewController implements SocketManager.MessageListener {
                 webView.setMaxHeight(Double.MAX_VALUE);
                 webView.setMaxWidth(Double.MAX_VALUE);
 
-                webView.setPrefWidth(950);
-                webView.setMinWidth(950);
+                webView.setPrefWidth(800); // Giảm kích thước để phù hợp hơn
+                webView.setMinWidth(0); // Cho phép co giãn
+
+                // Thêm CSS cho WebView
+                webView.setStyle("-fx-background-color: #e8f5e9; -fx-background-radius: 12px; -fx-border-radius: 12px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 3, 0, 0, 1); -fx-padding: 10px;");
+                
+                // Thêm padding cho WebView
+                Insets padding = new Insets(10, 10, 10, 10);
+                VBox.setMargin(webView, padding);
 
                 // Enable JavaScript và xử lý scroll
                 webView.getEngine().setJavaScriptEnabled(true);
 
-                // Xử lý scroll event
-//                webView.setOnScroll(event -> {
-//                    if (scrollPane != null) {
-//                        double deltaY = event.getDeltaY();
-//                        double currentVValue = scrollPane.getVvalue();
-//                        double newVValue = currentVValue - (deltaY / scrollPane.getHeight());
-//                        scrollPane.setVvalue(Math.max(0, Math.min(1, newVValue)));
-//                        event.consume();
-//                    }
-//                });
-
                 // Chuyển đổi markdown thành HTML
                 String htmlContent = MarkdownToHtml.convertToHtml(content);
-                webView.getEngine().loadContent(htmlContent);
+                String cssStyle = "<style>"
+                    + "body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; padding: 10px; margin: 0; color: #2e7d32; width: 780px; }"
+                    + "pre { background-color: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; max-width: 760px; }"
+                    + "code { font-family: 'Consolas', 'Monaco', monospace; color: #d32f2f; }"
+                    + "img { max-width: 100%; height: auto; }"
+                    + "table { border-collapse: collapse; width: 100%; max-width: 760px; }"
+                    + "th, td { border: 1px solid #ddd; padding: 8px; }"
+                    + "th { background-color: #f2f2f2; }"
+                    + "h1, h2, h3, h4, h5, h6 { color: #1565c0; margin-top: 10px; margin-bottom: 5px; }"
+                    + "strong { color: #1976d2; }"
+                    + "em { color: #388e3c; }"
+                    + "p { max-width: 760px; }"
+                    + "</style>";
+                webView.getEngine().loadContent(cssStyle + htmlContent);
 
                 // Điều chỉnh chiều cao theo nội dung
                 webView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
@@ -234,8 +246,6 @@ public class ChatViewController implements SocketManager.MessageListener {
                             if (heightObj instanceof Number) {
                                 double height = ((Number) heightObj).doubleValue();
                                 webView.setPrefHeight(height + 20);
-//                                webView.setMinHeight(height + 20);
-//                                webView.setMaxHeight(height + 20);
                             }
 
                             scrollToBottom();
@@ -255,29 +265,47 @@ public class ChatViewController implements SocketManager.MessageListener {
             }
 
             HBox messageBox = new HBox();
+            messageBox.setMaxWidth(Double.MAX_VALUE);
+            messageBox.setPadding(new Insets(5, 10, 5, 10));
 
             if (message.contains("has joined the chat")) {
                 messageNode.getStyleClass().add("join-notification");
                 messageBox.setAlignment(Pos.CENTER);
+                messageBox.getChildren().add(messageNode);
             }
             else if (message.contains("has changed your username to")) {
                 messageNode.getStyleClass().add("join-notification");
                 messageBox.setAlignment(Pos.CENTER);
+                messageBox.getChildren().add(messageNode);
             }
             else if (username != null && message.startsWith(username + ":")) {
                 messageNode.getStyleClass().add("mess-global");
                 messageBox.setAlignment(Pos.CENTER_RIGHT);
+                
+                // Thêm region trống bên trái để đẩy tin nhắn sang phải
+                Region spacer = new Region();
+                HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+                messageBox.getChildren().addAll(spacer, messageNode);
             }
             else if(message.startsWith("Bot:")) {
                 messageNode.getStyleClass().add("bot-message");
                 messageBox.setAlignment(Pos.CENTER_RIGHT);
+                
+                // Thêm region trống bên trái để đẩy tin nhắn sang phải
+                Region spacer = new Region();
+                HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+                messageBox.getChildren().addAll(spacer, messageNode);
+            }
+            else if(message.startsWith("@#$%^01naffajg:")) {
+                // Tin nhắn bot từ Gemini
+                messageBox.setAlignment(Pos.CENTER_LEFT);
+                messageBox.getChildren().add(messageNode);
             }
             else {
                 messageNode.getStyleClass().add("other-global");
                 messageBox.setAlignment(Pos.CENTER_LEFT);
+                messageBox.getChildren().add(messageNode);
             }
-
-            messageBox.getChildren().add(messageNode);
             chatContainer.getChildren().add(messageBox);
 
             // Apply fade transition
