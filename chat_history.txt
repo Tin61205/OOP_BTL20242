@@ -148,3 +148,9 @@ Hy vọng thông tin này hữu ích cho bạn.
 2025-06-19 16:51:47 | TSon: chao
 2025-06-19 16:52:03 | TSon: alo
 2025-06-19 16:52:08 | Bach_NT: oge
+2025-06-20 11:50:34 | Bach_NT: ê Hiếu
+2025-06-20 11:50:44 | Bach_NT: Overload khác gì Override đấy m
+2025-06-20 11:50:48 | hieu: t ko nhớ
+2025-06-20 11:50:54 | hieu: Để hỏi Chatbot xem
+2025-06-20 11:51:06 | hieu: @bot override khác gì overload
+2025-06-20 11:51:09 | @#$%^01naffajg: Override và Overload là hai khái niệm quan trọng trong lập trình hướng đối tượng (OOP), nhưng chúng có ý nghĩa và mục đích sử dụng khác nhau:<br><br>**Overload (Nạp chồng):**<br><br>*   **Định nghĩa:** Cho phép một lớp có nhiều phương thức trùng tên nhưng khác nhau về danh sách tham số (số lượng, kiểu dữ liệu, thứ tự tham số).<br>*   **Mục đích:** Cung cấp nhiều cách khác nhau để gọi một phương thức với các đầu vào khác nhau, giúp tăng tính linh hoạt và dễ sử dụng của lớp.<br>*   **Thời gian thực hiện:** Được giải quyết tại thời điểm biên dịch (compile-time).<br>*   **Liên quan đến:** Cùng một lớp.<br><br>**Override (Ghi đè):**<br><br>*   **Định nghĩa:** Cho phép một lớp con (subclass) định nghĩa lại một phương thức đã được định nghĩa trong lớp cha (superclass).<br>*   **Mục đích:** Cho phép lớp con thay đổi hoặc mở rộng hành vi của phương thức kế thừa từ lớp cha, phù hợp với nhu cầu cụ thể của lớp con.<br>*   **Thời gian thực hiện:** Được giải quyết tại thời điểm chạy (runtime) thông qua cơ chế đa hình (polymorphism).<br>*   **Liên quan đến:** Quan hệ kế thừa giữa lớp cha và lớp con.<br><br>**Tóm tắt:**<br><br>| Tính chất | Overload (Nạp chồng) | Override (Ghi đè) |<br>|---|---|---|<br>| **Mục đích** | Cung cấp nhiều cách gọi phương thức | Thay đổi hành vi của phương thức kế thừa |<br>| **Tham số** | Khác nhau | Giống nhau (về số lượng, kiểu dữ liệu) |<br>| **Thời gian thực hiện** | Biên dịch | Chạy |<br>| **Liên quan** | Cùng một lớp | Lớp cha và lớp con |<br>

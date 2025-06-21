@@ -54,10 +54,6 @@ public class GeminiService {
         }
     }
 
-    /**
-     * Kiểm tra xem API key có hợp lệ không
-     * @return true nếu API key hợp lệ, false nếu không
-     */
     public boolean isApiKeyValid() {
         return apiKey != null && !apiKey.isEmpty();
     }
@@ -92,7 +88,7 @@ public class GeminiService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                //System.out.println("RESPONSE JSON:\n" + response.body()); -- XEM form output của JSON
+               // System.out.println("RESPONSE JSON:\n" + response.body()); // XEM form output của JSON
                 return extractContent(response.body());
             } else {
                 JSONObject errorJson = new JSONObject(response.body());

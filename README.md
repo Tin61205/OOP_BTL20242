@@ -88,13 +88,6 @@ mvn javafx:run
 5. Để gọi bot trong chat nhóm, sử dụng cú pháp `@bot [câu hỏi]`, ví dụ: `@bot Cho tôi biết thời tiết hôm nay`
 6. Để chia sẻ hình ảnh, bạn có thể kéo và thả hình ảnh vào khung chat hoặc sử dụng nút tải lên
 
-### Chia sẻ hình ảnh
-1. Trong chat nhóm hoặc chat với bot, nhấn vào nút tải lên hình ảnh
-2. Chọn hình ảnh từ máy tính của bạn
-3. Hình ảnh sẽ được tải lên và chia sẻ trong cuộc trò chuyện
-4. Các định dạng hỗ trợ: JPG, PNG, GIF
-5. Kích thước tối đa: 5MB
-
 ### Chat với AI Bot
 1. Chọn tab "Chatbot"
 2. Gõ câu hỏi hoặc tin nhắn

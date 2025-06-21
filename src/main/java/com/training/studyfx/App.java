@@ -45,7 +45,7 @@ public class App extends Application {
         scene.getStylesheets().add(getClass().getResource("/styles/ui.css").toExternalForm());
         stage.setScene(scene);
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/logo.png")));
-        stage.setTitle("Chat Application");
+        stage.setTitle("Interal Chat");
         stage.show();
     }
 
@@ -54,8 +54,8 @@ public class App extends Application {
 
         if (fxml.equals("UI")) {
             Stage stage = (Stage) scene.getWindow();
-            stage.setWidth(1200);  // Tăng width để chatbot có đủ không gian
-            stage.setHeight(620); // Tăng height để hiển thị tốt hơn
+            stage.setWidth(1200);
+            stage.setHeight(820); 
             stage.centerOnScreen();
         } else if (fxml.equals("LoginView") || fxml.equals("RegisterView")) {
             Stage stage = (Stage) scene.getWindow();
