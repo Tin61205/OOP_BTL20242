@@ -176,22 +176,5 @@ OOP_BTL20242/
 
 Dự án này được phát triển cho Project OOP tại HUST.
 
-## 👥 Tác giả và đóng góp
-
-Dự án được phát triển bởi nhóm sinh viên của lớp OOP BTL 2024-2:
-
-- **Nguyễn Văn A** - *Trưởng nhóm* - [Email](mailto:example@example.com)
-- **Trần Thị B** - *UI/UX Designer* - [Email](mailto:example@example.com)
-- **Lê Văn C** - *Backend Developer* - [Email](mailto:example@example.com)
-- **Phạm Thị D** - *Frontend Developer* - [Email](mailto:example@example.com)
-- **Hoàng Văn E** - *Database Engineer* - [Email](mailto:example@example.com)
-
-### Liên hệ và hỗ trợ
-
-Nếu bạn có bất kỳ câu hỏi hoặc đề xuất nào, vui lòng liên hệ với chúng tôi qua email: [example@example.com](mailto:example@example.com)
-
-## ❓ Xử lý sự cố thường gặp
-
----
 
 *Made with ❤️ by OOP BTL 2024-2 Team*

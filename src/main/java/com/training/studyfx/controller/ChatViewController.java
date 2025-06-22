@@ -136,7 +136,7 @@ public class ChatViewController implements SocketManager.MessageListener {
             if (!message.isEmpty()) {
                 if (message.startsWith("@bot")) {
                     String botMessage = message.substring(4).trim();
-                    String systemPrompt = "Bạn là chatbot assistant của nhóm 6 OOP.Hãy trả lời một cách chuyên nghiệp , độ dài vừa phải ,không dài dòng mà đi vào trọng tâm .";
+                    String systemPrompt = "Bạn là chatbot assistant của nhóm 6 OOP.Hãy trả lời một cách chuyên nghiệp .";
                     String prompt = systemPrompt + botMessage;
                     appendToChat(socketManager.getUsername() + ": " + message);
                     chatHistoryManager.saveMessage(socketManager.getUsername() + ": " + message);

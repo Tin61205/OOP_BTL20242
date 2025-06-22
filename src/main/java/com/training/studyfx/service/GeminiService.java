@@ -75,7 +75,16 @@ public class GeminiService {
         contents.put(content);
         requestBody.put("contents", contents);
         requestBody.put("generationConfig", new JSONObject().put("temperature", temperature));
-
+        // {
+        //     "contents": [{
+        //       "parts": [{
+        //         "text": "userMessage"
+        //       }]
+        //     }],
+        //     "generationConfig": {
+        //       "temperature": 0.7
+        //     }
+        //   }
         String payload = requestBody.toString();
 
         HttpRequest request = HttpRequest.newBuilder()

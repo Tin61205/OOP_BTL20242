@@ -55,7 +55,7 @@ public class App extends Application {
         if (fxml.equals("UI")) {
             Stage stage = (Stage) scene.getWindow();
             stage.setWidth(1200);
-            stage.setHeight(820); 
+            stage.setHeight(820);
             stage.centerOnScreen();
         } else if (fxml.equals("LoginView") || fxml.equals("RegisterView")) {
             Stage stage = (Stage) scene.getWindow();
